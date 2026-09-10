@@ -79,21 +79,24 @@ rules:
 # format is unchanged across CWR 2.0/2.1/2.2 -- so no `since` tags are
 # needed on the fields below, and every rule above applies from CWR 2.0.
 fields:
-  - name: Record Type
+  - key: record_type
+    name: Record Type
     start: 1
     length: 3
     type: A
     req: mandatory
     valid_values: ["GRH"]
     description: GRH = Group Header
-  - name: Transaction Type
+  - key: transaction_type
+    name: Transaction Type
     start: 4
     length: 3
     type: L
     req: mandatory
     valid_values_ref: VALID_TXN_TYPE
     description: Indicates the type of transactions included in this group.
-  - name: Group ID
+  - key: group_id
+    name: Group ID
     start: 7
     length: 5
     type: N
@@ -101,7 +104,8 @@ fields:
     description: >-
       A unique sequential number for this group within this file. Group ID
       should start at 00001.
-  - name: Version Number for this transaction type
+  - key: version_number_for_this_transaction_type
+    name: Version Number for this transaction type
     start: 12
     length: 5
     type: A
@@ -109,7 +113,8 @@ fields:
     description: >-
       Indicates the version of the transaction type that will follow within
       this group. Constant '02.10' for all CWR 2.x files.
-  - name: Batch request
+  - key: batch_request
+    name: Batch request
     start: 17
     length: 10
     type: N
@@ -117,7 +122,8 @@ fields:
     description: >-
       A unique sequential number to identify the group, managed by the
       submitter to identify the group among multiple submission files.
-  - name: Submission/Distribution type
+  - key: submission_distribution_type
+    name: Submission Distribution type
     start: 27
     length: 2
     type: L

@@ -85,52 +85,60 @@ rules:
   reason: No catalog of the spec's own validation numbers (per record type/level) is modeled in this project.
   bmi_exception: ''
 fields:
-  - name: Record Type
+  - key: record_type
+    name: Record Type
     start: 1
     length: 3
     type: A
     req: mandatory
     valid_values: ["MSG"]
     description: MSG = Message.
-  - name: Transaction Sequence #
+  - key: transaction_sequence
+    name: Transaction Sequence
     start: 4
     length: 8
     type: N
     req: mandatory
     description: Must equal the Transaction Sequence # of the transaction (ACK) this record belongs to.
-  - name: Record Sequence #
+  - key: record_sequence
+    name: Record Sequence
     start: 12
     length: 8
     type: N
     req: mandatory
     description: Previous record's Record Sequence # + 1, consistent with the ACK record's sequencing (not the original transaction's).
-  - name: Message Type
+  - key: message_type
+    name: Message Type
     start: 20
     length: 1
     type: L
     req: mandatory
     valid_values: ["F", "R", "T", "G", "E"]
     description: F = Field Rejected, R = Record Rejected, T = Transaction Rejected, G = Group Rejected, E = Entire File Rejected.
-  - name: Original Record Sequence #
+  - key: original_record
+    name: Original Record Sequence
     start: 21
     length: 8
     type: N
     req: mandatory
     description: The Record Sequence # within the original transaction that caused this message.
-  - name: Record Type
+  - key: record_type
+    name: Record Type
     start: 29
     length: 3
     type: A
     req: mandatory
     description: The record type within the original transaction that caused this message.
-  - name: Message Level
+  - key: message_level
+    name: Message Level
     start: 32
     length: 1
     type: L
     req: mandatory
     valid_values: ["F", "R", "T", "G", "E"]
     description: The level of editing responsible for this message -- E=Entire File, G=Group, T=Transaction, R=Record, F=Field.
-  - name: Validation Number
+  - key: validation_number
+    name: Validation Number
     start: 33
     length: 3
     type: A
@@ -139,7 +147,8 @@ fields:
       Identifies the specific edit condition. The combination of Record
       Type, Message Level, and Validation Number points back to a
       condition in this spec.
-  - name: Message Text
+  - key: message_text
+    name: Message Text
     start: 36
     length: 150
     type: A

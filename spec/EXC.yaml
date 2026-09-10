@@ -62,70 +62,81 @@ rules:
   fail:
     submitter_work_n: ''
 fields:
-  - name: Record Type
+  - key: record_type
+    name: Record Type
     start: 1
     length: 3
     type: A
     req: mandatory
     valid_values: ["EXC"]
     description: EXC = Existing work which is in Conflict with a Work Registration.
-  - name: Transaction Sequence #
+  - key: transaction_sequence
+    name: Transaction Sequence
     start: 4
     length: 8
     type: N
     req: mandatory
     description: 00000000 for the first transaction in a group, else previous transaction header's value + 1.
-  - name: Record Sequence #
+  - key: record_sequence
+    name: Record Sequence
     start: 12
     length: 8
     type: N
     req: mandatory
     description: 00000000 for a transaction header record.
-  - name: Work Title
+  - key: work_title
+    name: Work Title
     start: 20
     length: 60
     type: A
     req: mandatory
     description: Name/Title of the work.
-  - name: Language Code
+  - key: language_code
+    name: Language Code
     start: 80
     length: 2
     type: L
     req: optional
     valid_values_ref: VALID_LANGUAGE
     description: The code representing the language of this title.
-  - name: Submitter Work #
+  - key: submitter_work
+    name: Submitter Work
     start: 82
     length: 14
     type: A
     req: mandatory
     description: Number assigned to the work by the submitting/receiving publisher; must be unique for the publisher.
-  - name: ISWC
+  - key: iswc
+    name: ISWC
     start: 96
     length: 11
     type: A
     req: optional
     description: The International Standard Work Code assigned to this work.
-  - name: Copyright Date
+  - key: copyright_date
+    name: Copyright Date
     start: 107
     length: 8
     type: D
     req: optional
     description: Original copyright date of the work.
-  - name: Copyright Number
+  - key: copyright_number
+    name: Copyright Number
     start: 115
     length: 12
     type: A
     req: optional
     description: Original copyright number of the work.
-  - name: Musical Work Distribution Category
+  - key: musical_work_distribution_category
+    name: Musical Work Distribution Category
     start: 127
     length: 3
     type: L
     req: mandatory
     valid_values_ref: VALID_MWDC
     description: Describes the type of music as it applies to special distribution rules.
-  - name: Duration
+  - key: duration
+    name: Duration
     start: 130
     length: 6
     type: T
@@ -134,69 +145,80 @@ fields:
       Duration in HHMMSS. Must be greater than zero if Musical Work
       Distribution Category is SER (some societies, e.g. BMI, also require
       it for JAZ).
-  - name: Recorded Indicator
+  - key: recorded_indicator
+    name: Recorded Indicator
     start: 136
     length: 1
     type: F
     req: mandatory
     valid_values_ref: VALID_YNU
     description: Indicates whether or not the work has ever been recorded.
-  - name: Text Music Relationship
+  - key: text_music_relationship
+    name: Text Music Relationship
     start: 137
     length: 3
     type: L
     req: optional
     description: Indicates whether this work contains music, text, and/or both.
-  - name: Composite Type
+  - key: composite_type
+    name: Composite Type
     start: 140
     length: 3
     type: L
     req: optional
     description: If this is a composite work, indicates the type of composite.
-  - name: Version Type
+  - key: version_type
+    name: Version Type
     start: 143
     length: 3
     type: L
     req: mandatory
     valid_values_ref: VALID_VERSION_TYPE
     description: Indicates relationships between this work and other works (e.g. whether it's an arrangement).
-  - name: Excerpt Type
+  - key: excerpt_type
+    name: Excerpt Type
     start: 146
     length: 3
     type: L
     req: optional
     description: If this is an excerpt, indicates the type of excerpt.
-  - name: Music Arrangement
+  - key: music_arrangement
+    name: Music Arrangement
     start: 149
     length: 3
     type: L
     req: conditional
     description: If Version Type is MOD, indicates the type of music arrangement.
-  - name: Lyric Adaptation
+  - key: lyric_adaptation
+    name: Lyric Adaptation
     start: 152
     length: 3
     type: L
     req: conditional
     description: If Version Type is MOD, indicates the type of lyric adaptation.
-  - name: Contact Name
+  - key: contact_name
+    name: Contact Name
     start: 155
     length: 30
     type: A
     req: optional
     description: Name of a business contact person at the organization that originated this transaction.
-  - name: Contact ID
+  - key: contact_id
+    name: Contact ID
     start: 185
     length: 10
     type: A
     req: optional
     description: An identifier associated with the contact person.
-  - name: CWR Work Type
+  - key: cwr_work_type
+    name: CWR Work Type
     start: 195
     length: 2
     type: L
     req: optional
     description: Values reside in the CWR Work Type table.
-  - name: Grand Rights Ind
+  - key: grand_rights_ind
+    name: Grand Rights Indicator
     start: 197
     length: 1
     type: B
@@ -205,7 +227,8 @@ fields:
     description: >-
       Indicates whether this work is originally intended for performance on
       stage. Mandatory for registrations with the UK societies.
-  - name: Composite Component Count
+  - key: composite_component_count
+    name: Composite Component Count
     start: 198
     length: 3
     type: N
@@ -213,13 +236,15 @@ fields:
     description: >-
       If Composite Type is entered, the number of components in this
       composite. Required for composite works where ASCAP is represented.
-  - name: Date of publication of printed edition
+  - key: date_of_publication_of_printed_edition
+    name: Date of publication of printed edition
     start: 201
     length: 8
     type: D
     req: optional
     description: GEMA-specific -- date the printed, sub-published edition appeared. Added CWR 2.0.
-  - name: Exceptional Clause
+  - key: exceptional_clause
+    name: Exceptional Clause
     start: 209
     length: 1
     type: F
@@ -227,19 +252,22 @@ fields:
     description: >-
       GEMA-specific -- Y declares the exceptional clause of the GEMA
       distribution rules for printed editions applies. Added CWR 2.0.
-  - name: Opus Number
+  - key: opus_number
+    name: Opus Number
     start: 210
     length: 25
     type: A
     req: optional
     description: Number assigned to this work, usually by the composer. Added CWR 2.0.
-  - name: Catalogue Number
+  - key: catalogue_number
+    name: Catalogue Number
     start: 235
     length: 25
     type: A
     req: optional
     description: The work catalogue number (e.g. BWV, KV), without dots. Added CWR 2.0.
-  - name: Priority Flag
+  - key: priority_flag
+    name: Priority Flag
     start: 260
     length: 1
     type: F

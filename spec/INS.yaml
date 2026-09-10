@@ -25,32 +25,37 @@ rules:
   reason: This is a default/ignore behavior, not a rejectable violation with a distinguishable PASS/FAIL outcome -- kept here only for traceability.
   bmi_exception: ''
 fields:
-  - name: Record Type
+  - key: record_type
+    name: Record Type
     start: 1
     length: 3
     type: A
     req: mandatory
     valid_values: ["INS"]
     description: INS = Instrumentation Summary.
-  - name: Transaction Sequence #
+  - key: transaction_sequence
+    name: Transaction Sequence
     start: 4
     length: 8
     type: N
     req: mandatory
     description: Must equal the Transaction Sequence # of the transaction header this record belongs to.
-  - name: Record Sequence #
+  - key: record_sequence
+    name: Record Sequence
     start: 12
     length: 8
     type: N
     req: mandatory
     description: Previous record's Record Sequence # + 1.
-  - name: Number of Voices
+  - key: number_of_voices
+    name: Number of Voices
     start: 20
     length: 3
     type: N
     req: optional
     description: The number of independent parts included in this work.
-  - name: Standard Instrumentation Type
+  - key: standard_instrumentation_type
+    name: Standard Instrumentation Type
     start: 23
     length: 3
     type: L
@@ -58,7 +63,8 @@ fields:
     description: >-
       Standard instrumentation used (Standard Instrumentation Table).
       Required if no IND records and Instrumentation Description is blank.
-  - name: Instrumentation Description
+  - key: instrumentation_description
+    name: Instrumentation Description
     start: 26
     length: 50
     type: A

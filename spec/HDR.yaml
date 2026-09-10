@@ -207,14 +207,16 @@ rules:
 # Every real CWR11-1991R3 Field Level Validation item for HDR (16 total) has
 # a dedicated rule above -- nothing left to add as a placeholder here.
 fields:
-  - name: Record Type
+  - key: record_type
+    name: Record Type
     start: 1
     length: 3
     type: A
     req: mandatory
     valid_values: ["HDR"]
     description: HDR = Transmission Header
-  - name: Sender Type
+  - key: sender_type
+    name: Sender Type
     start: 4
     length: 2
     type: A
@@ -223,7 +225,8 @@ fields:
     description: >-
       Indicates if the sender of the file is a society or a publisher.
       PB = Publisher, SO = Society, AA = Administrative Agency, WR = Writer.
-  - name: Sender ID
+  - key: sender_id
+    name: Sender ID
     start: 6
     length: 9
     type: N
@@ -231,38 +234,44 @@ fields:
     description: >-
       If Sender Type is PB, AA, or WR, the sender's assigned CWR IPI# (CWR
       Sender ID and Codes Table). If Sender Type is SO, the Society Code.
-  - name: Sender Name
+  - key: sender_name
+    name: Sender Name
     start: 15
     length: 45
     type: A
     req: mandatory
     description: The name of the sender (publisher, society, agency).
-  - name: EDI Standard Version Number
+  - key: edi_standard_version_number
+    name: EDI Standard Version Number
     start: 60
     length: 5
     type: A
     req: mandatory
     valid_values: ["01.10"]
     description: Must be set to 01.10 for this version of the standard.
-  - name: Creation Date
+  - key: creation_date
+    name: Creation Date
     start: 65
     length: 8
     type: D
     req: mandatory
     description: The date that this file was created.
-  - name: Creation Time
+  - key: creation_time
+    name: Creation Time
     start: 73
     length: 6
     type: T
     req: mandatory
     description: The time of day that this file was created.
-  - name: Transmission Date
+  - key: transmission_date
+    name: Transmission Date
     start: 79
     length: 8
     type: D
     req: mandatory
     description: The date that this file was transmitted to all receiving entities.
-  - name: Character Set
+  - key: character_set
+    name: Character Set
     start: 87
     length: 15
     type: L
@@ -271,7 +280,8 @@ fields:
     description: >-
       To be used if this file contains data in a character set other than
       ASCII (Big5, GB, or a Unicode value e.g. UTF-8). Added in CWR 2.1.
-  - name: Version
+  - key: version
+    name: Version
     start: 102
     length: 3
     type: A
@@ -279,7 +289,8 @@ fields:
     since: '2.2'
     valid_values: ["2.2"]
     description: CWR version (2.2). Added in CWR 2.2.
-  - name: Revision
+  - key: revision
+    name: Revision
     start: 105
     length: 3
     type: N
@@ -289,14 +300,16 @@ fields:
       CWR revision number. Added in CWR 2.2. Note: cwr_layout.py's
       REAL_LAYOUT type is "A" here -- real files left-justify this as text
       rather than zero-padded numeric, despite the spec's N type.
-  - name: Software Package
+  - key: software_package
+    name: Software Package
     start: 108
     length: 30
     type: A
     req: optional
     since: '2.2'
     description: Name of the software package from which the file originated. Added in CWR 2.2.
-  - name: Software Package Version
+  - key: software_package_version
+    name: Software Package Version
     start: 138
     length: 30
     type: A

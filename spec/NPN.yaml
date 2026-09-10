@@ -65,44 +65,51 @@ rules:
   fail:
     language_code: ZZ
 fields:
-  - name: Record Type
+  - key: record_type
+    name: Record Type
     start: 1
     length: 3
     type: A
     req: mandatory
     valid_values: ["NPN"]
     description: NPN = Non-Roman Alphabet Publisher Name.
-  - name: Transaction Sequence #
+  - key: transaction_sequence
+    name: Transaction Sequence
     start: 4
     length: 8
     type: N
     req: mandatory
     description: Must equal the Transaction Sequence # of the transaction header this record belongs to.
-  - name: Record Sequence #
+  - key: record_sequence
+    name: Record Sequence
     start: 12
     length: 8
     type: N
     req: mandatory
     description: Previous record's Record Sequence # + 1.
-  - name: Publisher Sequence #
+  - key: publisher_sequence
+    name: Publisher Sequence
     start: 20
     length: 2
     type: N
     req: mandatory
     description: A sequential number assigned to the original publishers on this work; must match the preceding SPU/OPU.
-  - name: Interested Party #
+  - key: interested_party
+    name: Interested Party
     start: 22
     length: 9
     type: A
     req: mandatory
     description: Submitting publisher's unique identifier for this publisher; must match the preceding SPU/OPU.
-  - name: Publisher Name
+  - key: publisher_name
+    name: Publisher Name
     start: 31
     length: 480
     type: A
     req: mandatory
     description: The name of this publishing company in non-Roman alphabet.
-  - name: Language Code
+  - key: language_code
+    name: Language Code
     start: 511
     length: 2
     type: L

@@ -47,44 +47,51 @@ rules:
   reason: NPA is not wired into layout.py's REAL_LAYOUT.
   bmi_exception: ''
 fields:
-  - name: Record Type
+  - key: record_type
+    name: Record Type
     start: 1
     length: 3
     type: A
     req: mandatory
     valid_values: ["NPA"]
     description: NPA = Non-Roman Alphabet Agreement Party Name.
-  - name: Transaction Sequence #
+  - key: transaction_sequence
+    name: Transaction Sequence
     start: 4
     length: 8
     type: N
     req: mandatory
     description: Must equal the Transaction Sequence # of the AGR transaction header this record belongs to.
-  - name: Record Sequence #
+  - key: record_sequence
+    name: Record Sequence
     start: 12
     length: 8
     type: N
     req: mandatory
     description: Previous record's Record Sequence # + 1.
-  - name: Interested Party #
+  - key: interested_party
+    name: Interested Party
     start: 20
     length: 9
     type: A
     req: conditional
     description: Submitting publisher's unique identifier for this writer; must match the preceding IPA record.
-  - name: Interested Party Name
+  - key: interested_party_name
+    name: Interested Party Name
     start: 29
     length: 160
     type: A
     req: mandatory
     description: The last name of a writer, or the publisher name, in non-Roman alphabet.
-  - name: Interested Party Writer First Name
+  - key: interested_party_writer_first_name
+    name: Interested Party Writer First Name
     start: 189
     length: 160
     type: A
     req: mandatory
     description: The first name of a writer, in non-Roman alphabet.
-  - name: Language Code
+  - key: language_code
+    name: Language Code
     start: 349
     length: 2
     type: L

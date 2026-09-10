@@ -54,32 +54,37 @@ rules:
   fail:
     language_code: ZZ
 fields:
-  - name: Record Type
+  - key: record_type
+    name: Record Type
     start: 1
     length: 3
     type: A
     req: mandatory
     valid_values: ["NAT"]
     description: NAT = Non-Roman Alphabet Title.
-  - name: Transaction Sequence #
+  - key: transaction_sequence
+    name: Transaction Sequence
     start: 4
     length: 8
     type: N
     req: mandatory
     description: Must equal the Transaction Sequence # of the transaction header this record belongs to.
-  - name: Record Sequence #
+  - key: record_sequence
+    name: Record Sequence
     start: 12
     length: 8
     type: N
     req: mandatory
     description: Previous record's Record Sequence # + 1.
-  - name: Title
+  - key: title
+    name: Title
     start: 20
     length: 640
     type: A
     req: mandatory
     description: The work title in non-Roman alphabet.
-  - name: Title Type
+  - key: title_type
+    name: Title Type
     start: 660
     length: 2
     type: L
@@ -87,7 +92,8 @@ fields:
     description: >-
       Type of title presented (original, alternate, etc; Title Type Table).
       Only one NAT per work can carry the original-title type.
-  - name: Language Code
+  - key: language_code
+    name: Language Code
     start: 662
     length: 2
     type: L

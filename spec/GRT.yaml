@@ -53,26 +53,30 @@ rules:
 # Field layout below is transcribed from the official CISAC CWR 2.2 spec
 # (CWR11-1991R3, section 3.7). start/length are 1-based, spec-defined.
 fields:
-  - name: Record Type
+  - key: record_type
+    name: Record Type
     start: 1
     length: 3
     type: A
     req: mandatory
     valid_values: ["GRT"]
     description: GRT = Group Trailer
-  - name: Group ID
+  - key: group_id
+    name: Group ID
     start: 4
     length: 5
     type: N
     req: mandatory
     description: The same group id that was present on the preceding GRH record.
-  - name: Transaction Count
+  - key: transaction_count
+    name: Transaction Count
     start: 9
     length: 8
     type: N
     req: mandatory
     description: The number of transactions included within this group.
-  - name: Record Count
+  - key: record_count
+    name: Record Count
     start: 17
     length: 8
     type: N
@@ -80,7 +84,8 @@ fields:
     description: >-
       The number of physical records included within this group, including
       GRH and GRT records.
-  - name: Currency indicator
+  - key: currency_indicator
+    name: Currency indicator
     start: 25
     length: 3
     type: L
@@ -90,7 +95,8 @@ fields:
       1.10 field). Note: ignored for CWR -- mandatory only if Total Monetary
       Value is provided, but the spec explicitly says both fields are
       ignored for CWR transactions.
-  - name: Total monetary value
+  - key: total_monetary_value
+    name: Total monetary value
     start: 28
     length: 10
     type: N

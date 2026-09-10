@@ -71,57 +71,66 @@ rules:
   reason: No ISO 639-2(T) dialect table is modeled in this project's lookups (VALID_LANGUAGE is the 2-letter CWR language table, a different code set).
   bmi_exception: ''
 fields:
-  - name: Record Type
+  - key: record_type
+    name: Record Type
     start: 1
     length: 3
     type: A
     req: mandatory
     valid_values: ["NPR"]
     description: NPR = Performance Data in non-roman alphabet.
-  - name: Transaction Sequence #
+  - key: transaction_sequence
+    name: Transaction Sequence
     start: 4
     length: 8
     type: N
     req: mandatory
     description: Must equal the Transaction Sequence # of the transaction header this record belongs to.
-  - name: Record Sequence #
+  - key: record_sequence
+    name: Record Sequence
     start: 12
     length: 8
     type: N
     req: mandatory
     description: Previous record's Record Sequence # + 1.
-  - name: Performing Artist Name
+  - key: performing_artist_name
+    name: Performing Artist Name
     start: 20
     length: 160
     type: A
     req: conditional
     description: Name of a person or group that performed the work, in non-Roman alphabet.
-  - name: Performing Artist First Name
+  - key: performing_artist_first_name
+    name: Performing Artist First Name
     start: 180
     length: 160
     type: A
     req: optional
     description: First name of a person that performed the work, in non-Roman alphabet.
-  - name: Performing Artist IPI Name #
+  - key: performing_artist
+    name: Performing Artist IPI Name
     start: 340
     length: 11
     type: L
     req: optional
     description: The IPI Name # corresponding to this performing artist.
-  - name: Performing Artist IPI Base Number
+  - key: performing_artist_ipi_base_number
+    name: Performing Artist IPI Base Number
     start: 351
     length: 13
     type: L
     req: optional
     description: The IPI base number assigned to this performing artist.
-  - name: Language Code
+  - key: language_code
+    name: Language Code
     start: 364
     length: 2
     type: L
     req: optional
     valid_values_ref: VALID_LANGUAGE
     description: The language code of the name.
-  - name: Performance Language
+  - key: performance_language
+    name: Performance Language
     start: 366
     length: 2
     type: L
@@ -129,7 +138,8 @@ fields:
     since: '2.1'
     valid_values_ref: VALID_LANGUAGE
     description: The language used in the performance. Added CWR 2.1.
-  - name: Performance Dialect
+  - key: performance_dialect
+    name: Performance Dialect
     start: 368
     length: 3
     type: L

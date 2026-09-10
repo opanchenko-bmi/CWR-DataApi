@@ -280,51 +280,59 @@ rules:
   fail:
     interested_party_writer_first_name: JÓHN
 fields:
-  - name: Record Type
+  - key: record_type
+    name: Record Type
     start: 1
     length: 3
     type: A
     req: mandatory
     valid_values: ["IPA"]
     description: IPA = Interested Party of Agreement.
-  - name: Transaction Sequence #
+  - key: transaction_sequence
+    name: Transaction Sequence
     start: 4
     length: 8
     type: N
     req: mandatory
     description: Must equal the Transaction Sequence # of the AGR transaction header this record belongs to.
-  - name: Record Sequence #
+  - key: record_sequence
+    name: Record Sequence
     start: 12
     length: 8
     type: N
     req: mandatory
     description: Previous record's Record Sequence # + 1.
-  - name: Agreement Role Code
+  - key: agreement_role_code
+    name: Agreement Role Code
     start: 20
     length: 2
     type: L
     req: mandatory
     valid_values: ["AS", "AC"]
     description: The role of this interested party in the agreement -- AS = assignor, AC = acquirer.
-  - name: Interested Party IPI Name #
+  - key: interested_party
+    name: Interested Party IPI Name
     start: 22
     length: 11
     type: L
     req: optional
     description: The IPI name # assigned to this interested party.
-  - name: IPI Base Number
+  - key: ipi_base_number
+    name: IPI Base
     start: 33
     length: 13
     type: L
     req: optional
     description: The IPI base number assigned to this interested party.
-  - name: Interested Party #
+  - key: interested_party
+    name: Interested Party
     start: 46
     length: 9
     type: A
     req: mandatory
     description: Submitter's unique identifier for this interested party.
-  - name: Interested Party Last Name
+  - key: interested_party_last_name
+    name: Interested Party Last Name
     start: 55
     length: 45
     type: A
@@ -332,7 +340,8 @@ fields:
     description: >-
       The last name of this writer or the name of the publisher. If first
       and last names can't be split, use "Last Name, First Name" format.
-  - name: Interested Party Writer First Name
+  - key: interested_party_writer_first_name
+    name: Interested Party Writer First Name
     start: 100
     length: 30
     type: A
@@ -340,13 +349,15 @@ fields:
     description: >-
       First name and qualifying/middle names of this writer. Only allowed
       if Agreement Type is OS or OG and Agreement Role Code is Assignor.
-  - name: PR Affiliation Society
+  - key: pr_affiliation_society
+    name: PR Affiliation Society
     start: 130
     length: 3
     type: L
     req: conditional
     description: Performing Rights Society this interested party is affiliated with. Required if PR Share > 0.
-  - name: PR Share
+  - key: pr_share
+    name: PR Share
     start: 133
     length: 5
     type: N
@@ -355,25 +366,29 @@ fields:
       % of performing rights claimed, range 0-10000 (0-100.00%), implied
       decimal. Must sum to 100.00 across all IPA records if the agreement
       covers performing rights, else 0.
-  - name: MR Affiliation Society
+  - key: mr_affiliation_society
+    name: MR Affiliation Society
     start: 138
     length: 3
     type: L
     req: conditional
     description: Mechanical Rights Society this interested party is affiliated with. Required if MR Share > 0.
-  - name: MR Share
+  - key: mr_share
+    name: MR Share
     start: 141
     length: 5
     type: N
     req: conditional
     description: '% of mechanical rights claimed, range 0-10000 (0-100.00%), implied decimal.'
-  - name: SR Affiliation Society
+  - key: sr_affiliation_society
+    name: SR Affiliation Society
     start: 146
     length: 3
     type: L
     req: conditional
     description: Synchronization rights society this interested party is affiliated with. Required if SR Share > 0.
-  - name: SR Share
+  - key: sr_share
+    name: SR Share
     start: 149
     length: 5
     type: N

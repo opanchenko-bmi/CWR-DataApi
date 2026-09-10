@@ -42,32 +42,37 @@ rules:
     counter and firing that check instead.
   bmi_exception: ''
 fields:
-  - name: Record Type
+  - key: record_type
+    name: Record Type
     start: 1
     length: 3
     type: A
     req: mandatory
     valid_values: ["IND"]
     description: IND = Instrumentation Detail.
-  - name: Transaction Sequence #
+  - key: transaction_sequence
+    name: Transaction Sequence
     start: 4
     length: 8
     type: N
     req: mandatory
     description: Must equal the Transaction Sequence # of the transaction header this record belongs to.
-  - name: Record Sequence #
+  - key: record_sequence
+    name: Record Sequence
     start: 12
     length: 8
     type: N
     req: mandatory
     description: Previous record's Record Sequence # + 1.
-  - name: Instrument Code
+  - key: instrument_code
+    name: Instrument Code
     start: 20
     length: 3
     type: L
     req: mandatory
     description: The specific instrument used in this instrumentation (Instrument Table).
-  - name: Number of Players
+  - key: number_of_players
+    name: Number of Players
     start: 23
     length: 3
     type: N
