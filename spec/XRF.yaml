@@ -44,26 +44,30 @@ rules:
   fail:
     validity: Z
 fields:
-  - name: Record Type
+  - key: record_type
+    name: Record Type
     start: 1
     length: 3
     type: A
     req: mandatory
     valid_values: ["XRF"]
     description: XRF = Work ID Cross Reference.
-  - name: Transaction Sequence #
+  - key: transaction_sequence
+    name: Transaction Sequence
     start: 4
     length: 8
     type: N
     req: mandatory
     description: Must equal the Transaction Sequence # of the transaction header this record belongs to.
-  - name: Record Sequence #
+  - key: record_sequence
+    name: Record Sequence
     start: 12
     length: 8
     type: N
     req: mandatory
     description: Previous record's Record Sequence # + 1.
-  - name: Organisation Code
+  - key: organisation_code
+    name: Organisation Code
     start: 20
     length: 3
     type: L
@@ -72,20 +76,23 @@ fields:
       The organisation (society, publisher, DSP, etc.) that generated the
       Work ID (Sender ID / Submitter ID / Society Code tables, ISWC, ISRC).
       Do not use 000 or 099.
-  - name: Identifier
+  - key: identifier
+    name: Identifier
     start: 23
     length: 14
     type: A
     req: mandatory
     description: An identifier that relates to this work transaction.
-  - name: Identifier Type
+  - key: identifier_type
+    name: Identifier Type
     start: 37
     length: 1
     type: L
     req: mandatory
     valid_values: ["W", "R", "P", "V"]
     description: W = Work, R = Recording, P = Product, V = Video.
-  - name: Validity
+  - key: validity
+    name: Validity
     start: 38
     length: 1
     type: F

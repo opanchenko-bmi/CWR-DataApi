@@ -96,145 +96,168 @@ rules:
   reason: Society-specific (SACEM only); this tool doesn't model per-record society interest.
   bmi_exception: ''
 fields:
-  - name: Record Type
+  - key: record_type
+    name: Record Type
     start: 1
     length: 3
     type: A
     req: mandatory
     valid_values: ["OWR"]
     description: OWR = Other Writer (not controlled by the submitter).
-  - name: Transaction Sequence #
+  - key: transaction_sequence
+    name: Transaction Sequence
     start: 4
     length: 8
     type: N
     req: mandatory
     description: Must equal the Transaction Sequence # of the transaction header this record belongs to.
-  - name: Record Sequence #
+  - key: record_sequence
+    name: Record Sequence
     start: 12
     length: 8
     type: N
     req: mandatory
     description: Previous record's Record Sequence # + 1.
-  - name: Interested Party #
+  - key: interested_party
+    name: Interested Party
     start: 20
     length: 9
     type: A
     req: optional
     description: Submitting publisher's unique identifier for this writer (optional for OWR).
-  - name: Writer Last Name
+  - key: writer_last_name
+    name: Writer Last Name
     start: 29
     length: 45
     type: A
     req: optional
     description: The last name of this writer (optional for OWR; blank requires Writer Unknown Indicator = Y).
-  - name: Writer First Name
+  - key: writer_first_name
+    name: Writer First Name
     start: 74
     length: 30
     type: A
     req: optional
     description: First name and qualifying/middle names of this writer.
-  - name: Writer Unknown Indicator
+  - key: writer_unknown_indicator
+    name: Writer Unknown Indicator
     start: 104
     length: 1
     type: F
     req: conditional
     valid_values_ref: VALID_YN
     description: Must be Y if Writer Last Name is blank, else Y/N. Default N.
-  - name: Writer Designation Code
+  - key: writer_designation_code
+    name: Writer Designation Code
     start: 105
     length: 2
     type: L
     req: optional
     valid_values_ref: VALID_WRITER_DESIGNATION
     description: Code defining the writer's role in composing the work (optional for OWR).
-  - name: Tax ID #
+  - key: tax_id
+    name: Tax ID
     start: 107
     length: 9
     type: A
     req: optional
     description: The number used to identify this writer for domestic tax reporting.
-  - name: Writer IPI Name #
+  - key: writer_ipi
+    name: Writer IPI
     start: 116
     length: 11
     type: L
     req: optional
     description: The IPI Name # assigned to this writer.
-  - name: PR Affiliation Society #
+  - key: pr_affiliation_society
+    name: PR Affiliation Society
     start: 127
     length: 3
     type: L
     req: optional
     description: Performing Rights Society this writer is affiliated with.
-  - name: PR Ownership Share
+  - key: pr_ownership_share
+    name: PR Ownership Share
     start: 130
     length: 5
     type: N
     req: optional
     description: Writer's ownership % of performance rights. Range 0-10000 (0-100.00%), implied decimal.
-  - name: MR Society
+  - key: mr_society
+    name: MR Society
     start: 135
     length: 3
     type: L
     req: optional
     description: Mechanical Rights Society this writer is affiliated with.
-  - name: MR Ownership Share
+  - key: mr_ownership_share
+    name: MR Ownership Share
     start: 138
     length: 5
     type: N
     req: optional
     description: Writer's ownership % of mechanical rights. Range 0-10000 (0-100.00%), implied decimal.
-  - name: SR Society
+  - key: sr_society
+    name: SR Society
     start: 143
     length: 3
     type: L
     req: optional
     description: Society this writer is affiliated with for synchronization rights.
-  - name: SR Ownership Share
+  - key: sr_ownership_share
+    name: SR Ownership Share
     start: 146
     length: 5
     type: N
     req: optional
     description: Writer's ownership % of synch rights. Range 0-10000 (0-100.00%), implied decimal.
-  - name: Reversionary Indicator
+  - key: reversionary_indicator
+    name: Reversionary Indicator
     start: 151
     length: 1
     type: F
     req: optional
     valid_values_ref: VALID_YNU
     description: Indicates writer involved in a reversionary claim (societies that recognize them, e.g. SOCAN).
-  - name: First Recording Refusal Ind
+  - key: first_recording_refusal_ind
+    name: First Recording Refusal Ind
     start: 152
     length: 1
     type: B
     req: optional
     valid_values_ref: VALID_YN
     description: Whether the submitter has refused authority for the first recording.
-  - name: Work For Hire Indicator
+  - key: work_for_hire_indicator
+    name: Work For Hire Indicator
     start: 153
     length: 1
     type: B
     req: optional
     valid_values_ref: VALID_YN
     description: Whether this work was written for hire.
-  - name: Filler
+  - key: filler
+    name: Filler
     start: 154
     length: 1
     type: A
     req: optional
     description: Reserved.
-  - name: Writer IPI Base Number
+  - key: writer_ipi_base_number
+    name: Writer IPI Base Number
     start: 155
     length: 13
     type: L
     req: optional
     description: The IPI base number assigned to this writer. Added CWR 2.0.
-  - name: Personal Number
+  - key: personal_number
+    name: Personal Number
     start: 168
     length: 12
     type: N
     req: optional
     description: The personal number assigned to this writer in their country of residence. Added CWR 2.0.
-  - name: USA License Ind.
+  - key: usa_license
+    name: USA License Indicator
     start: 180
     length: 1
     type: L

@@ -176,129 +176,149 @@ rules:
   reason: Cross-file uniqueness is not verified, and this field isn't mapped in layout.py's REAL_LAYOUT.
   bmi_exception: ''
 fields:
-  - name: Record Type
+  - key: record_type
+    name: Record Type
     start: 1
     length: 3
     type: A
     req: mandatory
     valid_values: ["REC"]
     description: REC = Recording Detail.
-  - name: Transaction Sequence #
+  - key: transaction_sequence
+    name: Transaction Sequence
     start: 4
     length: 8
     type: N
     req: mandatory
     description: Must equal the Transaction Sequence # of the transaction header this record belongs to.
-  - name: Record Sequence #
+  - key: record_sequence
+    name: Record Sequence
     start: 12
     length: 8
     type: N
     req: mandatory
     description: Previous record's Record Sequence # + 1.
-  - name: Release Date
+  - key: release_date
+    name: Release Date
     start: 20
     length: 8
     type: D
     req: optional
     description: Date the work was or will be released for public consumption (past, present, or future).
-  - name: Constant
+  - key: constant
+    name: Constant
     start: 28
     length: 60
     type: A
     req: optional
     description: Fill with blanks.
-  - name: Release Duration
+  - key: release_duration
+    name: Release Duration
     start: 88
     length: 6
     type: T
     req: optional
     description: Duration of the release of the work.
-  - name: Constant (2)
+  - key: constant_2
+    name: Constant_2
     start: 94
     length: 5
     type: A
     req: optional
     description: Fill with blanks.
-  - name: Album Title
+  - key: album_title
+    name: Album Title
     start: 99
     length: 60
     type: A
     req: optional
     description: The name of the album in which the work was included, if released as part of an album. Added CWR 2.0.
-  - name: Album Label
+  - key: album_label
+    name: Album Label
     start: 159
     length: 60
     type: A
     req: optional
     description: Name of the organization that produced and released the album. Added CWR 2.0.
-  - name: Release Catalog #
+  - key: release_catalog
+    name: Release Catalog
     start: 219
     length: 18
     type: A
     req: optional
     description: Number assigned by the organization releasing the album (sales/distribution tracking). Added CWR 2.0.
-  - name: EAN
+  - key: ean
+    name: EAN
     start: 237
     length: 13
     type: L
     req: optional
     description: European Article Number of release (EAN-13). Added CWR 2.0.
-  - name: ISRC
+  - key: isrc
+    name: ISRC
     start: 250
     length: 12
     type: L
     req: optional
     description: International Standard Recording Code of the recording (ISO 3901). Added CWR 2.0.
-  - name: Recording Format
+  - key: recording_format
+    name: Recording Format
     start: 262
     length: 1
     type: L
     req: optional
     valid_values: ["A", "V"]
     description: A = Audio, V = Video. Added CWR 2.0.
-  - name: Recording Technique
+  - key: recording_technique
+    name: Recording Technique
     start: 263
     length: 1
     type: L
     req: optional
     valid_values: ["A", "D", "U"]
     description: A = Analogue, D = Digital, U = Unknown. Added CWR 2.0.
-  - name: Media Type
+  - key: media_type
+    name: Media Type
     start: 264
     length: 3
     type: L
     req: optional
     since: '2.1'
     description: BIEM/CISAC code for media type. Added CWR 2.1.
-  - name: Recording Title
+  - key: recording_title
+    name: Recording Title
     start: 267
     length: 60
     type: A
     req: optional
     since: '2.2'
     description: Title of the Sound Recording. Added CWR 2.2.
-  - name: Version Title
+  - key: version_title
+    name: Version Title
     start: 327
     length: 60
     type: A
     req: optional
     since: '2.2'
     description: Title given to the version of the Sound Recording (e.g. "remixed by"). Added CWR 2.2.
-  - name: Display Artist
+  - key: display_artist
+    name: Display Artist
     start: 387
     length: 60
     type: A
     req: optional
     since: '2.2'
     description: Name of the artist of the Sound Recording. Added CWR 2.2.
-  - name: Record Label
+  - key: record_label
+    name: Record Label
     start: 447
     length: 60
     type: A
     req: optional
     since: '2.2'
     description: Name of the organisation that produced the Sound Recording. Added CWR 2.2.
-  - name: ISRC Validity
+  - key: isrc_validity
+    name: ISRC Validity
     start: 507
     length: 20
     type: L
@@ -308,7 +328,8 @@ fields:
     description: >-
       If an ISRC is supplied: Y = valid, U = the link is invalid, N = the
       ISRC is invalid. Added CWR 2.2.
-  - name: Submitter Recording Identifier
+  - key: submitter_recording_identifier
+    name: Submitter Recording Identifier
     start: 527
     length: 14
     type: A

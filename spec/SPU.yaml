@@ -534,26 +534,30 @@ rules:
 # (CWR11-1991R3, section 5.4-5.5 -- SPU/OPU share one record format).
 # start/length are 1-based, spec-defined. Record Prefix (1-19) as in NWR.
 fields:
-  - name: Record Type
+  - key: record_type
+    name: Record Type
     start: 1
     length: 3
     type: A
     req: mandatory
     valid_values: ["SPU", "OPU"]
     description: SPU (Publisher Controlled By Submitter) or OPU (Other Publisher).
-  - name: Transaction Sequence #
+  - key: transaction_sequence
+    name: Transaction Sequence
     start: 4
     length: 8
     type: N
     req: mandatory
     description: Must equal the Transaction Sequence # of the transaction header this record belongs to.
-  - name: Record Sequence #
+  - key: record_sequence
+    name: Record Sequence
     start: 12
     length: 8
     type: N
     req: mandatory
     description: Previous record's Record Sequence # + 1.
-  - name: Publisher Sequence #
+  - key: publisher_sequence
+    name: Publisher Sequence
     start: 20
     length: 2
     type: N
@@ -561,19 +565,22 @@ fields:
     description: >-
       A sequential number assigned to the original publishers on this work;
       the first chain is 1, each subsequent chain increments by 1.
-  - name: Interested Party #
+  - key: interested_party
+    name: Interested Party
     start: 22
     length: 9
     type: A
     req: conditional
     description: Submitting publisher's unique identifier for this publisher. Required for SPU, optional for OPU.
-  - name: Publisher Name
+  - key: publisher_name
+    name: Publisher Name
     start: 31
     length: 45
     type: A
     req: conditional
     description: The name of this publishing company. Required for SPU, optional for OPU.
-  - name: Publisher Unknown Indicator
+  - key: publisher_unknown_indicator
+    name: Publisher Unknown Indicator
     start: 76
     length: 1
     type: F
@@ -581,20 +588,23 @@ fields:
     description: >-
       Must be blank for SPU. For OPU, must be Y if Publisher Name is blank,
       else Y/N.
-  - name: Publisher Type
+  - key: publisher_type
+    name: Publisher Type
     start: 77
     length: 2
     type: L
     req: conditional
     valid_values_ref: VALID_PUBLISHER_TYPE
     description: Code defining this publisher's role. Required for SPU, optional for OPU.
-  - name: Tax ID #
+  - key: tax_id
+    name: Tax ID
     start: 79
     length: 9
     type: A
     req: optional
     description: The number used to identify this publisher for domestic tax reporting.
-  - name: Publisher IPI Name #
+  - key: publisher_ipi
+    name: Publisher IPI Name
     start: 88
     length: 11
     type: L
@@ -602,55 +612,64 @@ fields:
     description: >-
       Mandatory if this SPU is followed by an SPT (i.e. represents the file
       submitter, the collecting publisher).
-  - name: Submitter Agreement Number
+  - key: submitter_agreement_number
+    name: Submitter Agreement Number
     start: 99
     length: 14
     type: A
     req: optional
     description: The agreement number, unique to the submitter, under which this publisher acquired rights.
-  - name: PR Affiliation Society #
+  - key: pr_affiliation
+    name: PR Affiliation Society
     start: 113
     length: 3
     type: L
     req: conditional
     description: Performing Rights Society this publisher is affiliated with.
-  - name: PR Ownership Share
+  - key: pr_ownership_share
+    name: PR Ownership Share
     start: 116
     length: 5
     type: N
     req: conditional
     description: Publisher's ownership % of performance rights. Range 0-5000 (0-50.00%), implied decimal.
-  - name: MR Society
+  - key: mr_society
+    name: MR Society
     start: 121
     length: 3
     type: L
     req: conditional
     description: Mechanical Rights Society this publisher is affiliated with.
-  - name: MR Ownership Share
+  - key: mr_ownership_share
+    name: MR Ownership Share
     start: 124
     length: 5
     type: N
     req: conditional
     description: Publisher's ownership % of mechanical rights. Range 0-10000 (0-100.00%), implied decimal.
-  - name: SR Society
+  - key: sr_society
+    name: SR Society
     start: 129
     length: 3
     type: L
     req: conditional
     description: Society this publisher is affiliated with for synchronization rights.
-  - name: SR Ownership Share
+  - key: sr_ownership_share
+    name: SR Ownership Share
     start: 132
     length: 5
     type: N
     req: conditional
     description: Publisher's ownership % of synch rights. Range 0-10000 (0-100.00%), implied decimal.
-  - name: Special Agreements Indicator
+  - key: special_agreements_indicator
+    name: Special Agreements Indicator
     start: 137
     length: 1
     type: L
     req: optional
     description: Indicates publisher claiming reversionary rights (societies that recognize them, e.g. SOCAN).
-  - name: First Recording Refusal Ind
+  - key: first_recording_refusal_ind
+    name: First Recording Refusal Ind
     start: 138
     length: 1
     type: F
@@ -659,31 +678,36 @@ fields:
     description: >-
       Whether the submitter has refused authority for the first recording.
       Mandatory for UK society registrations.
-  - name: Filler
+  - key: filler
+    name: Filler
     start: 139
     length: 1
     type: A
     req: optional
     description: Fill with a blank.
-  - name: Publisher IPI Base Number
+  - key: publisher_ipi_base_number
+    name: Publisher IPI Base Number
     start: 140
     length: 13
     type: L
     req: optional
     description: The IPI base number assigned to this publisher. Added CWR 2.0.
-  - name: International Standard Agreement Code
+  - key: international_standard_agreement_code
+    name: International Standard Agreement Code
     start: 153
     length: 14
     type: A
     req: optional
     description: The ISAC assigned to the agreement under which this publisher share is administered. Added CWR 2.0.
-  - name: Society-assigned Agreement Number
+  - key: society_assigned_agreement
+    name: Society assigned Agreement Number
     start: 167
     length: 14
     type: A
     req: optional
     description: The agreement number assigned by the society of the sub-publisher. Added CWR 2.0.
-  - name: Agreement Type
+  - key: agreement_type
+    name: Agreement Type
     start: 181
     length: 2
     type: L
@@ -691,7 +715,8 @@ fields:
     since: '2.1'
     valid_values_ref: VALID_AGREEMENT_TYPE
     description: Code defining the category of agreement. Added CWR 2.1.
-  - name: USA License Ind
+  - key: usa_license_ind
+    name: USA License Indicator
     start: 183
     length: 1
     type: L

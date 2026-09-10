@@ -38,33 +38,38 @@ rules:
     exercisable via a single TER field patch.
   bmi_exception: ''
 fields:
-  - name: Record Type
+  - key: record_type
+    name: Record Type
     start: 1
     length: 3
     type: A
     req: mandatory
     valid_values: ["TER"]
     description: TER = Territory in Agreement.
-  - name: Transaction Sequence #
+  - key: transaction_sequence
+    name: Transaction Sequence
     start: 4
     length: 8
     type: N
     req: mandatory
     description: Must equal the Transaction Sequence # of the AGR transaction header this record belongs to.
-  - name: Record Sequence #
+  - key: record_sequence
+    name: Record Sequence
     start: 12
     length: 8
     type: N
     req: mandatory
     description: Previous record's Record Sequence # + 1.
-  - name: Inclusion/Exclusion Indicator
+  - key: inclusion_exclusion_indicator
+    name: Inclusion Exclusion Indicator
     start: 20
     length: 1
     type: L
     req: mandatory
     valid_values_ref: VALID_INCL_EXCL
     description: Whether the territory in this record is within (I) or excluded from (E) the agreement's territorial scope.
-  - name: TIS Numeric Code
+  - key: tis_numeric_code
+    name: TIS Numeric Code
     start: 21
     length: 4
     type: L

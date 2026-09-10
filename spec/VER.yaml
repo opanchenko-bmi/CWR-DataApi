@@ -114,99 +114,115 @@ rules:
   fail:
     writer_1_last_name: SMÍTH
 fields:
-  - name: Record Type
+  - key: record_type
+    name: Record Type
     start: 1
     length: 3
     type: A
     req: mandatory
     valid_values: ["VER"]
     description: VER = Original Work Title for Versions.
-  - name: Transaction Sequence #
+  - key: transaction_sequence
+    name: Transaction Sequence
     start: 4
     length: 8
     type: N
     req: mandatory
     description: Must equal the Transaction Sequence # of the transaction header this record belongs to.
-  - name: Record Sequence #
+  - key: record_sequence
+    name: Record Sequence
     start: 12
     length: 8
     type: N
     req: mandatory
     description: Previous record's Record Sequence # + 1.
-  - name: Original Work Title
+  - key: original_work_title
+    name: Original Work Title
     start: 20
     length: 60
     type: A
     req: mandatory
     description: Original title of the work from which this version was derived.
-  - name: ISWC of Original Work
+  - key: iswc_of_original_work
+    name: ISWC of Original Work
     start: 80
     length: 11
     type: A
     req: optional
     description: The ISWC assigned to the work from which this version has been derived.
-  - name: Language Code
+  - key: language_code
+    name: Language Code
     start: 91
     length: 2
     type: L
     req: optional
     valid_values_ref: VALID_LANGUAGE
     description: The language in which the original work was written.
-  - name: Writer 1 Last Name
+  - key: writer_1_last_name
+    name: Writer 1 Last Name
     start: 93
     length: 45
     type: A
     req: optional
     description: Last name of the original writer/composer of the work this version was derived from.
-  - name: Writer 1 First Name
+  - key: writer_1_first_name
+    name: Writer 1 First Name
     start: 138
     length: 30
     type: A
     req: optional
     description: First name of the original writer/composer of the work this version was derived from.
-  - name: Source
+  - key: source
+    name: Source
     start: 168
     length: 60
     type: A
     req: optional
     description: A description of the source from which the work was obtained.
-  - name: Writer 1 IPI Name #
+  - key: writer_1_ipi_name
+    name: Writer 1 IPI Name
     start: 228
     length: 11
     type: L
     req: optional
     description: The IPI Name # assigned to the first writer of the original work. Added CWR 2.0.
-  - name: Writer 1 IPI Base Number
+  - key: writer_1_ipi_base_number
+    name: Writer 1 IPI Base Number
     start: 239
     length: 13
     type: L
     req: optional
     description: The IPI base number assigned to this writer. Added CWR 2.0.
-  - name: Writer 2 Last Name
+  - key: writer_2_last_name
+    name: Writer 2 Last Name
     start: 252
     length: 45
     type: A
     req: optional
     description: Last name of the second writer of the original work. Added CWR 2.0.
-  - name: Writer 2 First Name
+  - key: writer_2_first_name
+    name: Writer 2 First Name
     start: 297
     length: 30
     type: A
     req: optional
     description: First name of the second writer of the original work. Added CWR 2.0.
-  - name: Writer 2 IPI Name #
+  - key: writer_2
+    name: Writer 2 IPI Name
     start: 327
     length: 11
     type: L
     req: optional
     description: The IPI Name # assigned to the second writer of the original work. Added CWR 2.0.
-  - name: Writer 2 IPI Base Number
+  - key: writer_2_ipi_base_number
+    name: Writer 2 IPI Base Number
     start: 338
     length: 13
     type: L
     req: optional
     description: The IPI base number assigned to this writer. Added CWR 2.0.
-  - name: Submitter Work #
+  - key: submitter_work
+    name: Submitter Work
     start: 351
     length: 14
     type: A

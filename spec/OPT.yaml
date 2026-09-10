@@ -68,77 +68,89 @@ rules:
   reason: Structural record-ordering check; not exercisable via a single-field patch.
   bmi_exception: ''
 fields:
-  - name: Record Type
+  - key: record_type
+    name: Record Type
     start: 1
     length: 3
     type: A
     req: mandatory
     valid_values: ["OPT"]
     description: OPT = Publisher Non-Controlled Collection.
-  - name: Transaction Sequence #
+  - key: transaction_sequence
+    name: Transaction Sequence
     start: 4
     length: 8
     type: N
     req: mandatory
     description: Must equal the Transaction Sequence # of the transaction header this record belongs to.
-  - name: Record Sequence #
+  - key: record_sequence
+    name: Record Sequence
     start: 12
     length: 8
     type: N
     req: mandatory
     description: Previous record's Record Sequence # + 1.
-  - name: Interested Party #
+  - key: interested_party
+    name: Interested Party
     start: 20
     length: 9
     type: A
     req: mandatory
     description: Submitting publisher's unique identifier for this publisher; matches the preceding SPU/OPU.
-  - name: Constant
+  - key: constant
+    name: Constant
     start: 29
     length: 6
     type: A
     req: mandatory
     description: Set this field equal to spaces.
-  - name: PR Collection Share
+  - key: pr_collection_share
+    name: PR Collection Share
     start: 35
     length: 5
     type: N
     req: conditional
     description: '% of total royalty for performance collected by this publisher within the territory. Range 0-5000.'
-  - name: MR Collection Share
+  - key: mr_collection_share
+    name: MR Collection Share
     start: 40
     length: 5
     type: N
     req: conditional
     description: '% of total royalty for mechanical uses collected by this publisher. Range 0-10000.'
-  - name: SR Collection Share
+  - key: sr_collection_share
+    name: SR Collection Share
     start: 45
     length: 5
     type: N
     req: conditional
     description: '% of total royalty for synch rights collected by this publisher. Range 0-10000.'
-  - name: Inclusion/Exclusion Indicator
+  - key: inclusion_exclusion_indicator
+    name: Inclusion Exclusion Indicator
     start: 50
     length: 1
     type: L
     req: mandatory
     valid_values_ref: VALID_INCL_EXCL
     description: Whether the territory in this record is included (I) or excluded (E). Added CWR 2.0.
-  - name: TIS Numeric Code
+  - key: tis_numeric_code
+    name: TIS Numeric Code
     start: 51
     length: 4
     type: L
     req: mandatory
     valid_values_ref: VALID_TIS
     description: A territory within which this publisher claims collection rights. Added CWR 2.0.
-  - name: Shares change
+  - key: shares_change
+    name: Shares change
     start: 55
     length: 1
     type: B
     req: optional
     valid_values_ref: VALID_YN
     description: Y if the shares change on sub-publication or similar reason. Added CWR 2.0.
-  - name: Sequence #
+  - key: sequence
+    name: Sequence
     start: 56
     length: 3
     type: N

@@ -131,26 +131,30 @@ rules:
 # (CWR11-1991R3, section 5.14). start/length are 1-based, spec-defined.
 # Record Prefix (1-19) as in NWR.
 fields:
-  - name: Record Type
+  - key: record_type
+    name: Record Type
     start: 1
     length: 3
     type: A
     req: mandatory
     valid_values: ["PWR"]
     description: PWR = Publisher For Writer.
-  - name: Transaction Sequence #
+  - key: transaction_sequence
+    name: Transaction Sequence
     start: 4
     length: 8
     type: N
     req: mandatory
     description: Must equal the Transaction Sequence # of the transaction header this record belongs to.
-  - name: Record Sequence #
+  - key: record_sequence
+    name: Record Sequence
     start: 12
     length: 8
     type: N
     req: mandatory
     description: Previous record's Record Sequence # + 1.
-  - name: Publisher IP #
+  - key: publisher_ip
+    name: Publisher IP
     start: 20
     length: 9
     type: A
@@ -159,32 +163,37 @@ fields:
       The publisher interested party number pointing back to the SPU/OPU
       record for the original publisher/income participant representing
       this writer.
-  - name: Publisher Name
+  - key: publisher_name
+    name: Publisher Name
     start: 29
     length: 45
     type: A
     req: conditional
     description: The name of the publisher indicated by the Interested Party # field.
-  - name: Submitter Agreement Number
+  - key: submitter_agreement_number
+    name: Submitter Agreement Number
     start: 74
     length: 14
     type: A
     req: optional
     description: The unique number assigned to this agreement by the submitter. Added CWR 2.0.
-  - name: Society-Assigned Agreement Number
+  - key: society_assigned_agreement
+    name: Society Assigned Agreement Number
     start: 88
     length: 14
     type: A
     req: optional
     description: The unique number assigned to this agreement by the society. Added CWR 2.0.
-  - name: Writer IP #
+  - key: writer_ip
+    name: Writer IP
     start: 102
     length: 9
     type: A
     req: conditional
     since: '2.1'
     description: The writer interested party number pointing back to the SWR/OWR record in an explicit link. Added CWR 2.1.
-  - name: Publisher Sequence #
+  - key: publisher_sequence
+    name: Publisher Sequence
     start: 111
     length: 2
     type: N

@@ -38,26 +38,30 @@ rules:
 # Field layout below is transcribed from the official CISAC CWR 2.2 spec
 # (CWR11-1991R3, section 3.8). start/length are 1-based, spec-defined.
 fields:
-  - name: Record Type
+  - key: record_type
+    name: Record Type
     start: 1
     length: 3
     type: A
     req: mandatory
     valid_values: ["TRL"]
     description: TRL = Transmission Trailer
-  - name: Group Count
+  - key: group_count
+    name: Group Count
     start: 4
     length: 5
     type: N
     req: mandatory
     description: The number of groups included within this file.
-  - name: Transaction Count
+  - key: transaction_count
+    name: Transaction Count
     start: 9
     length: 8
     type: N
     req: mandatory
     description: The number of transactions included within this file.
-  - name: Record Count
+  - key: record_count
+    name: Record Count
     start: 17
     length: 8
     type: N

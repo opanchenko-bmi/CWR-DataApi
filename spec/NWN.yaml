@@ -59,44 +59,51 @@ rules:
   fail:
     language_code: ZZ
 fields:
-  - name: Record Type
+  - key: record_type
+    name: Record Type
     start: 1
     length: 3
     type: A
     req: mandatory
     valid_values: ["NWN"]
     description: NWN = Non-Roman Alphabet Writer Name.
-  - name: Transaction Sequence #
+  - key: transaction_sequence
+    name: Transaction Sequence
     start: 4
     length: 8
     type: N
     req: mandatory
     description: Must equal the Transaction Sequence # of the transaction header this record belongs to.
-  - name: Record Sequence #
+  - key: record_sequence
+    name: Record Sequence
     start: 12
     length: 8
     type: N
     req: mandatory
     description: Previous record's Record Sequence # + 1.
-  - name: Interested Party #
+  - key: interested_party
+    name: Interested Party
     start: 20
     length: 9
     type: A
     req: conditional
     description: Submitting publisher's unique identifier for this writer; must match the preceding SWR/OWR.
-  - name: Writer Last Name
+  - key: writer_last_name
+    name: Writer Last Name
     start: 29
     length: 160
     type: A
     req: mandatory
     description: The last or single name of this writer, in non-Roman alphabet.
-  - name: Writer First Name
+  - key: writer_first_name
+    name: Writer First Name
     start: 189
     length: 160
     type: A
     req: optional
     description: The first name of this writer, in non-Roman alphabet.
-  - name: Language Code
+  - key: language_code
+    name: Language Code
     start: 349
     length: 2
     type: L

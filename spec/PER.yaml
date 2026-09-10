@@ -56,44 +56,51 @@ rules:
   reason: No IPI database is modeled in this project's lookups.
   bmi_exception: ''
 fields:
-  - name: Record Type
+  - key: record_type
+    name: Record Type
     start: 1
     length: 3
     type: A
     req: mandatory
     valid_values: ["PER"]
     description: PER = Performing Artist.
-  - name: Transaction Sequence #
+  - key: transaction_sequence
+    name: Transaction Sequence
     start: 4
     length: 8
     type: N
     req: mandatory
     description: Must equal the Transaction Sequence # of the transaction header this record belongs to.
-  - name: Record Sequence #
+  - key: record_sequence
+    name: Record Sequence
     start: 12
     length: 8
     type: N
     req: mandatory
     description: Previous record's Record Sequence # + 1.
-  - name: Performing Artist Last Name
+  - key: performing_artist_last_name
+    name: Performing Artist Last Name
     start: 20
     length: 45
     type: A
     req: mandatory
     description: Last name of a person, or full name of a group, that performed the work.
-  - name: Performing Artist First Name
+  - key: performing_artist_first_name
+    name: Performing Artist First Name
     start: 65
     length: 30
     type: A
     req: optional
     description: First name associated with the performing artist.
-  - name: Performing Artist IPI Name #
+  - key: performing_artist
+    name: Performing Artist IPI Name
     start: 95
     length: 11
     type: L
     req: optional
     description: The IPI Name # corresponding to this performing artist.
-  - name: Performing Artist IPI Base Number
+  - key: performing_artist_ipi_base_number
+    name: Performing Artistt IPI Base Number
     start: 106
     length: 13
     type: L
