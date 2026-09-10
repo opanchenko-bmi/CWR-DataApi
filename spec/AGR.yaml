@@ -307,57 +307,66 @@ rules:
   reason: Structural, file-level ordering check; not exercisable via a single AGR field patch.
   bmi_exception: ''
 fields:
-  - name: Record Type
+  - key: record_type
+    name: Record Type
     start: 1
     length: 3
     type: A
     req: mandatory
     valid_values: ["AGR"]
     description: AGR = Agreement Supporting Work Registration.
-  - name: Transaction Sequence #
+  - key: transaction_sequence
+    name: Transaction Sequence #
     start: 4
     length: 8
     type: N
     req: mandatory
     description: 00000000 for the first transaction in a group, else previous transaction header's value + 1.
-  - name: Record Sequence #
+  - key: record_sequence
+    name: Record Sequence #
     start: 12
     length: 8
     type: N
     req: mandatory
     description: 00000000 for a transaction header record.
-  - name: Submitter Agreement Number
+  - key: submitter_agreement_number
+    name: Submitter Agreement Number
     start: 20
     length: 14
     type: A
     req: mandatory
     description: The submitter's unique identifier for this agreement.
-  - name: International Standard Agreement Code
+  - key: international_standard_agreement_code
+    name: International Standard Agreement Code
     start: 34
     length: 14
     type: A
     req: optional
     description: The ISAC assigned to this agreement (not yet available per spec text).
-  - name: Agreement Type
+  - key: agreement_type
+    name: Agreement Type
     start: 48
     length: 2
     type: L
     req: mandatory
     valid_values_ref: VALID_AGREEMENT_TYPE
     description: Code defining the category of agreement.
-  - name: Agreement Start Date
+  - key: agreement_start_date
+    name: Agreement Start Date
     start: 50
     length: 8
     type: D
     req: mandatory
     description: The date the transfer of rights to the acquiring party becomes effective.
-  - name: Agreement End Date
+  - key: agreement_end_date
+    name: Agreement End Date
     start: 58
     length: 8
     type: D
     req: optional
     description: The date the transfer of rights ceases, except for agreed provisions such as a collection period.
-  - name: Retention End Date
+  - key: retention_end_date
+    name: Retention End Date
     start: 66
     length: 8
     type: D
@@ -365,27 +374,31 @@ fields:
     description: >-
       End date of the retention period, superseding Agreement End Date when
       a retention period applies. Must be >= Agreement End Date.
-  - name: Prior Royalty Status
+  - key: prior_royalty_status
+    name: Prior Royalty Status
     start: 74
     length: 1
     type: A
     req: mandatory
     valid_values: ["N", "A", "D"]
     description: N = none, A = all, D = date (Prior Royalty Start Date entered).
-  - name: Prior Royalty Start Date
+  - key: prior_royalty_start_date
+    name: Prior Royalty Start Date
     start: 75
     length: 8
     type: D
     req: conditional
     description: Required if and only if Prior Royalty Status is D; must be before Agreement Start Date.
-  - name: Post-term Collection Status
+  - key: post_term_collection_status
+    name: Post-term Collection Status
     start: 83
     length: 1
     type: A
     req: mandatory
     valid_values: ["N", "O", "D"]
     description: N = no, O = open-ended, D = date (Post-term Collection End Date entered).
-  - name: Post-term Collection End Date
+  - key: post_term_collection_end_date
+    name: Post-term Collection End Date
     start: 84
     length: 8
     type: D
@@ -393,19 +406,22 @@ fields:
     description: >-
       Required if and only if Post-term Collection Status is D; must be
       after Retention End Date (if present) or else Agreement End Date.
-  - name: Date of Signature of Agreement
+  - key: date_of_signature
+    name: Date of Signature of Agreement
     start: 92
     length: 8
     type: D
     req: optional
     description: The date the written contract was signed.
-  - name: Number of Works
+  - key: number_of_works
+    name: Number of Works
     start: 100
     length: 5
     type: N
     req: mandatory
     description: Number of works registered subject to this agreement, specific to this file.
-  - name: Sales/Manufacture Clause
+  - key: sales_manufacture_clause
+    name: Sales/Manufacture Clause
     start: 105
     length: 1
     type: L
@@ -414,21 +430,24 @@ fields:
     description: >-
       S = Sales Clause, M = Manufacture Clause. Mandatory when Agreement
       Type is OS or PS.
-  - name: Shares change
+  - key: shares_change
+    name: Shares change
     start: 106
     length: 1
     type: B
     req: optional
     valid_values_ref: VALID_YN
     description: Y if writer-interest shares can change on sub-publication or similar. Default N.
-  - name: Advance Given
+  - key: advance_given
+    name: Advance Given
     start: 107
     length: 1
     type: B
     req: optional
     valid_values_ref: VALID_YN
     description: Y if there is an advance paid for this agreement. Default N.
-  - name: Society-assigned Agreement Number
+  - key: society_assigned_agreement_number
+    name: Society-assigned Agreement Number
     start: 108
     length: 14
     type: A

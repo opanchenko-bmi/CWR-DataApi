@@ -71,38 +71,44 @@ rules:
   reason: The spec's "CWR National Titles" character subset isn't modeled in spec/_lookups.yaml, so there's no distinct rule to validate against beyond FLV-04's ASCII relaxation.
   bmi_exception: ''
 fields:
-  - name: Record Type
+  - key: record_type
+    name: Record Type
     start: 1
     length: 3
     type: A
     req: mandatory
-    valid_values: ["ALT"]
-    description: ALT = Alternate Title.
-  - name: Transaction Sequence #
+    valid_values: ["AGR"]
+    description: AGR = Agreement Supporting Work Registration.
+  - key: transaction_sequence
+    name: Transaction Sequence #
     start: 4
     length: 8
     type: N
     req: mandatory
-    description: Must equal the Transaction Sequence # of the transaction header this record belongs to.
-  - name: Record Sequence #
+    description: 00000000 for the first transaction in a group, else previous transaction header's value + 1.
+  - key: record_sequence
+    name: Record Sequence #
     start: 12
     length: 8
     type: N
     req: mandatory
-    description: Previous record's Record Sequence # + 1.
-  - name: Alternate Title
+    description: 00000000 for a transaction header record.
+  - key: alternate_title
+    name: Alternate Title
     start: 20
     length: 60
     type: A
     req: mandatory
     description: AKA or pseudonym of the work title.
-  - name: Title Type
+  - key: title_type
+    name: Title Type
     start: 80
     length: 2
     type: L
     req: mandatory
     description: Type of alternate title presented (Title Type Table), other than OT (Original Title).
-  - name: Language Code
+  - key: language_code
+    name: Language Code
     start: 82
     length: 2
     type: L

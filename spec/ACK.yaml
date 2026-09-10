@@ -125,38 +125,44 @@ rules:
   fail:
     transaction_status: ZZ
 fields:
-  - name: Record Type
+  - key: record_type
+    name: Record Type
     start: 1
     length: 3
     type: A
     req: mandatory
     valid_values: ["ACK"]
     description: ACK = Acknowledgement of Transaction.
-  - name: Transaction Sequence #
+  - key: transaction_sequence
+    name: Transaction Sequence #
     start: 4
     length: 8
     type: N
     req: mandatory
     description: 00000000 for the first transaction in a group, else previous transaction header's value + 1.
-  - name: Record Sequence #
+  - key: record_sequence
+    name: Record Sequence #
     start: 12
     length: 8
     type: N
     req: mandatory
     description: 00000000 for a transaction header record.
-  - name: Creation Date
+  - key: creation_date
+    name: Creation Date
     start: 20
     length: 8
     type: D
     req: mandatory
     description: The Creation Date of the original file that contained the transaction this ACK applies to.
-  - name: Creation Time
+  - key: creation_time
+    name: Creation Time
     start: 28
     length: 6
     type: T
     req: mandatory
     description: The Creation Time of the original file that contained the transaction this ACK applies to.
-  - name: Original Group ID
+  - key: original_group_id
+    name: Original Group ID
     start: 34
     length: 5
     type: N
@@ -164,7 +170,8 @@ fields:
     description: >-
       The Group ID of the original transaction this ACK applies to. Zeroes
       if the ACK is a result of an HDR/TRL record problem.
-  - name: Original Transaction Sequence #
+  - key: original_transaction_sequence
+    name: Original Transaction Sequence #
     start: 39
     length: 8
     type: N
@@ -172,7 +179,8 @@ fields:
     description: >-
       The Transaction Sequence # of the original transaction this ACK
       applies to. Zeroes if the ACK is a result of an HDR/TRL record problem.
-  - name: Original Transaction Type
+  - key: original_transaction_type
+    name: Original Transaction Type
     start: 47
     length: 3
     type: L
@@ -181,19 +189,22 @@ fields:
     description: >-
       The Transaction Type of the original transaction this ACK applies to.
       HDR or TRL if the ACK is a result of an HDR/TRL record problem.
-  - name: Creation Title
+  - key: creation_title
+    name: Creation Title
     start: 50
     length: 60
     type: A
     req: conditional
     description: The title as delivered by the submitter. Required if the ACK is in response to an NWR or REV.
-  - name: Submitter Creation #
+  - key: submitter_creation_number
+    name: Submitter Creation Number
     start: 110
     length: 20
     type: A
     req: conditional
     description: The unique identifier assigned by the original submitter to this work. Required if in response to a transaction.
-  - name: Recipient Creation #
+  - key: recipient_creation_number
+    name: Recipient Creation Number
     start: 130
     length: 20
     type: A
@@ -202,13 +213,15 @@ fields:
       The unique identifier assigned by the recipient. Required if in
       response to a transaction and the transaction status indicates
       acceptance.
-  - name: Processing Date
+  - key: processing_date
+    name: Processing Date
     start: 150
     length: 8
     type: D
     req: mandatory
     description: The date this transaction or file was formally processed by the recipient.
-  - name: Transaction Status
+  - key: transaction_status
+    name: Transaction Status
     start: 158
     length: 2
     type: L

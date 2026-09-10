@@ -64,50 +64,58 @@ rules:
     note: SOME NOTE TEXT
     subject_code: ''
 fields:
-  - name: Record Type
+  - key: record_type
+    name: Record Type
     start: 1
     length: 3
     type: A
     req: mandatory
     valid_values: ["ARI"]
     description: ARI = Additional Related Information.
-  - name: Transaction Sequence #
+  - key: transaction_sequence
+    name: Transaction Sequence
     start: 4
     length: 8
     type: N
     req: mandatory
     description: Must equal the Transaction Sequence # of the transaction header this record belongs to.
-  - name: Record Sequence #
+  - key: record_sequence
+    name: Record Sequence
     start: 12
     length: 8
     type: N
     req: mandatory
     description: Previous record's Record Sequence # + 1.
-  - name: Society #
+  - key: society_number
+    name: Society Number
     start: 20
     length: 3
     type: L
     req: mandatory
     description: Society the note is addressed to (Society Code Table), or 000 for all societies.
-  - name: Work #
+  - key: work
+    name: Work Number
     start: 23
     length: 14
     type: A
     req: conditional
     description: The society work # relating to this registration (e.g. from an unidentified list or website). Either Work # or Note must be entered.
-  - name: Type of Right
+  - key: type_of_right
+    name: Type of Right
     start: 37
     length: 3
     type: L
     req: mandatory
     description: Whether this note relates to performing, mechanical, sync rights, or ALL rights.
-  - name: Subject Code
+  - key: subject_code
+    name: Subject Code
     start: 40
     length: 2
     type: L
     req: conditional
     description: Subject of the ARI; required if Note is not blank.
-  - name: Note
+  - key: note
+    name: Note
     start: 42
     length: 160
     type: A
