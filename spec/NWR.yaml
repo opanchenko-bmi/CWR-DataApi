@@ -1,0 +1,1037 @@
+record_type: NWR
+name: New Work Registration
+rules:
+- id: NWR-FLV-01
+  reject_level: TR
+  field: work_title
+  level: mandatory
+  version: '2.0'
+  description: Work Title must be present.
+  bmi_exception: ''
+  pass:
+    work_title: MIDNIGHT DRIVE
+  fail:
+    work_title: ''
+- id: NWR-FLV-02
+  reject_level: TR
+  field: language_code
+  level: optional
+  version: '2.0'
+  description: Language Code, if entered, must match an entry in the Language Code table.
+  bmi_exception: ''
+  pass:
+    language_code: EN
+  fail:
+    language_code: ZZ
+- id: NWR-FLV-03
+  reject_level: TR
+  field: submitter_work_n
+  level: mandatory
+  version: '2.0'
+  description: Submitter Work Number must be present and unique.
+  bmi_exception: ''
+  pass:
+    submitter_work_n: W0000000123
+  fail:
+    submitter_work_n: ''
+- id: NWR-FLV-04
+  reject_level: FR
+  field: iswc
+  level: optional
+  version: '2.0'
+  description: ISWC when present must match T-DDDDDDDDD-C format.
+  bmi_exception: ''
+  pass:
+    iswc: T1234567894
+  fail:
+    iswc: XX99
+- id: NWR-FLV-05
+  reject_level: FR
+  field: copyright_date
+  level: optional
+  version: '2.0'
+  description: Copyright Date must be a valid date.
+  bmi_exception: ''
+  pass:
+    copyright_date: '20200101'
+  fail:
+    copyright_date: '99999999'
+- id: NWR-FLV-06
+  reject_level: TR
+  field: musical_work_distribution_category
+  level: mandatory
+  version: '2.0'
+  description: Musical Work Distribution Category must be entered and match an entry in the table (e.g.
+    POP, SER, JAZ).
+  bmi_exception: ''
+  pass:
+    musical_work_distribution_category: POP
+  fail:
+    musical_work_distribution_category: ZZZ
+- id: NWR-FLV-07
+  reject_level: TR
+  field: duration
+  level: conditional
+  version: '2.0'
+  description: If Musical Work Distribution Category is SER, Duration must be greater than zero.
+  bmi_exception: ''
+  pass:
+    musical_work_distribution_category: SER
+    duration: '015000'
+  fail:
+    musical_work_distribution_category: SER
+    duration: '000000'
+- id: NWR-FLV-09
+  reject_level: FR
+  field: recorded_indicator
+  level: mandatory
+  version: '2.0'
+  description: Recorded Indicator must be equal to Y, N, or U.
+  bmi_exception: ''
+  pass:
+    recorded_indicator: Y
+  fail:
+    recorded_indicator: Z
+- id: NWR-FLV-12
+  reject_level: TR
+  field: version_type
+  level: mandatory
+  version: '2.0'
+  description: Version Type must be a valid code (ORI/MOD).
+  bmi_exception: ''
+  pass:
+    version_type: ORI
+  fail:
+    version_type: ZZZ
+- id: NWR-FLV-14
+  reject_level: TR
+  field: music_arrangement
+  level: conditional
+  version: '2.0'
+  description: If Version Type is MOD, Music Arrangement must be entered.
+  bmi_exception: ''
+  pass:
+    version_type: MOD
+    music_arrangement: ARR
+  fail:
+    version_type: MOD
+    music_arrangement: ''
+- id: NWR-FLV-15
+  reject_level: TR
+  field: lyric_adaptation
+  level: conditional
+  version: '2.0'
+  description: If Version Type is MOD, Lyric Adaptation must be entered.
+  bmi_exception: ''
+  pass:
+    version_type: MOD
+    lyric_adaptation: NEW
+  fail:
+    version_type: MOD
+    lyric_adaptation: ''
+- id: NWR-FLV-16
+  reject_level: FR
+  field: grand_rights_ind
+  level: conditional
+  version: '2.0'
+  description: Grand Rights Ind, if entered, must be equal to Y or N.
+  bmi_exception: ''
+  pass:
+    grand_rights_ind: Y
+  fail:
+    grand_rights_ind: Z
+- id: NWR-FLV-18
+  reject_level: TR
+  field: composite_component_count
+  level: conditional
+  version: '2.0'
+  description: If Composite Type is entered, Composite Component Count must be entered.
+  bmi_exception: ''
+  pass:
+    composite_type: MED
+    composite_component_count: 3
+  fail:
+    composite_type: MED
+    composite_component_count: 0
+- id: NWR-FLV-19
+  reject_level: TR
+  field: composite_type
+  level: conditional
+  version: '2.0'
+  description: If Composite Component Count is entered, Composite Type must be entered.
+  bmi_exception: ''
+  pass:
+    composite_component_count: 3
+    composite_type: MED
+  fail:
+    composite_component_count: 3
+    composite_type: ''
+- id: NWR-FLV-20
+  reject_level: TR
+  field: composite_component_count
+  level: conditional
+  version: '2.0'
+  description: If entered, Composite Component Count must be numeric and greater than 1.
+  bmi_exception: ''
+  pass:
+    composite_type: MED
+    composite_component_count: 3
+  fail:
+    composite_type: MED
+    composite_component_count: 1
+- id: NWR-FLV-24
+  reject_level: TR
+  field: work_title
+  level: mandatory
+  version: '2.0'
+  description: Work Title must contain only valid ASCII characters.
+  bmi_exception: ''
+  pass:
+    work_title: MIDNIGHT DRIVE
+  fail:
+    work_title: MIDNIGHT DRÍVE
+- id: NWR-FLV-08
+  reject_level: FR
+  field: duration
+  level: optional
+  version: '2.0'
+  description: If Musical Work Distribution Category is not SER and Duration is entered, it must be a
+    valid combination of hours, minutes, and seconds.
+  bmi_exception: ''
+  pass:
+    musical_work_distribution_category: POP
+    duration: '015000'
+  fail:
+    musical_work_distribution_category: POP
+    duration: '019900'
+- id: NWR-FLV-10
+  reject_level: FR
+  field: text_music_relationship
+  level: optional
+  version: '2.0'
+  description: Text Music Relationship, if entered, must match an entry in the Text Music Relationship
+    table.
+  bmi_exception: ''
+  pass:
+    text_music_relationship: MTX
+  fail:
+    text_music_relationship: ZZZ
+- id: NWR-FLV-11
+  reject_level: FR
+  field: composite_type
+  level: optional
+  version: '2.0'
+  description: Composite Type, if entered, must match an entry in the Composite Type table.
+  bmi_exception: ''
+  pass:
+    composite_type: MED
+  fail:
+    composite_type: ZZZ
+- id: NWR-FLV-13
+  reject_level: FR
+  field: excerpt_type
+  level: optional
+  version: '2.0'
+  description: Excerpt Type, if entered, must match an entry in the Excerpt Type table.
+  bmi_exception: ''
+  pass:
+    excerpt_type: MOV
+  fail:
+    excerpt_type: ZZZ
+- id: NWR-FLV-14B
+  reject_level: TR
+  field: music_arrangement
+  level: conditional
+  version: '2.0'
+  description: If Version Type is MOD, Music Arrangement must match an entry in the Music Arrangement
+    table.
+  bmi_exception: ''
+  pass:
+    version_type: MOD
+    music_arrangement: ARR
+    lyric_adaptation: NEW
+  fail:
+    version_type: MOD
+    music_arrangement: ZZZ
+    lyric_adaptation: NEW
+- id: NWR-FLV-15B
+  reject_level: TR
+  field: lyric_adaptation
+  level: conditional
+  version: '2.0'
+  description: If Version Type is MOD, Lyric Adaptation must match an entry in the Lyric Adaptation table.
+  bmi_exception: ''
+  pass:
+    version_type: MOD
+    music_arrangement: ARR
+    lyric_adaptation: NEW
+  fail:
+    version_type: MOD
+    music_arrangement: ARR
+    lyric_adaptation: ZZZ
+- id: NWR-FLV-17
+  reject_level: FR
+  field: cwr_work_type
+  level: optional
+  version: '2.0'
+  description: CWR Work Type, if entered, must match an entry in the CWR Work Type table.
+  bmi_exception: ''
+  pass:
+    cwr_work_type: TA
+  fail:
+    cwr_work_type: ZZ
+- id: NWR-FLV-BMI-01
+  reject_level: TR
+  field: duration
+  level: conditional
+  version: '2.0'
+  description: 'For registrations to BMI only: if Musical Work Distribution Category is JAZ and BMI is represented on the work, Duration must be greater than zero.'
+  note: >-
+    This tool has no per-record "society represented" model, so "BMI
+    represented" is approximated in validator.py as any SPU/OPU/SWR/OWR
+    record carrying BMI's Society Code (021) as its PR or MR Affiliation
+    Society; generated by patching the first SPU's PR Affiliation Society
+    to 021 alongside Musical Work Distribution Category/Duration on NWR.
+  bmi_exception: ''
+  targets:
+    - record_type: NWR
+      pass:
+        musical_work_distribution_category: JAZ
+        duration: '015000'
+      fail:
+        musical_work_distribution_category: JAZ
+        duration: '000000'
+    - record_type: SPU
+      pass:
+        pr_affiliation_society: '021'
+      fail:
+        pr_affiliation_society: '021'
+# - id: NWR-FLV-GEMA-01
+#   reject_level: FR
+#   field: iswc
+#   level: conditional
+#   version: '2.0'
+#   description: 'For registrations to GEMA only: if an ISWC is entered and is part of the GEMA number block, that number must already be registered by GEMA.'
+#   implemented: false
+#   reason: Society-specific (GEMA only); no ISWC-block registration database is modeled.
+#   bmi_exception: ''
+# - id: NWR-FLV-SACEM-01
+#   reject_level: FR
+#   field: iswc
+#   level: conditional
+#   version: '2.0'
+#   description: 'For registrations to SACEM only: if an ISWC is entered and is part of the SACEM number block, that number must already be registered by SACEM.'
+#   implemented: false
+#   reason: Society-specific (SACEM only); no ISWC-block registration database is modeled.
+#   bmi_exception: ''
+- id: NWR-TLV-01
+  reject_level: TR
+  field: transaction_count
+  level: mandatory
+  version: '2.0'
+  description: Only one NWR/REV/ISW/EXC transaction is allowed per transaction.
+  note: >-
+    Cross-transaction structural check; engine.py's _apply_nwr_tlv_01
+    clones the NWR header as a bare second transaction (no children of its
+    own, to avoid double-counting shares in every other TLV aggregate
+    check) appended right before GRT.
+  bmi_exception: ''
+# - id: NWR-TLV-02
+#   reject_level: FR
+#   field: null
+#   level: mandatory
+#   version: '2.0'
+#   description: If Record Type is REV and the work hasn't been successfully registered with the receiving society, the record type is changed to NWR.
+#   implemented: false
+#   reason: Requires cross-file registration history this tool doesn't track.
+#   bmi_exception: ''
+- id: NWR-TLV-04
+  reject_level: TR
+  field: pr_ownership_share
+  level: mandatory
+  version: '2.0'
+  description: >-
+    Total Ownership shares across all SPU and OPU records must be <= 50%
+    for PR Shares and <= 100% for MR/SR Shares (tolerance .06%). Total
+    Writer Ownership shares across all SWR/OWR must be 0% or >= 50% for PR,
+    <= 100% for MR/SR.
+  note: >-
+    Checked by validator.py as a cross-record aggregate across all
+    SPU/OPU/SWR/OWR children (finding attributed to NWR); generated by
+    patching the first SPU's own PR Ownership Share (still individually
+    valid at 50.00%) high enough to push the file-wide total over the
+    threshold regardless of the other SPUs' shares.
+  bmi_exception: ''
+  targets:
+    - record_type: SPU
+      pass:
+        pr_ownership_share: 2500
+      fail:
+        pr_ownership_share: 5000
+- id: NWR-TLV-07
+  reject_level: TR
+  field: spu_collection
+  level: mandatory
+  version: '2.0'
+  description: For each publisher controlled by the submitter that has collection shares, there must be at least one SPT record.
+  note: >-
+    Checked in validator.py by comparing SPU vs. SPT Interested Party #s;
+    generated by redirecting the baseline's first SPT (belonging to the
+    first SPU) onto a second, already-SPT-covered SPU's IP (AUTO_SPU_IP_2)
+    -- the first SPU ends up with no matching SPT, without leaving any SPT
+    pointing at a nonexistent IP.
+  bmi_exception: ''
+  targets:
+    - record_type: SPT
+      pass:
+        interested_party_n: AUTO_SPU_IP
+      fail:
+        interested_party_n: AUTO_SPU_IP_2
+- id: NWR-TLV-08
+  reject_level: RR
+  field: null
+  level: mandatory
+  version: '2.0'
+  description: Detail records other than those listed in the Transaction Format table may not be submitted for this transaction.
+  implemented: false
+  reason: Whole-transaction structural check; not exercisable via a single-field patch.
+  bmi_exception: ''
+- id: NWR-TLV-10
+  reject_level: TR
+  field: version_type
+  level: mandatory
+  version: '2.0'
+  description: If Version Type is MOD, at least one SWR or OWR record must have a Writer Designation Code of AR/AD/SR/SA/TR.
+  note: >-
+    Checked by validator.py as a cross-record check across all SWR/OWR
+    children (finding attributed to NWR's version_type field). FAIL is
+    clean (MOD + arrangement/adaptation filled in + the one SWR left at a
+    non-arranger code). PASS is a known partial: giving the baseline's only
+    SWR an arranger code satisfies this rule but then trips NWR-TLV-12
+    (needs a separate CA/A/C writer) -- a true clean PASS needs a second
+    SWR/OWR record, which this tool can't synthesize yet.
+  bmi_exception: ''
+  targets:
+    - record_type: NWR
+      pass:
+        version_type: MOD
+        music_arrangement: ARR
+        lyric_adaptation: NEW
+      fail:
+        version_type: MOD
+        music_arrangement: ARR
+        lyric_adaptation: NEW
+    - record_type: SWR
+      pass:
+        writer_designation_code: AR
+      fail:
+        writer_designation_code: CA
+- id: NWR-TLV-12
+  reject_level: TR
+  field: record_type
+  level: mandatory
+  version: '2.0'
+  description: A transaction must contain at least one writer record (SWR or OWR) with a Writer Designation Code of CA, A, or C.
+  note: >-
+    Checked by validator.py as a cross-record check across all SWR/OWR
+    children (finding attributed to NWR's record_type field); generated by
+    patching the baseline's one SWR's Writer Designation Code to PA (valid,
+    but outside CA/A/C and outside the arranger set too, so it doesn't
+    collaterally trip NWR-TLV-23/NWR-FLV-BMI-01-style checks).
+  bmi_exception: ''
+  targets:
+    - record_type: SWR
+      pass:
+        writer_designation_code: CA
+      fail:
+        writer_designation_code: PA
+- id: NWR-TLV-13
+  reject_level: TR
+  field: null
+  level: mandatory
+  version: '2.0'
+  description: If Record Type is NWR, the work cannot previously have been sent and accepted on a CWR transaction.
+  implemented: false
+  reason: Requires cross-file registration history this tool doesn't track.
+  bmi_exception: ''
+- id: NWR-TLV-14
+  reject_level: TR
+  field: mr_collection_share
+  level: mandatory
+  version: '2.0'
+  description: The total of collection shares cannot exceed 100% for a given right for a territory (tolerance .06%).
+  note: >-
+    Checked by validator.py as a cross-record aggregate across all
+    SPT/OPT/SWT/OWT children (finding attributed to NWR); generated by
+    raising the first chain's World-territory (Administrator) SPT's MR
+    Collection Share to 100% -- still individually valid on its own -- so
+    it alone pushes that territory's combined MR total (with the second
+    chain's own contribution) over the limit. PR/SR use a 50%/100%
+    individual cap respectively that two chains can't cross without
+    exceeding it per-record first, which is why MR was chosen here.
+  bmi_exception: ''
+  targets:
+    - record_type: SPT
+      match:
+        inclusion_exclusion_indicator: I
+      pass:
+        mr_collection_share: 2500
+      fail:
+        mr_collection_share: 10000
+- id: NWR-TLV-16
+  reject_level: TR
+  field: publisher_chain_control
+  level: mandatory
+  version: '2.0'
+  description: A non-controlled publisher (OPU) cannot appear in a chain started with a controlled original publisher (SPU).
+  note: >-
+    The baseline has no OPU record to patch, and none of this tool's
+    single-record-patch mechanisms can add one -- engine.py's
+    _apply_nwr_tlv_16 instead clones the chain's controlled (E) SPU,
+    relabels it OPU (OPU shares SPU's exact REAL_LAYOUT byte offsets),
+    clears its Publisher Type and Ownership Shares (so it doesn't
+    collaterally inflate NWR-TLV-04's total), and keeps the same Publisher
+    Sequence # so it lands in the same chain.
+  bmi_exception: ''
+- id: NWR-TLV-17
+  reject_level: TR
+  field: publisher_chain_originals
+  level: mandatory
+  version: '2.0'
+  description: There can only be one original publisher (Publisher Type E) in a publisher chain.
+  note: >-
+    Checked in validator.py by counting Publisher Type E records per
+    Publisher Sequence #; generated by retyping the first chain's
+    Administrator (AM) SPU to E as well, giving that chain two.
+  bmi_exception: ''
+  targets:
+    - record_type: SPU
+      match:
+        publisher_type: AM
+      pass:
+        publisher_type: AM
+      fail:
+        publisher_type: E
+- id: NWR-TLV-20
+  reject_level: TR
+  field: swr_collection
+  level: mandatory
+  version: '2.0'
+  description: For each writer controlled by the submitter that has collection shares, there must be at least one SWT record.
+  note: >-
+    Checked in validator.py by comparing SWR vs. SWT Interested Party #s.
+    The baseline has only one SWR/SWT pair, so unlike NWR-TLV-07 there's no
+    second writer's SWT to redirect onto -- FAIL mismatches the SWT's IP
+    outright, which also collaterally trips the pre-existing "SWT must
+    match a known SWR" check. A fully clean FAIL would need a second
+    SWR/OWR record, which this tool can't synthesize yet.
+  bmi_exception: ''
+  targets:
+    - record_type: SWT
+      pass:
+        interested_party_n: AUTO_SWR_IP
+      fail:
+        interested_party_n: '999999999'
+- id: NWR-TLV-22
+  reject_level: GR
+  field: grh_type_match
+  level: mandatory
+  version: '2.0'
+  description: The Transaction Record Type (NWR or REV) must be the same as the Transaction Type of the immediately preceding GRH record.
+  note: >-
+    Previously left deliberately unchecked on a concern it would fire
+    against every generated file (this app's GRH defaults to NWR, matching
+    every synthetic NWR record); in practice, the only other rule that ever
+    patches GRH's Transaction Type away from NWR is GRH-FLV-01's own FAIL
+    case, where this now firing alongside it is a correct consequence, not
+    a false positive -- confirmed by a full regression run. Generated here
+    by mismatching GRH's Transaction Type against the actual NWR header.
+  bmi_exception: ''
+  targets:
+    - record_type: GRH
+      pass:
+        transaction_type: NWR
+      fail:
+        transaction_type: REV
+- id: NWR-TLV-23
+  reject_level: TR
+  field: version_type
+  level: mandatory
+  version: '2.1'
+  description: If Version Type is ORI, there cannot be an SWR or OWR record with a Writer Designation Code of AR/AD/SR/SA/TR.
+  note: >-
+    Checked by validator.py as a cross-record check across all SWR/OWR
+    children (finding attributed to NWR's version_type field); Version Type
+    is left at the baseline's default ORI (no patch needed) and only the
+    one SWR's Writer Designation Code is toggled.
+  bmi_exception: ''
+  targets:
+    - record_type: SWR
+      pass:
+        writer_designation_code: CA
+      fail:
+        writer_designation_code: AR
+- id: NWR-TLV-24
+  reject_level: TR
+  field: null
+  level: mandatory
+  version: '2.1'
+  description: If all writers (SWR/OWR) are in the public domain, the total ownership shares for performing rights must equal zero.
+  implemented: false
+  reason: This tool doesn't track a "public domain" writer flag.
+  bmi_exception: ''
+- id: NWR-TLV-25
+  reject_level: TR
+  field: publisher_chain_share
+  level: mandatory
+  version: '2.1'
+  description: For each SPU publisher chain (excluding OPUs), the sum of PR/MR/SR Ownership Share for SPU records with type E or AQ must be greater than zero.
+  note: >-
+    Checked in validator.py by summing PR/MR/SR Ownership Share across a
+    chain's E/AQ records; generated by zeroing the first chain's Original
+    Publisher (E) shares -- that chain has no AQ, so its E record is the
+    only contributor.
+  bmi_exception: ''
+  targets:
+    - record_type: SPU
+      pass:
+        pr_ownership_share: 2500
+        mr_ownership_share: 2500
+        sr_ownership_share: 0
+      fail:
+        pr_ownership_share: 0
+        mr_ownership_share: 0
+        sr_ownership_share: 0
+- id: NWR-TLV-26
+  reject_level: TR
+  field: publisher_chain_acquirer
+  level: mandatory
+  version: '2.1'
+  description: If an SPU record with type AQ appears in a chain of title, the Ownership shares on the preceding Original publisher must be zero.
+  note: >-
+    The baseline has no AQ-type SPU -- generated by retyping the first
+    chain's Administrator (AM) SPU to AQ with a nonzero share (satisfying
+    AQ's own pre-existing "must not be all zero" check) while leaving the
+    chain's Original Publisher (E) at its baseline nonzero share for FAIL,
+    or zeroing it for PASS (which stays compatible with NWR-TLV-25, since
+    that check sums E *and* AQ shares together).
+  bmi_exception: ''
+  targets:
+    - record_type: SPU
+      match:
+        publisher_type: AM
+      pass:
+        publisher_type: AQ
+        pr_ownership_share: 2500
+        mr_ownership_share: 2500
+      fail:
+        publisher_type: AQ
+        pr_ownership_share: 2500
+        mr_ownership_share: 2500
+    - record_type: SPU
+      match:
+        publisher_type: E
+      pass:
+        pr_ownership_share: 0
+        mr_ownership_share: 0
+        sr_ownership_share: 0
+      fail:
+        pr_ownership_share: 2500
+        mr_ownership_share: 2500
+        sr_ownership_share: 0
+- id: NWR-TLV-27
+  reject_level: TR
+  field: spt_collection_match
+  level: mandatory
+  version: '2.1'
+  description: >-
+    For performing rights, within each chain of title, the sum of
+    Collection Shares for any group of SPT records within a territory must
+    equal the total Ownership shares on the preceding Original Publisher
+    and Acquirer SPU records (tolerance .06%), under specified conditions.
+  note: >-
+    SPT records are attributed to a chain by file position (the chain they
+    physically follow), not by Interested Party #, since an administrator's
+    IP can legitimately repeat across chains; generated by mismatching the
+    first chain's World-territory (Administrator) SPT's PR Collection Share
+    against the chain's Original Publisher Ownership Share.
+  bmi_exception: ''
+  targets:
+    - record_type: SPT
+      match:
+        inclusion_exclusion_indicator: I
+      pass:
+        pr_collection_share: 2500
+      fail:
+        pr_collection_share: 4000
+- id: NWR-TLV-43
+  reject_level: TR
+  field: record_order
+  level: mandatory
+  version: '2.2'
+  description: >-
+    The sequence of records within the transaction must follow the exact
+    canonical order (NWR/REV/ISW/EXC, SPU, NPN, SPT, OPT, OPU, NPN, OPT,
+    SWR, NWN, SWT, PWR, OWR, NWN, PWR, OWT, ALT, NAT, EWT, NET, NOW, VER,
+    NVT, NOW, PER, NPR, REC, ORN, INS, IND, COM, NCT, NOW, ARI, XRF).
+  note: >-
+    Enforced in validator.py only at the coarser "phase" level this tool
+    can actually model (see _TLV43_PHASE) -- publisher records, then writer
+    records, then PWR, then ALT/PER/REC/ORN/INS-IND/COM/XRF -- since several
+    of the listed record types (NPN, NAT, EWT, NET, NOW, VER, NVT, NPR,
+    NCT, ARI) aren't modeled by this tool at all. Generated by swapping the
+    file positions of the first SWT and first PWR (bytes untouched).
+  bmi_exception: ''
+# - id: NWR-TLV-GEMA-01
+#   reject_level: TR
+#   field: null
+#   level: mandatory
+#   version: '2.1'
+#   description: 'For registrations to GEMA only: the work transaction must contain at least one SPU with PR or MR Affiliation society set to 035 (GEMA), or it is rejected with status NP.'
+#   implemented: false
+#   reason: Society-specific (GEMA only); this tool doesn't model per-record society routing.
+#   bmi_exception: ''
+# - id: NWR-TLV-GEMA-02
+#   reject_level: TR
+#   field: null
+#   level: mandatory
+#   version: '2.1'
+#   description: 'For registrations to GEMA only: if all Writers'' Last Names are entered as "DP" (Public Domain), the work is rejected with status NP.'
+#   implemented: false
+#   reason: Society-specific (GEMA only).
+#   bmi_exception: ''
+# - id: NWR-TLV-HARRYFOX-01
+#   reject_level: TR
+#   field: null
+#   level: mandatory
+#   version: '2.1'
+#   description: 'For registrations to Harry Fox only: a transaction must contain at least one SWR record.'
+#   implemented: false
+#   reason: Society-specific (Harry Fox only); this tool doesn't model per-record society routing.
+#   bmi_exception: ''
+# - id: NWR-TLV-SGAE-01
+#   reject_level: TR
+#   field: null
+#   level: mandatory
+#   version: '2.1'
+#   description: >-
+#     For registrations to SGAE only: SPU records for Spanish sub-publishers
+#     need a pre-notified Society-assigned Agreement Number; total
+#     collection/ownership shares for SGAE territories must equal 100% per
+#     right (PR ownership+collection <= 50%); all-Public-Domain writers are
+#     rejected; and the agreements hierarchy between original publisher,
+#     sub-publisher, and submitter must be pre-notified with matching shares.
+#   implemented: false
+#   reason: Society-specific (SGAE only); no agreements database is modeled.
+#   bmi_exception: ''
+# - id: NWR-TLV-ABRAMUS-01
+#   reject_level: TR
+#   field: null
+#   level: mandatory
+#   version: '2.1'
+#   description: 'For registrations to ABRAMUS and UBC only: all SPU records for a final Sub-Publisher''s collecting shares in Brazil must include the sub-publishing agreement start date in the Society-assigned Agreement Number field (format YYYYMMDD, left-justified).'
+#   implemented: false
+#   reason: Society-specific (ABRAMUS/UBC only); this tool doesn't model per-record society routing.
+#   bmi_exception: ''
+# - id: NWR-TLV-SACEM-02
+#   reject_level: TR
+#   field: null
+#   level: mandatory
+#   version: '2.1'
+#   description: 'For registrations to SACEM only: the work transaction must contain at least one SPU with PR or MR Affiliation society set to 058 (SACEM), or it is rejected with status NP.'
+#   implemented: false
+#   reason: Society-specific (SACEM only); this tool doesn't model per-record society routing.
+#   bmi_exception: ''
+# - id: NWR-TLV-SIAE-01
+#   reject_level: TR
+#   field: null
+#   level: mandatory
+#   version: '2.1'
+#   description: 'For registrations to SIAE only: there must be at least one writer designation code of C or CA on the transaction.'
+#   implemented: false
+#   reason: Society-specific (SIAE only); this tool doesn't model per-record society routing.
+#   bmi_exception: ''
+- id: NWR-TLV-45
+  reject_level: TR
+  field: text_music_relationship
+  level: mandatory
+  version: '2.0'
+  description: If Text Music Relationship is MUS (music only), there should be no CA/A/SA/TR role codes among SWR/OWR writers (only C or AR).
+  note: >-
+    Checked by validator.py as a cross-record check across all SWR/OWR
+    children; generated by setting Text Music Relationship to MUS on NWR
+    and toggling the baseline's one SWR between C (PASS -- also satisfies
+    NWR-TLV-12's CA/A/C requirement) and CA (FAIL).
+  bmi_exception: ''
+  targets:
+    - record_type: NWR
+      pass:
+        text_music_relationship: MUS
+      fail:
+        text_music_relationship: MUS
+    - record_type: SWR
+      pass:
+        writer_designation_code: C
+      fail:
+        writer_designation_code: CA
+# - id: NWR-TLV-ICE-01
+#   reject_level: TR
+#   field: null
+#   level: mandatory
+#   version: '2.2'
+#   description: >-
+#     For registrations to ICE Societies only: if writer designation AR is on
+#     the work, a different writer's designation must be C or CA; if SA is on
+#     the work, a different writer's designation must be A or CA.
+#   implemented: false
+#   reason: Society-specific (ICE only); cross-record check across multiple writer records.
+#   bmi_exception: ''
+- id: NWR-TLV-MUSICMARK-02
+  reject_level: TR
+  field: null
+  level: mandatory
+  version: '2.2'
+  description: 'For registrations to MusicMark societies only: if SWR is BMI, any related publisher must be BMI or non-US PRO; if SWR is ASCAP, any related publisher must be ASCAP or non-US PRO.'
+  implemented: false
+  reason: Society-specific (MusicMark only); cross-record affiliation check.
+  bmi_exception: ''
+# - id: NWR-TLV-ASCAP-01
+#   reject_level: TR
+#   field: null
+#   level: mandatory
+#   version: '2.2'
+#   description: 'For registrations to ASCAP only: the sum of collection shares for performing rights across all writers and publishers for the territory of US must equal 100% (tolerance applies).'
+#   implemented: false
+#   reason: Society-specific (ASCAP only); cross-record aggregate across the whole chain.
+#   bmi_exception: ''
+# - id: NWR-TLV-CWRWORKTYPE-01
+#   reject_level: TR
+#   field: cwr_work_type
+#   level: conditional
+#   version: '2.0'
+#   description: If CWR Work Type is FM, the transaction must include an ORN (Work Origin) record with a Production Title.
+#   implemented: false
+#   reason: >-
+#     Checked by validator.py as a cross-record check against the file's ORN
+#     records, but not exposed as its own generatable single-field-patch rule.
+#   bmi_exception: ''
+- id: NWR-TLV-SER-01
+  reject_level: TR
+  field: musical_work_distribution_category
+  level: conditional
+  version: '2.0'
+  description: If Musical Work Distribution Category is SER, the transaction must include an INS (Instrumentation Summary) or IND (Instrumentation Detail) record.
+  note: >-
+    Checked by validator.py as a cross-record check against the file's
+    INS/IND records. FAIL is clean: the baseline has neither record type,
+    so setting Musical Work Distribution Category to SER (with a valid
+    Duration, to avoid the unrelated NWR-FLV-07 mandatory-duration finding)
+    fires this check on its own. PASS is a known gap: a true compliant
+    example needs an actual INS or IND record added to the file, and this
+    tool has no full byte layout to synthesize either record type from
+    scratch (REAL_LAYOUT only maps a couple of their fields) -- PASS below
+    just leaves Musical Work Distribution Category at the baseline's
+    non-SER default, which doesn't exercise the rule at all.
+  bmi_exception: ''
+  pass:
+    musical_work_distribution_category: POP
+    duration: '015000'
+  fail:
+    musical_work_distribution_category: SER
+    duration: '015000'
+# Field layout below is transcribed from the official CISAC CWR 2.2 spec
+# (CWR11-1991R3, section 4.2-4.5 -- NWR/REV/ISW/EXC share one record
+# format). start/length are 1-based, spec-defined.
+#
+# The first 19 bytes are the shared "Record Prefix" every transaction
+# header/detail record carries (spec p.9): Record Type(3), Transaction
+# Sequence #(8), Record Sequence #(8). Matches DETAIL_PREFIX in
+# cwr_layout.py.
+fields:
+  - name: Record Type
+    start: 1
+    length: 3
+    type: A
+    req: mandatory
+    valid_values: ["NWR", "REV", "ISW", "EXC"]
+    description: NWR (new), REV (revised), ISW (ISWC notification), or EXC (existing work in conflict).
+  - name: Transaction Sequence #
+    start: 4
+    length: 8
+    type: N
+    req: mandatory
+    description: 00000000 for the first transaction in a group, else previous transaction header's value + 1.
+  - name: Record Sequence #
+    start: 12
+    length: 8
+    type: N
+    req: mandatory
+    description: 00000000 for a transaction header record.
+  - name: Work Title
+    start: 20
+    length: 60
+    type: A
+    req: mandatory
+    description: Name/Title of the work.
+  - name: Language Code
+    start: 80
+    length: 2
+    type: L
+    req: optional
+    valid_values_ref: VALID_LANGUAGE
+    description: The code representing the language of this title.
+  - name: Submitter Work #
+    start: 82
+    length: 14
+    type: A
+    req: mandatory
+    description: Number assigned to the work by the submitting/receiving publisher; must be unique for the publisher.
+  - name: ISWC
+    start: 96
+    length: 11
+    type: A
+    req: optional
+    description: The International Standard Work Code assigned to this work.
+  - name: Copyright Date
+    start: 107
+    length: 8
+    type: D
+    req: optional
+    description: Original copyright date of the work.
+  - name: Copyright Number
+    start: 115
+    length: 12
+    type: A
+    req: optional
+    description: Original copyright number of the work.
+  - name: Musical Work Distribution Category
+    start: 127
+    length: 3
+    type: L
+    req: mandatory
+    valid_values_ref: VALID_MWDC
+    description: Describes the type of music as it applies to special distribution rules.
+  - name: Duration
+    start: 130
+    length: 6
+    type: T
+    req: conditional
+    description: >-
+      Duration in HHMMSS. Must be greater than zero if Musical Work
+      Distribution Category is SER (some societies, e.g. BMI, also require
+      it for JAZ).
+  - name: Recorded Indicator
+    start: 136
+    length: 1
+    type: F
+    req: mandatory
+    valid_values_ref: VALID_YNU
+    description: Indicates whether or not the work has ever been recorded.
+  - name: Text Music Relationship
+    start: 137
+    length: 3
+    type: L
+    req: optional
+    description: Indicates whether this work contains music, text, and/or both.
+  - name: Composite Type
+    start: 140
+    length: 3
+    type: L
+    req: optional
+    description: If this is a composite work, indicates the type of composite.
+  - name: Version Type
+    start: 143
+    length: 3
+    type: L
+    req: mandatory
+    valid_values_ref: VALID_VERSION_TYPE
+    description: Indicates relationships between this work and other works (e.g. whether it's an arrangement).
+  - name: Excerpt Type
+    start: 146
+    length: 3
+    type: L
+    req: optional
+    description: If this is an excerpt, indicates the type of excerpt.
+  - name: Music Arrangement
+    start: 149
+    length: 3
+    type: L
+    req: conditional
+    description: If Version Type is MOD, indicates the type of music arrangement.
+  - name: Lyric Adaptation
+    start: 152
+    length: 3
+    type: L
+    req: conditional
+    description: If Version Type is MOD, indicates the type of lyric adaptation.
+  - name: Contact Name
+    start: 155
+    length: 30
+    type: A
+    req: optional
+    description: Name of a business contact person at the organization that originated this transaction.
+  - name: Contact ID
+    start: 185
+    length: 10
+    type: A
+    req: optional
+    description: An identifier associated with the contact person.
+  - name: CWR Work Type
+    start: 195
+    length: 2
+    type: L
+    req: optional
+    description: Values reside in the CWR Work Type table.
+  - name: Grand Rights Ind
+    start: 197
+    length: 1
+    type: B
+    req: conditional
+    valid_values_ref: VALID_YN
+    description: >-
+      Indicates whether this work is originally intended for performance on
+      stage. Mandatory for registrations with the UK societies.
+  - name: Composite Component Count
+    start: 198
+    length: 3
+    type: N
+    req: conditional
+    description: >-
+      If Composite Type is entered, the number of components in this
+      composite. Required for composite works where ASCAP is represented.
+  - name: Date of publication of printed edition
+    start: 201
+    length: 8
+    type: D
+    req: optional
+    description: GEMA-specific -- date the printed, sub-published edition appeared. Added CWR 2.0.
+  - name: Exceptional Clause
+    start: 209
+    length: 1
+    type: F
+    req: optional
+    description: >-
+      GEMA-specific -- Y declares the exceptional clause of the GEMA
+      distribution rules for printed editions applies. Added CWR 2.0.
+  - name: Opus Number
+    start: 210
+    length: 25
+    type: A
+    req: optional
+    description: Number assigned to this work, usually by the composer. Added CWR 2.0.
+  - name: Catalogue Number
+    start: 235
+    length: 25
+    type: A
+    req: optional
+    description: The work catalogue number (e.g. BWV, KV), without dots. Added CWR 2.0.
+  - name: Priority Flag
+    start: 260
+    length: 1
+    type: F
+    req: optional
+    since: '2.1'
+    description: >-
+      Indicates this work should be processed faster (on the charts, a
+      well-known composer, etc.). Added CWR 2.1.
+record_length: 260

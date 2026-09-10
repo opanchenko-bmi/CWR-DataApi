@@ -1,0 +1,197 @@
+record_type: PWR
+name: Publisher For Writer
+rules:
+- id: PWR-FLV-07
+  reject_level: TR
+  field: publisher_sequence_n
+  level: mandatory
+  version: '2.2'
+  description: 'Publisher Sequence # must be entered and must match the Publisher Sequence # of the relating
+    original SPU/OPU record.'
+  bmi_exception: ''
+  pass:
+    publisher_sequence_n: AUTO_SPU_SEQ
+  fail:
+    publisher_sequence_n: 99
+- id: PWR-FLV-08
+  reject_level: TR
+  field: writer_ip_n
+  level: mandatory
+  version: '2.1'
+  description: 'For controlled chains (where PWR follows an SWR), Writer IP # must be entered.'
+  bmi_exception: ''
+  pass:
+    writer_ip_n: AUTO_SWR_IP
+  fail:
+    writer_ip_n: ''
+- id: PWR-FLV-09
+  reject_level: TR
+  field: publisher_ip_n
+  level: mandatory
+  version: '2.0'
+  description: 'For controlled chains (where PWR follows an SWR), Publisher IP # must be entered.'
+  bmi_exception: ''
+  pass:
+    publisher_ip_n: AUTO_SPU_IP
+  fail:
+    publisher_ip_n: ''
+- id: PWR-FLV-10
+  reject_level: TR
+  field: publisher_name
+  level: mandatory
+  version: '2.0'
+  description: For controlled chains (where PWR follows an SWR), Publisher Name must be entered.
+  bmi_exception: ''
+  pass:
+    publisher_name: AUTO_SPU_NAME
+  fail:
+    publisher_name: ''
+- id: PWR-FLV-11
+  reject_level: TR
+  field: writer_ip_n
+  level: mandatory
+  version: '2.1'
+  description: 'Writer IP # must match the Interested Party # entered on the preceding SWR/OWR record.'
+  bmi_exception: ''
+  pass:
+    writer_ip_n: AUTO_SWR_IP
+  fail:
+    writer_ip_n: W999
+- id: PWR-FLV-12
+  reject_level: TR
+  field: publisher_ip_n
+  level: mandatory
+  version: '2.0'
+  description: 'Publisher IP # must match the Interested Party # for the original publisher referenced
+    by the Publisher Sequence #.'
+  bmi_exception: ''
+  pass:
+    publisher_ip_n: AUTO_SPU_IP
+  fail:
+    publisher_ip_n: P999
+- id: PWR-FLV-13
+  reject_level: FR
+  field: publisher_name
+  level: optional
+  version: '2.0'
+  description: 'Publisher Name must match the name of the original publisher/income participant referenced
+    by the Publisher Sequence #.'
+  bmi_exception: ''
+  pass:
+    publisher_sequence_n: AUTO_SPU_SEQ
+    publisher_name: AUTO_SPU_NAME
+  fail:
+    publisher_sequence_n: AUTO_SPU_SEQ
+    publisher_name: WRONG PUBLISHER NAME
+- id: PWR-FLV-03
+  reject_level: FR
+  field: submitter_agreement_number
+  level: optional
+  version: '2.0'
+  description: >-
+    If Submitter Agreement Number is entered, it must match the identifier
+    for an original agreement on file with the society of the original
+    publisher, or an identifier in an AGR transaction with type OS or OG.
+  implemented: false
+  reason: No agreements database is modeled, and this field isn't mapped in layout.py's REAL_LAYOUT.
+  bmi_exception: ''
+- id: PWR-FLV-04
+  reject_level: FR
+  field: society_assigned_agreement_number
+  level: optional
+  version: '2.0'
+  description: If Society-Assigned Agreement Number is entered, it must match the identifier for an original agreement on file with the society of the original publisher.
+  implemented: false
+  reason: No agreements database is modeled, and this field isn't mapped in layout.py's REAL_LAYOUT.
+  bmi_exception: ''
+- id: PWR-FLV-MUSICMARK-01
+  reject_level: TR
+  field: null
+  level: conditional
+  version: '2.2'
+  description: 'For registrations to MusicMark societies only: if SWR is BMI, any related publisher must be BMI or non-US PRO; if SWR is ASCAP, any related publisher must be ASCAP or non-US PRO.'
+  implemented: false
+  reason: Society-specific (MusicMark only); cross-record affiliation check across SWR/SPU not exercisable via a single-field patch.
+  bmi_exception: ''
+- id: PWR-FLV-ICE-01
+  reject_level: TR
+  field: null
+  level: conditional
+  version: '2.2'
+  description: >-
+    For registrations to ICE Societies only: the agreement number on PWR
+    must be present, must exist in ICE, must not be terminated, the claimed
+    territory must be included on the publisher's agreement in ICE, and the
+    original publisher on the transaction must own the quoted agreement
+    number.
+  implemented: false
+  reason: Society-specific (ICE only); requires a live agreements database this tool doesn't model.
+  bmi_exception: ''
+# Field layout below is transcribed from the official CISAC CWR 2.2 spec
+# (CWR11-1991R3, section 5.14). start/length are 1-based, spec-defined.
+# Record Prefix (1-19) as in NWR.
+fields:
+  - name: Record Type
+    start: 1
+    length: 3
+    type: A
+    req: mandatory
+    valid_values: ["PWR"]
+    description: PWR = Publisher For Writer.
+  - name: Transaction Sequence #
+    start: 4
+    length: 8
+    type: N
+    req: mandatory
+    description: Must equal the Transaction Sequence # of the transaction header this record belongs to.
+  - name: Record Sequence #
+    start: 12
+    length: 8
+    type: N
+    req: mandatory
+    description: Previous record's Record Sequence # + 1.
+  - name: Publisher IP #
+    start: 20
+    length: 9
+    type: A
+    req: conditional
+    description: >-
+      The publisher interested party number pointing back to the SPU/OPU
+      record for the original publisher/income participant representing
+      this writer.
+  - name: Publisher Name
+    start: 29
+    length: 45
+    type: A
+    req: conditional
+    description: The name of the publisher indicated by the Interested Party # field.
+  - name: Submitter Agreement Number
+    start: 74
+    length: 14
+    type: A
+    req: optional
+    description: The unique number assigned to this agreement by the submitter. Added CWR 2.0.
+  - name: Society-Assigned Agreement Number
+    start: 88
+    length: 14
+    type: A
+    req: optional
+    description: The unique number assigned to this agreement by the society. Added CWR 2.0.
+  - name: Writer IP #
+    start: 102
+    length: 9
+    type: A
+    req: conditional
+    since: '2.1'
+    description: The writer interested party number pointing back to the SWR/OWR record in an explicit link. Added CWR 2.1.
+  - name: Publisher Sequence #
+    start: 111
+    length: 2
+    type: N
+    req: mandatory
+    since: '2.2'
+    description: >-
+      Reference to the publisher chain this link relates to, matching the
+      Publisher Sequence # on the relating original SPU/OPU record. Added
+      CWR 2.2.
+record_length: 112

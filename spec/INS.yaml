@@ -1,0 +1,70 @@
+# CWR 2.2 record layout: INS - Instrumentation Summary
+# Fields transcribed from the official CISAC CWR 2.2 functional spec
+# (CWR11-1991R3, section 5.23).
+record_type: INS
+name: Instrumentation Summary
+rules:
+- id: INS-FLV-01
+  reject_level: FR
+  field: standard_instrumentation_type
+  level: conditional
+  version: '2.0'
+  description: Standard Instrumentation Type, if entered, must match the Standard Instrumentation table.
+  bmi_exception: ''
+  pass:
+    standard_instrumentation_type: ORC
+  fail:
+    standard_instrumentation_type: ZZZ
+- id: INS-FLV-02
+  reject_level: FR
+  field: instrumentation_description
+  level: conditional
+  version: '2.0'
+  description: If Standard Instrumentation Type and/or IND records exist, the Instrumentation Description is ignored.
+  implemented: false
+  reason: This is a default/ignore behavior, not a rejectable violation with a distinguishable PASS/FAIL outcome -- kept here only for traceability.
+  bmi_exception: ''
+fields:
+  - name: Record Type
+    start: 1
+    length: 3
+    type: A
+    req: mandatory
+    valid_values: ["INS"]
+    description: INS = Instrumentation Summary.
+  - name: Transaction Sequence #
+    start: 4
+    length: 8
+    type: N
+    req: mandatory
+    description: Must equal the Transaction Sequence # of the transaction header this record belongs to.
+  - name: Record Sequence #
+    start: 12
+    length: 8
+    type: N
+    req: mandatory
+    description: Previous record's Record Sequence # + 1.
+  - name: Number of Voices
+    start: 20
+    length: 3
+    type: N
+    req: optional
+    description: The number of independent parts included in this work.
+  - name: Standard Instrumentation Type
+    start: 23
+    length: 3
+    type: L
+    req: conditional
+    description: >-
+      Standard instrumentation used (Standard Instrumentation Table).
+      Required if no IND records and Instrumentation Description is blank.
+  - name: Instrumentation Description
+    start: 26
+    length: 50
+    type: A
+    req: conditional
+    description: >-
+      Free-text instrumentation description for non-standard
+      instrumentation. Required if no IND records and Standard
+      Instrumentation Type is blank; ignored if either is present.
+record_length: 75

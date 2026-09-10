@@ -1,0 +1,94 @@
+# CWR 2.2 record layout: NPA - Non-Roman Alphabet Agreement Party Name
+# Fields transcribed from the official CISAC CWR 2.2 functional spec
+# (CWR11-1991R3, section 5.3). No rules defined for this type yet.
+#
+# Not present in this project's original stub pass -- added after reviewing
+# the real spec, which defines it as a distinct record type immediately
+# after IPA in the section 5 Detail Records list.
+record_type: NPA
+name: Non-Roman Alphabet Agreement Party Name
+# NPA is not wired into layout.py's REAL_LAYOUT, so none of these can be
+# exercised by this tool's Generate PASS/FAIL flow yet -- placeholders only.
+rules:
+- id: NPA-RLV-01
+  reject_level: RR
+  field: null
+  level: mandatory
+  version: '2.0'
+  description: This record must immediately follow an IPA record that refers to the interested party named here.
+  implemented: false
+  reason: NPA is not wired into layout.py's REAL_LAYOUT; structural ordering also isn't exercisable via a single-field patch.
+  bmi_exception: ''
+- id: NPA-FLV-01
+  reject_level: RR
+  field: interested_party_n
+  level: conditional
+  version: '2.0'
+  description: Interested Party # must be entered and must match the Interested Party # of the corresponding IPA record.
+  implemented: false
+  reason: NPA is not wired into layout.py's REAL_LAYOUT.
+  bmi_exception: ''
+- id: NPA-FLV-02
+  reject_level: RR
+  field: interested_party_name
+  level: mandatory
+  version: '2.0'
+  description: Interested Party Name must be entered.
+  implemented: false
+  reason: NPA is not wired into layout.py's REAL_LAYOUT.
+  bmi_exception: ''
+- id: NPA-FLV-03
+  reject_level: FR
+  field: language_code
+  level: optional
+  version: '2.0'
+  description: Language code, if entered, must be a valid code from the Language Code Table.
+  implemented: false
+  reason: NPA is not wired into layout.py's REAL_LAYOUT.
+  bmi_exception: ''
+fields:
+  - name: Record Type
+    start: 1
+    length: 3
+    type: A
+    req: mandatory
+    valid_values: ["NPA"]
+    description: NPA = Non-Roman Alphabet Agreement Party Name.
+  - name: Transaction Sequence #
+    start: 4
+    length: 8
+    type: N
+    req: mandatory
+    description: Must equal the Transaction Sequence # of the AGR transaction header this record belongs to.
+  - name: Record Sequence #
+    start: 12
+    length: 8
+    type: N
+    req: mandatory
+    description: Previous record's Record Sequence # + 1.
+  - name: Interested Party #
+    start: 20
+    length: 9
+    type: A
+    req: conditional
+    description: Submitting publisher's unique identifier for this writer; must match the preceding IPA record.
+  - name: Interested Party Name
+    start: 29
+    length: 160
+    type: A
+    req: mandatory
+    description: The last name of a writer, or the publisher name, in non-Roman alphabet.
+  - name: Interested Party Writer First Name
+    start: 189
+    length: 160
+    type: A
+    req: mandatory
+    description: The first name of a writer, in non-Roman alphabet.
+  - name: Language Code
+    start: 349
+    length: 2
+    type: L
+    req: optional
+    valid_values_ref: VALID_LANGUAGE
+    description: The language code of the name.
+record_length: 350

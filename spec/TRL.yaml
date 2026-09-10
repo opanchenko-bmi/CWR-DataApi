@@ -1,0 +1,68 @@
+record_type: TRL
+name: Transmission Trailer
+rules:
+- id: TRL-FLV-01
+  reject_level: ER
+  field: group_count
+  level: mandatory
+  version: '2.0'
+  description: Group Count must equal the actual number of groups within the entire file.
+  bmi_exception: ''
+  pass:
+    group_count: 1
+  fail:
+    group_count: 99
+- id: TRL-FLV-02
+  reject_level: ER
+  field: transaction_count
+  level: mandatory
+  version: '2.0'
+  description: Transaction Count must equal the actual number of transactions within the entire file.
+  bmi_exception: ''
+  pass:
+    transaction_count: AUTO_TXN_COUNT
+  fail:
+    transaction_count: 99
+- id: TRL-FLV-03
+  reject_level: ER
+  field: record_count
+  level: mandatory
+  version: '2.0'
+  description: Record Count must equal the actual number of physical records in this file, including HDR
+    and TRL.
+  bmi_exception: ''
+  pass:
+    record_count: AUTO_TOTAL_RECORD_COUNT
+  fail:
+    record_count: 1
+# Field layout below is transcribed from the official CISAC CWR 2.2 spec
+# (CWR11-1991R3, section 3.8). start/length are 1-based, spec-defined.
+fields:
+  - name: Record Type
+    start: 1
+    length: 3
+    type: A
+    req: mandatory
+    valid_values: ["TRL"]
+    description: TRL = Transmission Trailer
+  - name: Group Count
+    start: 4
+    length: 5
+    type: N
+    req: mandatory
+    description: The number of groups included within this file.
+  - name: Transaction Count
+    start: 9
+    length: 8
+    type: N
+    req: mandatory
+    description: The number of transactions included within this file.
+  - name: Record Count
+    start: 17
+    length: 8
+    type: N
+    req: mandatory
+    description: >-
+      The number of physical records included in this file, including HDR
+      and TRL records.
+record_length: 24

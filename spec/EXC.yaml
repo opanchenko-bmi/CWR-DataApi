@@ -1,0 +1,251 @@
+# CWR 2.2 record layout: EXC - Existing work which is in Conflict with a Work Registration
+# EXC shares NWR's exact record format (CWR11-1991R3, section 4.2-4.5:
+# "Note that the BNF definitions for REV, EXC, and ISW are the same as for
+# NWR"). Fields duplicated here from NWR.yaml for a self-contained per-type
+# file; keep in sync with NWR.yaml/REV.yaml/ISW.yaml if the layout changes.
+#
+# Note: per spec, "If the transaction type is EXC, then all edits except
+# the first may be bypassed since the existing work that is in conflict may
+# have been from a non-CWR registration" -- so req: below reflects the
+# generic NWR requirements, not EXC's relaxed enforcement. Because of that
+# bypass, validator.py's EXC section deliberately does NOT reuse the shared
+# _validate_nwr_fields() check that REV/ISW use -- it only checks Work
+# Title and Submitter Work # (EXC-FLV-02/03), leaving MWDC/Version
+# Type/Recorded Indicator/etc. unenforced for EXC, matching the spec note.
+#
+# EXC's full validation catalog is otherwise identical to NWR's per spec --
+# see spec/NWR.yaml for the complete set. REAL_LAYOUT["EXC"] aliases
+# REAL_LAYOUT["NWR"] in layout.py; like EWT/VER/REC/PER/COM/ISW, EXC won't
+# appear in most real files, including this project's own
+# valid_baseline.V22 -- Generate PASS/FAIL for EXC-FLV-02/03 requires
+# loading (dragging/browsing) a real file that already carries an EXC
+# record.
+record_type: EXC
+name: Existing work which is in Conflict with a Work Registration
+rules:
+- id: EXC-FLV-01
+  reject_level: ER
+  field: record_type
+  level: mandatory
+  version: '2.0'
+  description: Record Type must be entered and equal to EXC.
+  implemented: false
+  reason: >-
+    Self-referential: this exact 3-byte field is what the parser reads to
+    classify a record as EXC in the first place (see engine.py's
+    parse_real()), so blanking/corrupting it doesn't produce "an EXC record
+    with an invalid Record Type" -- it produces a record the tool no longer
+    recognizes as EXC at all (it falls out of the EXC bucket, or collides
+    with file-structure/prefix rules instead). No other rule in this
+    catalog checks a record's own type tag this way.
+  bmi_exception: ''
+- id: EXC-FLV-02
+  reject_level: TR
+  field: work_title
+  level: mandatory
+  version: '2.0'
+  description: Work Title must be present (bypassable per spec since the conflicting work may not be a CWR registration).
+  bmi_exception: ''
+  pass:
+    work_title: EXISTING CONFLICTING WORK
+  fail:
+    work_title: ''
+- id: EXC-FLV-03
+  reject_level: TR
+  field: submitter_work_n
+  level: mandatory
+  version: '2.0'
+  description: Submitter Work Number must be entered (bypassable per spec since the conflicting work may not be a CWR registration).
+  bmi_exception: ''
+  pass:
+    submitter_work_n: W0000000001
+  fail:
+    submitter_work_n: ''
+fields:
+  - name: Record Type
+    start: 1
+    length: 3
+    type: A
+    req: mandatory
+    valid_values: ["EXC"]
+    description: EXC = Existing work which is in Conflict with a Work Registration.
+  - name: Transaction Sequence #
+    start: 4
+    length: 8
+    type: N
+    req: mandatory
+    description: 00000000 for the first transaction in a group, else previous transaction header's value + 1.
+  - name: Record Sequence #
+    start: 12
+    length: 8
+    type: N
+    req: mandatory
+    description: 00000000 for a transaction header record.
+  - name: Work Title
+    start: 20
+    length: 60
+    type: A
+    req: mandatory
+    description: Name/Title of the work.
+  - name: Language Code
+    start: 80
+    length: 2
+    type: L
+    req: optional
+    valid_values_ref: VALID_LANGUAGE
+    description: The code representing the language of this title.
+  - name: Submitter Work #
+    start: 82
+    length: 14
+    type: A
+    req: mandatory
+    description: Number assigned to the work by the submitting/receiving publisher; must be unique for the publisher.
+  - name: ISWC
+    start: 96
+    length: 11
+    type: A
+    req: optional
+    description: The International Standard Work Code assigned to this work.
+  - name: Copyright Date
+    start: 107
+    length: 8
+    type: D
+    req: optional
+    description: Original copyright date of the work.
+  - name: Copyright Number
+    start: 115
+    length: 12
+    type: A
+    req: optional
+    description: Original copyright number of the work.
+  - name: Musical Work Distribution Category
+    start: 127
+    length: 3
+    type: L
+    req: mandatory
+    valid_values_ref: VALID_MWDC
+    description: Describes the type of music as it applies to special distribution rules.
+  - name: Duration
+    start: 130
+    length: 6
+    type: T
+    req: conditional
+    description: >-
+      Duration in HHMMSS. Must be greater than zero if Musical Work
+      Distribution Category is SER (some societies, e.g. BMI, also require
+      it for JAZ).
+  - name: Recorded Indicator
+    start: 136
+    length: 1
+    type: F
+    req: mandatory
+    valid_values_ref: VALID_YNU
+    description: Indicates whether or not the work has ever been recorded.
+  - name: Text Music Relationship
+    start: 137
+    length: 3
+    type: L
+    req: optional
+    description: Indicates whether this work contains music, text, and/or both.
+  - name: Composite Type
+    start: 140
+    length: 3
+    type: L
+    req: optional
+    description: If this is a composite work, indicates the type of composite.
+  - name: Version Type
+    start: 143
+    length: 3
+    type: L
+    req: mandatory
+    valid_values_ref: VALID_VERSION_TYPE
+    description: Indicates relationships between this work and other works (e.g. whether it's an arrangement).
+  - name: Excerpt Type
+    start: 146
+    length: 3
+    type: L
+    req: optional
+    description: If this is an excerpt, indicates the type of excerpt.
+  - name: Music Arrangement
+    start: 149
+    length: 3
+    type: L
+    req: conditional
+    description: If Version Type is MOD, indicates the type of music arrangement.
+  - name: Lyric Adaptation
+    start: 152
+    length: 3
+    type: L
+    req: conditional
+    description: If Version Type is MOD, indicates the type of lyric adaptation.
+  - name: Contact Name
+    start: 155
+    length: 30
+    type: A
+    req: optional
+    description: Name of a business contact person at the organization that originated this transaction.
+  - name: Contact ID
+    start: 185
+    length: 10
+    type: A
+    req: optional
+    description: An identifier associated with the contact person.
+  - name: CWR Work Type
+    start: 195
+    length: 2
+    type: L
+    req: optional
+    description: Values reside in the CWR Work Type table.
+  - name: Grand Rights Ind
+    start: 197
+    length: 1
+    type: B
+    req: conditional
+    valid_values_ref: VALID_YN
+    description: >-
+      Indicates whether this work is originally intended for performance on
+      stage. Mandatory for registrations with the UK societies.
+  - name: Composite Component Count
+    start: 198
+    length: 3
+    type: N
+    req: conditional
+    description: >-
+      If Composite Type is entered, the number of components in this
+      composite. Required for composite works where ASCAP is represented.
+  - name: Date of publication of printed edition
+    start: 201
+    length: 8
+    type: D
+    req: optional
+    description: GEMA-specific -- date the printed, sub-published edition appeared. Added CWR 2.0.
+  - name: Exceptional Clause
+    start: 209
+    length: 1
+    type: F
+    req: optional
+    description: >-
+      GEMA-specific -- Y declares the exceptional clause of the GEMA
+      distribution rules for printed editions applies. Added CWR 2.0.
+  - name: Opus Number
+    start: 210
+    length: 25
+    type: A
+    req: optional
+    description: Number assigned to this work, usually by the composer. Added CWR 2.0.
+  - name: Catalogue Number
+    start: 235
+    length: 25
+    type: A
+    req: optional
+    description: The work catalogue number (e.g. BWV, KV), without dots. Added CWR 2.0.
+  - name: Priority Flag
+    start: 260
+    length: 1
+    type: F
+    req: optional
+    since: '2.1'
+    description: >-
+      Indicates this work should be processed faster (on the charts, a
+      well-known composer, etc.). Added CWR 2.1.
+record_length: 260

@@ -1,0 +1,114 @@
+# CWR 2.2 record layout: ALT - Alternate Title
+# Fields transcribed from the official CISAC CWR 2.2 functional spec
+# (CWR11-1991R3, section 5.15).
+record_type: ALT
+name: Alternate Title
+rules:
+- id: ALT-FLV-01
+  reject_level: RR
+  field: alternate_title
+  level: mandatory
+  version: '2.0'
+  description: Alternate Title must be present.
+  bmi_exception: ''
+  pass:
+    alternate_title: WHEN THE NIGHT FALLS
+  fail:
+    alternate_title: ''
+- id: ALT-FLV-02
+  reject_level: FR
+  field: title_type
+  level: mandatory
+  version: '2.0'
+  description: Title Type must match an entry in the Title Type table, and cannot be OT (Original Title).
+  bmi_exception: ''
+  pass:
+    title_type: AT
+  fail:
+    title_type: OT
+- id: ALT-FLV-03
+  reject_level: RR
+  field: language_code
+  level: optional
+  version: '2.0'
+  description: Language Code, if entered, must match an entry in the Language Code table.
+  bmi_exception: ''
+  pass:
+    language_code: EN
+  fail:
+    language_code: ZZ
+- id: ALT-FLV-04
+  reject_level: RR
+  field: alternate_title
+  level: mandatory
+  version: '2.0'
+  description: Alternate Title must contain only valid ASCII characters, unless Title Type is OL or AL.
+  bmi_exception: ''
+  pass:
+    alternate_title: WHEN THE NIGHT FALLS
+  fail:
+    alternate_title: WHEN THE NÍGHT FÁLLS
+- id: ALT-FLV-06
+  reject_level: RR
+  field: language_code
+  level: conditional
+  version: '2.0'
+  description: Language Code is mandatory when Title Type is OL or AL.
+  bmi_exception: ''
+  pass:
+    title_type: OL
+    language_code: EN
+  fail:
+    title_type: OL
+    language_code: ''
+- id: ALT-FLV-05
+  reject_level: RR
+  field: alternate_title
+  level: conditional
+  version: '2.0'
+  description: If Title Type is OL or AL, Alternate Title must contain only valid ASCII characters from the "CWR National Titles" section of the allowed CIS character set.
+  implemented: false
+  reason: The spec's "CWR National Titles" character subset isn't modeled in spec/_lookups.yaml, so there's no distinct rule to validate against beyond FLV-04's ASCII relaxation.
+  bmi_exception: ''
+fields:
+  - name: Record Type
+    start: 1
+    length: 3
+    type: A
+    req: mandatory
+    valid_values: ["ALT"]
+    description: ALT = Alternate Title.
+  - name: Transaction Sequence #
+    start: 4
+    length: 8
+    type: N
+    req: mandatory
+    description: Must equal the Transaction Sequence # of the transaction header this record belongs to.
+  - name: Record Sequence #
+    start: 12
+    length: 8
+    type: N
+    req: mandatory
+    description: Previous record's Record Sequence # + 1.
+  - name: Alternate Title
+    start: 20
+    length: 60
+    type: A
+    req: mandatory
+    description: AKA or pseudonym of the work title.
+  - name: Title Type
+    start: 80
+    length: 2
+    type: L
+    req: mandatory
+    description: Type of alternate title presented (Title Type Table), other than OT (Original Title).
+  - name: Language Code
+    start: 82
+    length: 2
+    type: L
+    req: conditional
+    valid_values_ref: VALID_LANGUAGE
+    description: >-
+      The language this alternate title was translated into. Mandatory if
+      Title Type is OL or AL.
+record_length: 83

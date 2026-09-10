@@ -1,0 +1,307 @@
+# CWR 2.2 record layout: OPU - Other Publisher
+# OPU shares SPU's record format (CWR11-1991R3, section 5.4-5.5). Fields
+# duplicated here from SPU.yaml for a self-contained per-type file; keep in
+# sync with SPU.yaml if the layout changes.
+record_type: OPU
+name: Other Publisher
+rules:
+- id: OPU-FLV-01
+  reject_level: TR
+  field: publisher_sequence_n
+  level: mandatory
+  version: '2.0'
+  description: 'Publisher Sequence # must be entered and numeric.'
+  bmi_exception: ''
+  pass:
+    publisher_sequence_n: 2
+  fail:
+    publisher_sequence_n: 0
+- id: OPU-FLV-02
+  reject_level: FR
+  field: publisher_unknown_indicator
+  level: conditional
+  version: '2.0'
+  description: Publisher Unknown Indicator must be Y when Publisher Name is blank.
+  bmi_exception: ''
+  pass:
+    publisher_name: ''
+    publisher_unknown_indicator: Y
+  fail:
+    publisher_name: ''
+    publisher_unknown_indicator: N
+- id: OPU-FLV-03
+  reject_level: FR
+  field: publisher_type
+  level: optional
+  version: '2.0'
+  description: Publisher Type, if entered, must be a valid code (E/AM/PA/SE/ES/AQ).
+  bmi_exception: ''
+  pass:
+    publisher_type: AM
+  fail:
+    publisher_type: ZZ
+- id: OPU-FLV-04
+  reject_level: TR
+  field: pr_ownership_share
+  level: conditional
+  version: '2.0'
+  description: PR Ownership Share, if entered, must be within 0 - 50.00% (0-5000).
+  bmi_exception: ''
+  pass:
+    pr_ownership_share: 0
+  fail:
+    pr_ownership_share: 15000
+- id: OPU-FLV-05
+  reject_level: FR
+  field: publisher_name
+  level: conditional
+  version: '2.0'
+  description: Publisher Name must be blank when Publisher Unknown Indicator is Y.
+  bmi_exception: ''
+  pass:
+    publisher_unknown_indicator: 'Y'
+    publisher_name: ''
+  fail:
+    publisher_unknown_indicator: 'Y'
+    publisher_name: SOME PUBLISHER
+- id: OPU-FLV-06
+  reject_level: FR
+  field: tax_id
+  level: optional
+  version: '1.1'
+  description: 'Tax ID #, if entered, must be numeric.'
+  bmi_exception: ''
+  pass:
+    tax_id: '123456789'
+  fail:
+    tax_id: 12A45B789
+- id: OPU-FLV-07
+  reject_level: FR
+  field: pr_affiliation_society
+  level: optional
+  version: '2.0'
+  description: PR Affiliation Society #, if entered, must match an entry in the Society Code table.
+  bmi_exception: ''
+  pass:
+    pr_affiliation_society: '021'
+  fail:
+    pr_affiliation_society: '999'
+- id: OPU-FLV-08
+  reject_level: FR
+  field: special_agreements_indicator
+  level: optional
+  version: '2.0'
+  description: For OPU, Special Agreements Indicator can only be L or blank.
+  bmi_exception: ''
+  pass:
+    special_agreements_indicator: L
+  fail:
+    special_agreements_indicator: R
+- id: OPU-FLV-09
+  reject_level: FR
+  field: usa_license_ind
+  level: optional
+  version: '2.1'
+  description: USA License Ind, if entered, must match an entry in the USA License Indicator table.
+  bmi_exception: ''
+  pass:
+    usa_license_ind: A
+  fail:
+    usa_license_ind: Z
+- id: OPU-RLV-01
+  reject_level: TR
+  field: null
+  level: mandatory
+  version: '2.0'
+  description: Only OPU records may appear in a publisher chain begun with an OPU.
+  implemented: false
+  reason: Publisher-chain structure across multiple records; not exercisable via a single-record patch.
+  bmi_exception: ''
+- id: OPU-RLV-02
+  reject_level: RR
+  field: null
+  level: mandatory
+  version: '2.0'
+  description: Territory records (SPT) are not valid in a publisher chain beginning with an OPU.
+  implemented: false
+  reason: Publisher-chain structure; not exercisable via a single-record patch.
+  bmi_exception: ''
+- id: OPU-FLV-10
+  reject_level: FR
+  field: publisher_ipi_name_n
+  level: optional
+  version: '2.0'
+  description: If Publisher IPI Name # is entered, it must match a publisher entry in the IPI database.
+  implemented: false
+  reason: No IPI database is modeled in this project's lookups.
+  bmi_exception: ''
+- id: OPU-FLV-11
+  reject_level: FR
+  field: publisher_type
+  level: optional
+  version: '2.0'
+  description: If Publisher Type is invalid or missing on an OPU, it defaults to "E".
+  implemented: false
+  reason: >-
+    This is a default-on-error behavior, not a rejectable violation with a
+    distinguishable PASS/FAIL outcome -- kept here only for traceability.
+  bmi_exception: ''
+fields:
+  - name: Record Type
+    start: 1
+    length: 3
+    type: A
+    req: mandatory
+    valid_values: ["OPU"]
+    description: OPU = Other Publisher (not controlled by the submitter).
+  - name: Transaction Sequence #
+    start: 4
+    length: 8
+    type: N
+    req: mandatory
+    description: Must equal the Transaction Sequence # of the transaction header this record belongs to.
+  - name: Record Sequence #
+    start: 12
+    length: 8
+    type: N
+    req: mandatory
+    description: Previous record's Record Sequence # + 1.
+  - name: Publisher Sequence #
+    start: 20
+    length: 2
+    type: N
+    req: mandatory
+    description: A sequential number assigned to the original publishers on this work.
+  - name: Interested Party #
+    start: 22
+    length: 9
+    type: A
+    req: optional
+    description: Submitting publisher's unique identifier for this publisher (optional for OPU).
+  - name: Publisher Name
+    start: 31
+    length: 45
+    type: A
+    req: optional
+    description: The name of this publishing company (optional for OPU; blank requires Publisher Unknown Indicator = Y).
+  - name: Publisher Unknown Indicator
+    start: 76
+    length: 1
+    type: F
+    req: conditional
+    valid_values_ref: VALID_YN
+    description: Must be Y if Publisher Name is blank, else Y/N. Default N.
+  - name: Publisher Type
+    start: 77
+    length: 2
+    type: L
+    req: optional
+    valid_values_ref: VALID_PUBLISHER_TYPE
+    description: Code defining this publisher's role (optional for OPU; defaults to E if invalid/missing).
+  - name: Tax ID #
+    start: 79
+    length: 9
+    type: A
+    req: optional
+    description: The number used to identify this publisher for domestic tax reporting.
+  - name: Publisher IPI Name #
+    start: 88
+    length: 11
+    type: L
+    req: optional
+    description: The IPI Name # assigned to this publisher.
+  - name: Submitter Agreement Number
+    start: 99
+    length: 14
+    type: A
+    req: optional
+    description: The agreement number, unique to the submitter, under which this publisher acquired rights.
+  - name: PR Affiliation Society #
+    start: 113
+    length: 3
+    type: L
+    req: conditional
+    description: Performing Rights Society this publisher is affiliated with.
+  - name: PR Ownership Share
+    start: 116
+    length: 5
+    type: N
+    req: conditional
+    description: Publisher's ownership % of performance rights. Range 0-5000 (0-50.00%), implied decimal.
+  - name: MR Society
+    start: 121
+    length: 3
+    type: L
+    req: conditional
+    description: Mechanical Rights Society this publisher is affiliated with.
+  - name: MR Ownership Share
+    start: 124
+    length: 5
+    type: N
+    req: conditional
+    description: Publisher's ownership % of mechanical rights. Range 0-10000 (0-100.00%), implied decimal.
+  - name: SR Society
+    start: 129
+    length: 3
+    type: L
+    req: conditional
+    description: Society this publisher is affiliated with for synchronization rights.
+  - name: SR Ownership Share
+    start: 132
+    length: 5
+    type: N
+    req: conditional
+    description: Publisher's ownership % of synch rights. Range 0-10000 (0-100.00%), implied decimal.
+  - name: Special Agreements Indicator
+    start: 137
+    length: 1
+    type: L
+    req: optional
+    description: For OPU, must be "L" or blank.
+  - name: First Recording Refusal Ind
+    start: 138
+    length: 1
+    type: F
+    req: optional
+    valid_values_ref: VALID_YN
+    description: Whether the submitter has refused authority for the first recording.
+  - name: Filler
+    start: 139
+    length: 1
+    type: A
+    req: optional
+    description: Fill with a blank.
+  - name: Publisher IPI Base Number
+    start: 140
+    length: 13
+    type: L
+    req: optional
+    description: The IPI base number assigned to this publisher. Added CWR 2.0.
+  - name: International Standard Agreement Code
+    start: 153
+    length: 14
+    type: A
+    req: optional
+    description: The ISAC assigned to the agreement under which this publisher share is administered. Added CWR 2.0.
+  - name: Society-assigned Agreement Number
+    start: 167
+    length: 14
+    type: A
+    req: optional
+    description: The agreement number assigned by the society of the sub-publisher. Added CWR 2.0.
+  - name: Agreement Type
+    start: 181
+    length: 2
+    type: L
+    req: optional
+    since: '2.1'
+    valid_values_ref: VALID_AGREEMENT_TYPE
+    description: Code defining the category of agreement. Added CWR 2.1.
+  - name: USA License Ind
+    start: 183
+    length: 1
+    type: L
+    req: optional
+    since: '2.1'
+    description: Indicates rights flow through SESAC/BMI/ASCAP/AMRA in the US. Added CWR 2.1.
+record_length: 183

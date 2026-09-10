@@ -1,0 +1,48 @@
+# 'order' controls display/load order in the app; the first 10 are the
+# original rule-bearing types, the rest currently have no rules yet (all
+# have accurate fields: blocks from the real CISAC CWR 2.2 spec though --
+# see each file's header comment).
+version: CWR 2.2
+order:
+- HDR
+- GRH
+- GRT
+- TRL
+- NWR
+- SPU
+- SPT
+- SWR
+- SWT
+- PWR
+- AGR
+- TER
+- IPA
+- NPA
+- REV
+- ISW
+- EXC
+- ACK
+- OPU
+- OPT
+- OWR
+- OWT
+- NPN
+- NWN
+- ALT
+- NAT
+- EWT
+- NET
+- VER
+- NCT
+- NVT
+- PER
+- NPR
+- REC
+- ORN
+- INS
+- IND
+- COM
+- NOW
+- ARI
+- XRF
+- MSG

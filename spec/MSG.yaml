@@ -1,0 +1,148 @@
+# CWR 2.2 record layout: MSG - Message
+# Fields transcribed from the official CISAC CWR 2.2 functional spec
+# (CWR11-1991R3, section 5.26).
+#
+# Like EWT/VER/REC/PER/COM, MSG won't appear in most real files, including
+# this project's own valid_baseline.V22 -- Generate PASS/FAIL for any rule
+# below requires loading (dragging/browsing) a real file that already
+# carries an MSG record (inside an ACK transaction from a society).
+#
+# MSG's own "Record Type" field (the *original* record type this message
+# refers to) is mapped as `target_record_type` in layout.py's REAL_LAYOUT --
+# never `record_type`, which would collide with the classifier this tool's
+# parser uses to recognize the line as an MSG record in the first place.
+record_type: MSG
+name: Message
+rules:
+- id: MSG-FLV-01
+  reject_level: TR
+  field: message_type
+  level: mandatory
+  version: '2.0'
+  description: Message Type must be entered and equal to F, R, T, G, or E.
+  bmi_exception: ''
+  pass:
+    message_type: F
+  fail:
+    message_type: Z
+- id: MSG-FLV-02
+  reject_level: TR
+  field: original_record_sequence_n
+  level: mandatory
+  version: '2.0'
+  description: Original Record Sequence # must correspond to a value within the transaction that caused this message.
+  implemented: false
+  reason: >-
+    Cross-transaction check: requires re-examining the original submitted
+    transaction this ACK/MSG refers to, which this single-file tool doesn't
+    have.
+  bmi_exception: ''
+- id: MSG-FLV-03
+  reject_level: TR
+  field: message_level
+  level: mandatory
+  version: '2.0'
+  description: Message Level must be equal to F, R, T, G, or E.
+  bmi_exception: ''
+  pass:
+    message_level: F
+  fail:
+    message_level: Z
+- id: MSG-FLV-04
+  reject_level: TR
+  field: message_text
+  level: mandatory
+  version: '2.0'
+  description: Message Text must be entered and correspond to the validation referenced by Record Type, Message Level, and Validation Number.
+  note: Only the "must be entered" half is checked; matching it to a specific spec validation isn't modeled (see MSG-FLV-06).
+  bmi_exception: ''
+  pass:
+    message_text: 'FIELD REJECTED: INVALID CODE'
+  fail:
+    message_text: ''
+- id: MSG-FLV-05
+  reject_level: TR
+  field: target_record_type
+  level: mandatory
+  version: '2.0'
+  description: Record Type must be entered and correspond to the record being validated.
+  note: >-
+    Narrowed to "must be entered and a recognized CWR record type" --
+    matching it to the specific record actually being validated is a
+    cross-transaction check this tool can't make.
+  bmi_exception: ''
+  pass:
+    target_record_type: NWR
+  fail:
+    target_record_type: ''
+- id: MSG-FLV-06
+  reject_level: TR
+  field: validation_number
+  level: mandatory
+  version: '2.0'
+  description: Validation Number must be entered and refer to a validation in the spec.
+  implemented: false
+  reason: No catalog of the spec's own validation numbers (per record type/level) is modeled in this project.
+  bmi_exception: ''
+fields:
+  - name: Record Type
+    start: 1
+    length: 3
+    type: A
+    req: mandatory
+    valid_values: ["MSG"]
+    description: MSG = Message.
+  - name: Transaction Sequence #
+    start: 4
+    length: 8
+    type: N
+    req: mandatory
+    description: Must equal the Transaction Sequence # of the transaction (ACK) this record belongs to.
+  - name: Record Sequence #
+    start: 12
+    length: 8
+    type: N
+    req: mandatory
+    description: Previous record's Record Sequence # + 1, consistent with the ACK record's sequencing (not the original transaction's).
+  - name: Message Type
+    start: 20
+    length: 1
+    type: L
+    req: mandatory
+    valid_values: ["F", "R", "T", "G", "E"]
+    description: F = Field Rejected, R = Record Rejected, T = Transaction Rejected, G = Group Rejected, E = Entire File Rejected.
+  - name: Original Record Sequence #
+    start: 21
+    length: 8
+    type: N
+    req: mandatory
+    description: The Record Sequence # within the original transaction that caused this message.
+  - name: Record Type
+    start: 29
+    length: 3
+    type: A
+    req: mandatory
+    description: The record type within the original transaction that caused this message.
+  - name: Message Level
+    start: 32
+    length: 1
+    type: L
+    req: mandatory
+    valid_values: ["F", "R", "T", "G", "E"]
+    description: The level of editing responsible for this message -- E=Entire File, G=Group, T=Transaction, R=Record, F=Field.
+  - name: Validation Number
+    start: 33
+    length: 3
+    type: A
+    req: mandatory
+    description: >-
+      Identifies the specific edit condition. The combination of Record
+      Type, Message Level, and Validation Number points back to a
+      condition in this spec.
+  - name: Message Text
+    start: 36
+    length: 150
+    type: A
+    req: mandatory
+    description: The text associated with this message.
+record_length: 185

@@ -1,0 +1,318 @@
+# CWR 2.2 record layout: REC - Recording Detail
+# Fields transcribed from the official CISAC CWR 2.2 functional spec
+# (CWR11-1991R3, section 5.21).
+record_type: REC
+name: Recording Detail
+rules:
+- id: REC-FLV-01
+  reject_level: FR
+  field: release_date
+  level: optional
+  version: '2.0'
+  description: Release Date, if entered, must be a valid YYYYMMDD date.
+  bmi_exception: ''
+  pass:
+    release_date: TODAY
+  fail:
+    release_date: '20239999'
+- id: REC-FLV-02
+  reject_level: FR
+  field: recording_format
+  level: optional
+  version: '2.0'
+  description: Recording Format, if entered, must be A or V.
+  bmi_exception: ''
+  pass:
+    recording_format: A
+  fail:
+    recording_format: Z
+- id: REC-FLV-03
+  reject_level: FR
+  field: recording_technique
+  level: optional
+  version: '2.0'
+  description: Recording Technique, if entered, must be A, D, or U.
+  bmi_exception: ''
+  pass:
+    recording_technique: D
+  fail:
+    recording_technique: Z
+- id: REC-FLV-04
+  reject_level: FR
+  field: media_type
+  level: optional
+  version: '2.1'
+  description: Media Type, if entered, must match the BIEM/CISAC media type table.
+  bmi_exception: ''
+  pass:
+    media_type: CD
+  fail:
+    media_type: ZZZ
+- id: REC-FLV-05
+  reject_level: RR
+  field: isrc_validity
+  level: conditional
+  version: '2.2'
+  description: If an ISRC is supplied, ISRC Validity must be Y, U, or N.
+  bmi_exception: ''
+  pass:
+    isrc: US1234567890
+    isrc_validity: Y
+  fail:
+    isrc: US1234567890
+    isrc_validity: Z
+- id: REC-FLV-06
+  reject_level: FR
+  field: release_duration
+  level: optional
+  version: '2.0'
+  description: Release Duration, if entered, must be a valid combination of hours, minutes, and seconds.
+  bmi_exception: ''
+  pass:
+    release_duration: '015000'
+  fail:
+    release_duration: '019900'
+- id: REC-FLV-07
+  reject_level: FR
+  field: ean
+  level: optional
+  version: '2.0'
+  description: EAN, if entered, must be a valid 13-digit European Article Number.
+  bmi_exception: ''
+  pass:
+    ean: '1234567890123'
+  fail:
+    ean: BADEAN
+- id: REC-FLV-08
+  reject_level: FR
+  field: isrc
+  level: optional
+  version: '2.0'
+  description: ISRC, if entered, must be a valid International Standard Recording Code.
+  bmi_exception: ''
+  pass:
+    isrc: US1234567890
+  fail:
+    isrc: BADISRC
+- id: REC-FLV-09
+  reject_level: FR
+  field: album_title
+  level: optional
+  version: '2.0'
+  description: Album Title, if entered, must contain only valid ASCII characters.
+  bmi_exception: ''
+  pass:
+    album_title: GREATEST HITS
+  fail:
+    album_title: GRÉATEST HITS
+- id: REC-FLV-10
+  reject_level: TR
+  field: recording_title
+  level: optional
+  version: '2.2'
+  description: Recording Title, if entered, must contain only valid ASCII characters.
+  bmi_exception: ''
+  pass:
+    recording_title: MIDNIGHT DRIVE
+  fail:
+    recording_title: MIDNIGHT DRÍVE
+- id: REC-FLV-11
+  reject_level: TR
+  field: version_title
+  level: optional
+  version: '2.2'
+  description: Version Title, if entered, must contain only valid ASCII characters.
+  bmi_exception: ''
+  pass:
+    version_title: REMIXED BY DJ X
+  fail:
+    version_title: RÉMIXED BY DJ X
+- id: REC-FLV-12
+  reject_level: RR
+  field: record_type
+  level: mandatory
+  version: '2.0'
+  description: At least one of the optional fields on the REC record must be entered.
+  note: >-
+    Checked against every optional REC field this tool maps (see
+    validator.py's _REC_OPTIONAL_FIELDS); FAIL blanks all of them at once so
+    the record has nothing left entered.
+  bmi_exception: ''
+  pass:
+    album_title: GREATEST HITS
+  fail:
+    release_date: ''
+    release_duration: '000000'
+    album_title: ''
+    album_label: ''
+    release_catalog_n: ''
+    ean: ''
+    isrc: ''
+    recording_format: ''
+    recording_technique: ''
+    media_type: ''
+    recording_title: ''
+    version_title: ''
+    display_artist: ''
+    record_label: ''
+    isrc_validity: ''
+    submitter_recording_identifier: ''
+- id: REC-FLV-SESAC-01
+  reject_level: TR
+  field: null
+  level: conditional
+  version: '2.0'
+  description: 'For registrations to SESAC only: if the work registration contains a SESAC interest, Recording Format, Recording Technique, and several release-format flags must be entered.'
+  implemented: false
+  reason: Society-specific (SESAC only); this tool doesn't model per-record society interest.
+  bmi_exception: ''
+- id: REC-FLV-13
+  reject_level: RR
+  field: submitter_recording_identifier
+  level: optional
+  version: '2.2'
+  description: If entered, the Submitter Recording Identifier must uniquely identify the recording.
+  implemented: false
+  reason: Cross-file uniqueness is not verified, and this field isn't mapped in layout.py's REAL_LAYOUT.
+  bmi_exception: ''
+fields:
+  - name: Record Type
+    start: 1
+    length: 3
+    type: A
+    req: mandatory
+    valid_values: ["REC"]
+    description: REC = Recording Detail.
+  - name: Transaction Sequence #
+    start: 4
+    length: 8
+    type: N
+    req: mandatory
+    description: Must equal the Transaction Sequence # of the transaction header this record belongs to.
+  - name: Record Sequence #
+    start: 12
+    length: 8
+    type: N
+    req: mandatory
+    description: Previous record's Record Sequence # + 1.
+  - name: Release Date
+    start: 20
+    length: 8
+    type: D
+    req: optional
+    description: Date the work was or will be released for public consumption (past, present, or future).
+  - name: Constant
+    start: 28
+    length: 60
+    type: A
+    req: optional
+    description: Fill with blanks.
+  - name: Release Duration
+    start: 88
+    length: 6
+    type: T
+    req: optional
+    description: Duration of the release of the work.
+  - name: Constant (2)
+    start: 94
+    length: 5
+    type: A
+    req: optional
+    description: Fill with blanks.
+  - name: Album Title
+    start: 99
+    length: 60
+    type: A
+    req: optional
+    description: The name of the album in which the work was included, if released as part of an album. Added CWR 2.0.
+  - name: Album Label
+    start: 159
+    length: 60
+    type: A
+    req: optional
+    description: Name of the organization that produced and released the album. Added CWR 2.0.
+  - name: Release Catalog #
+    start: 219
+    length: 18
+    type: A
+    req: optional
+    description: Number assigned by the organization releasing the album (sales/distribution tracking). Added CWR 2.0.
+  - name: EAN
+    start: 237
+    length: 13
+    type: L
+    req: optional
+    description: European Article Number of release (EAN-13). Added CWR 2.0.
+  - name: ISRC
+    start: 250
+    length: 12
+    type: L
+    req: optional
+    description: International Standard Recording Code of the recording (ISO 3901). Added CWR 2.0.
+  - name: Recording Format
+    start: 262
+    length: 1
+    type: L
+    req: optional
+    valid_values: ["A", "V"]
+    description: A = Audio, V = Video. Added CWR 2.0.
+  - name: Recording Technique
+    start: 263
+    length: 1
+    type: L
+    req: optional
+    valid_values: ["A", "D", "U"]
+    description: A = Analogue, D = Digital, U = Unknown. Added CWR 2.0.
+  - name: Media Type
+    start: 264
+    length: 3
+    type: L
+    req: optional
+    since: '2.1'
+    description: BIEM/CISAC code for media type. Added CWR 2.1.
+  - name: Recording Title
+    start: 267
+    length: 60
+    type: A
+    req: optional
+    since: '2.2'
+    description: Title of the Sound Recording. Added CWR 2.2.
+  - name: Version Title
+    start: 327
+    length: 60
+    type: A
+    req: optional
+    since: '2.2'
+    description: Title given to the version of the Sound Recording (e.g. "remixed by"). Added CWR 2.2.
+  - name: Display Artist
+    start: 387
+    length: 60
+    type: A
+    req: optional
+    since: '2.2'
+    description: Name of the artist of the Sound Recording. Added CWR 2.2.
+  - name: Record Label
+    start: 447
+    length: 60
+    type: A
+    req: optional
+    since: '2.2'
+    description: Name of the organisation that produced the Sound Recording. Added CWR 2.2.
+  - name: ISRC Validity
+    start: 507
+    length: 20
+    type: L
+    req: conditional
+    since: '2.2'
+    valid_values: ["Y", "U", "N"]
+    description: >-
+      If an ISRC is supplied: Y = valid, U = the link is invalid, N = the
+      ISRC is invalid. Added CWR 2.2.
+  - name: Submitter Recording Identifier
+    start: 527
+    length: 14
+    type: A
+    req: optional
+    since: '2.2'
+    description: The submitter's unique identifier for this recording. Added CWR 2.2.
+record_length: 540

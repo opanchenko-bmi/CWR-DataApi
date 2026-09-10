@@ -1,0 +1,116 @@
+# CWR 2.2 record layout: ARI - Additional Related Information
+# Fields transcribed from the official CISAC CWR 2.2 functional spec
+# (CWR11-1991R3, section 5.31).
+#
+# ARI is a whole new record type introduced in CWR 2.1 (per the intro:
+# "Version 2.1 of the CWR format includes additional fields for the
+# registration of cues, and a new record, ARI"). It does not exist at all
+# in real CWR 2.0 files.
+#
+# Like EWT/VER/REC/PER/COM, ARI won't appear in most real files, including
+# this project's own valid_baseline.V22 -- Generate PASS/FAIL for any rule
+# below requires loading (dragging/browsing) a real file that already
+# carries an ARI record.
+record_type: ARI
+name: Additional Related Information
+since_version: '2.1'
+rules:
+- id: ARI-RLV-01
+  reject_level: RR
+  field: record_type
+  level: mandatory
+  version: '2.1'
+  description: Either Work # or Note must be entered.
+  bmi_exception: ''
+  pass:
+    work_n: W0000000001
+    note: ''
+  fail:
+    work_n: ''
+    note: ''
+- id: ARI-FLV-01
+  reject_level: RR
+  field: society_n
+  level: mandatory
+  version: '2.1'
+  description: Society # must be entered and must match an entry in the Society Code table, or "000" for all societies.
+  bmi_exception: ''
+  pass:
+    society_n: '010'
+  fail:
+    society_n: ZZZ
+- id: ARI-FLV-02
+  reject_level: RR
+  field: type_of_right
+  level: mandatory
+  version: '2.1'
+  description: Type of Right must be entered and must be a valid right, or "ALL" for all rights.
+  bmi_exception: ''
+  pass:
+    type_of_right: ALL
+  fail:
+    type_of_right: ZZZ
+- id: ARI-FLV-03
+  reject_level: RR
+  field: subject_code
+  level: conditional
+  version: '2.1'
+  description: Subject Code must be entered if Note is not blank, and must match an entry in the Subject Code table.
+  bmi_exception: ''
+  pass:
+    note: SOME NOTE TEXT
+    subject_code: DL
+  fail:
+    note: SOME NOTE TEXT
+    subject_code: ''
+fields:
+  - name: Record Type
+    start: 1
+    length: 3
+    type: A
+    req: mandatory
+    valid_values: ["ARI"]
+    description: ARI = Additional Related Information.
+  - name: Transaction Sequence #
+    start: 4
+    length: 8
+    type: N
+    req: mandatory
+    description: Must equal the Transaction Sequence # of the transaction header this record belongs to.
+  - name: Record Sequence #
+    start: 12
+    length: 8
+    type: N
+    req: mandatory
+    description: Previous record's Record Sequence # + 1.
+  - name: Society #
+    start: 20
+    length: 3
+    type: L
+    req: mandatory
+    description: Society the note is addressed to (Society Code Table), or 000 for all societies.
+  - name: Work #
+    start: 23
+    length: 14
+    type: A
+    req: conditional
+    description: The society work # relating to this registration (e.g. from an unidentified list or website). Either Work # or Note must be entered.
+  - name: Type of Right
+    start: 37
+    length: 3
+    type: L
+    req: mandatory
+    description: Whether this note relates to performing, mechanical, sync rights, or ALL rights.
+  - name: Subject Code
+    start: 40
+    length: 2
+    type: L
+    req: conditional
+    description: Subject of the ARI; required if Note is not blank.
+  - name: Note
+    start: 42
+    length: 160
+    type: A
+    req: conditional
+    description: Free-text note pertaining to the Type of Right and Subject above. Either Work # or Note must be entered.
+record_length: 201

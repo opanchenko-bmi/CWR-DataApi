@@ -1,0 +1,102 @@
+# CWR 2.2 record layout: PER - Performing Artist
+# Fields transcribed from the official CISAC CWR 2.2 functional spec
+# (CWR11-1991R3, section 5.19).
+record_type: PER
+name: Performing Artist
+rules:
+- id: PER-FLV-01
+  reject_level: RR
+  field: performing_artist_last_name
+  level: mandatory
+  version: '2.0'
+  description: Performing Artist Last Name must be entered.
+  bmi_exception: ''
+  pass:
+    performing_artist_last_name: SWV
+  fail:
+    performing_artist_last_name: ''
+- id: PER-FLV-02
+  reject_level: RR
+  field: performing_artist_last_name
+  level: mandatory
+  version: '2.0'
+  description: Performing Artist Last Name must contain only valid ASCII characters.
+  bmi_exception: ''
+  pass:
+    performing_artist_last_name: SWV
+  fail:
+    performing_artist_last_name: SWÝ
+- id: PER-FLV-05
+  reject_level: RR
+  field: performing_artist_first_name
+  level: optional
+  version: '2.0'
+  description: Performing Artist First Name, if entered, must contain only valid ASCII characters.
+  bmi_exception: ''
+  pass:
+    performing_artist_first_name: CHERYL
+  fail:
+    performing_artist_first_name: CHÉRYL
+- id: PER-FLV-03
+  reject_level: FR
+  field: performing_artist_ipi_name_n
+  level: optional
+  version: '2.0'
+  description: If Performing Artist IPI Name # is entered, it must match an entry on the IPI database.
+  implemented: false
+  reason: No IPI database is modeled in this project's lookups.
+  bmi_exception: ''
+- id: PER-FLV-04
+  reject_level: FR
+  field: performing_artist_ipi_base_number
+  level: optional
+  version: '2.0'
+  description: If Performing Artist IPI Base Number is entered, it must match an entry in the IPI database.
+  implemented: false
+  reason: No IPI database is modeled in this project's lookups.
+  bmi_exception: ''
+fields:
+  - name: Record Type
+    start: 1
+    length: 3
+    type: A
+    req: mandatory
+    valid_values: ["PER"]
+    description: PER = Performing Artist.
+  - name: Transaction Sequence #
+    start: 4
+    length: 8
+    type: N
+    req: mandatory
+    description: Must equal the Transaction Sequence # of the transaction header this record belongs to.
+  - name: Record Sequence #
+    start: 12
+    length: 8
+    type: N
+    req: mandatory
+    description: Previous record's Record Sequence # + 1.
+  - name: Performing Artist Last Name
+    start: 20
+    length: 45
+    type: A
+    req: mandatory
+    description: Last name of a person, or full name of a group, that performed the work.
+  - name: Performing Artist First Name
+    start: 65
+    length: 30
+    type: A
+    req: optional
+    description: First name associated with the performing artist.
+  - name: Performing Artist IPI Name #
+    start: 95
+    length: 11
+    type: L
+    req: optional
+    description: The IPI Name # corresponding to this performing artist.
+  - name: Performing Artist IPI Base Number
+    start: 106
+    length: 13
+    type: L
+    req: optional
+    description: The IPI base number assigned to this performing artist. Added CWR 2.0.
+record_length: 118

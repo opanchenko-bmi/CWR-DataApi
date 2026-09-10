@@ -1,0 +1,2371 @@
+# Custom/allow-list lookups used by cwr_validator.py, and reference data for
+# cwr_spec/*.yaml fields' valid_values_ref. Small "verified subset" comments
+# from earlier revisions of this file are gone -- most of this is now
+# ported from an existing internal C# tool's lookup tables
+# (SWV.SWVMessage.Helpers.LookupTables, a similar CWR validation tool), which
+# carries the real CISAC/CWR code tables (Society, TIS, Language, Sender,
+# Instrument, etc.) rather than small hand-picked samples.
+#
+# Corrections this port surfaced vs. the previous hand-authored subset here
+# (all now reflected below -- also changes cwr_validator.py's live behavior,
+# since it loads these lists directly):
+#   - VALID_PUBLISHER_TYPE was missing "AQ" (Acquirer) -- cwr_validator.py's
+#     own logic already treats AQ as a legitimate publisher type elsewhere
+#     (`ptype not in ("E", "AQ")`), so this closes a real gap.
+#   - VALID_WRITER_DESIGNATION was missing "PA" (income participant).
+#   - VALID_MWDC was missing "UNC" (Unclassified).
+#   - VALID_LANGUAGE, VALID_TIS, and VALID_SOCIETY_CODE go from small
+#     hand-picked samples (13 / 9 / 2 entries) to the real, much larger
+#     CISAC tables (142 / 251 / 331 entries).
+#
+# Left as-is / not ported:
+#   - VALID_TXN_TYPE's C# source (TransactionType) still includes "COP",
+#     which the CWR 2.2 spec's own revision history (CWR11-1991R3 p.2) says
+#     was removed from the transaction type documentation. Not added here --
+#     flagging in case the C# tool intentionally still supports older files.
+#   - EDIStandardVersionNumber ({"01.10"}) isn't a lookup here since
+#     HDR-FLV-09 / cwr_validator.py already hardcode that single constant.
+#   - VALID_YN_BLANK folds together three C# sets that were literally
+#     identical ({"Y","N",""}): BlankFlag, FirstRecordingRefusal, and
+#     UnknownIndicator (Publisher/Writer Unknown Indicator). Same for
+#     VALID_YNU covering RecordedIndicator/ReversionaryIndicator/Validity/
+#     ISRCValidity (all {"Y","N","U"}) -- consolidated rather than kept as
+#     separate near-duplicate keys.
+#
+# SOCIETY_NAMES is a {code: name} MAPPING, not a flat list -- cwr_rules.py's
+# load_lookups() passes dict-valued entries through unchanged (only
+# list-valued entries become sets). VALID_SENDER_FILE_CODE is the short
+# 2-3 char sender code used in the CWR file NAMING convention
+# (CWyynnnnsss_rrr.Vxx, spec section 3.1) -- distinct from HDR's numeric
+# Sender ID field (the submitter's IPI#).
+
+VALID_SENDER_TYPE:
+- PB
+- SO
+- AA
+- WR
+VALID_TXN_TYPE:
+- ACK
+- AGR
+- NWR
+- REV
+- ISW
+- EXC
+- COP
+VALID_CHARACTER_SET:
+- BIG5
+- GB
+- UTF-8
+VALID_PUBLISHER_TYPE:
+- AQ
+- AM
+- PA
+- E
+- ES
+- SE
+VALID_WRITER_DESIGNATION:
+- AD
+- AR
+- A
+- C
+- CA
+- SR
+- SA
+- TR
+- PA
+VALID_VERSION_TYPE:
+- MOD
+- ORI
+VALID_INCL_EXCL:
+- I
+- E
+VALID_MWDC:
+- JAZ
+- POP
+- SER
+- UNC
+VALID_SOCIETY_CODE:
+- 1
+- 2
+- 3
+- 4
+- 5
+- 6
+- 7
+- 8
+- 9
+- 10
+- 11
+- 12
+- 13
+- 14
+- 15
+- 16
+- 17
+- 18
+- 19
+- 20
+- 21
+- 22
+- 23
+- 24
+- 25
+- 26
+- 27
+- 28
+- 29
+- 30
+- 31
+- 32
+- 33
+- 34
+- 35
+- 36
+- 37
+- 38
+- 39
+- 40
+- 41
+- 42
+- 43
+- 44
+- 45
+- 46
+- 47
+- 48
+- 49
+- 50
+- 51
+- 52
+- 53
+- 54
+- 55
+- 56
+- 57
+- 58
+- 59
+- 60
+- 61
+- 62
+- 63
+- 64
+- 65
+- 66
+- 67
+- 68
+- 69
+- 70
+- 71
+- 72
+- 73
+- 74
+- 75
+- 76
+- 77
+- 78
+- 79
+- 80
+- 81
+- 82
+- 83
+- 84
+- 85
+- 86
+- 87
+- 88
+- 89
+- 90
+- 91
+- 92
+- 93
+- 94
+- 95
+- 96
+- 97
+- 98
+- 99
+- 101
+- 102
+- 103
+- 104
+- 105
+- 106
+- 107
+- 108
+- 109
+- 110
+- 111
+- 112
+- 113
+- 114
+- 115
+- 116
+- 117
+- 118
+- 119
+- 120
+- 121
+- 122
+- 123
+- 124
+- 125
+- 126
+- 127
+- 128
+- 129
+- 130
+- 131
+- 132
+- 133
+- 134
+- 135
+- 136
+- 137
+- 138
+- 139
+- 140
+- 141
+- 142
+- 143
+- 144
+- 145
+- 146
+- 147
+- 148
+- 149
+- 150
+- 151
+- 152
+- 153
+- 154
+- 155
+- 156
+- 157
+- 158
+- 159
+- 160
+- 161
+- 162
+- 163
+- 164
+- 166
+- 167
+- 168
+- 169
+- 170
+- 171
+- 172
+- 173
+- 174
+- 175
+- 176
+- 177
+- 178
+- 179
+- 180
+- 181
+- 182
+- 183
+- 184
+- 185
+- 186
+- 187
+- 188
+- 189
+- 190
+- 191
+- 192
+- 193
+- 194
+- 195
+- 196
+- 197
+- 198
+- 199
+- 200
+- 201
+- 202
+- 203
+- 204
+- 205
+- 206
+- 207
+- 208
+- 209
+- 210
+- 212
+- 213
+- 214
+- 215
+- 216
+- 217
+- 218
+- 219
+- 220
+- 221
+- 222
+- 223
+- 224
+- 225
+- 226
+- 227
+- 228
+- 229
+- 230
+- 231
+- 232
+- 233
+- 234
+- 235
+- 236
+- 237
+- 238
+- 239
+- 240
+- 241
+- 242
+- 243
+- 244
+- 245
+- 246
+- 247
+- 248
+- 249
+- 250
+- 251
+- 252
+- 253
+- 254
+- 255
+- 256
+- 257
+- 258
+- 259
+- 260
+- 261
+- 262
+- 263
+- 264
+- 265
+- 266
+- 267
+- 268
+- 269
+- 270
+- 271
+- 272
+- 273
+- 274
+- 275
+- 276
+- 277
+- 278
+- 279
+- 280
+- 281
+- 282
+- 283
+- 284
+- 285
+- 286
+- 287
+- 288
+- 289
+- 290
+- 291
+- 292
+- 293
+- 294
+- 295
+- 296
+- 297
+- 298
+- 299
+- 300
+- 301
+- 302
+- 303
+- 304
+- 305
+- 306
+- 307
+- 308
+- 309
+- 310
+- 311
+- 312
+- 313
+- 314
+- 315
+- 316
+- 317
+- 318
+- 319
+- 320
+- 321
+- 322
+- 555
+- 635
+- 658
+- 672
+- 707
+- 758
+- 775
+- 776
+- 777
+- 778
+- 779
+- 888
+SOCIETY_NAMES:
+  '001': ACUM
+  '002': ADDAF
+  '003': AEPI
+  '004': AGADU
+  '005': AKM
+  '006': BUCADA
+  '007': APDAYC
+  008: APRA
+  009: ARTISJUS
+  '010': ASCAP
+  '011': AUSTRO-MECHANA (AUME)
+  '012': AMCOS
+  '013': AWA
+  '014': ARGENTORES
+  '015': APA
+  '016': BUMDA
+  '017': AMRA
+  018: BGDA
+  019: BMDA
+  '020': SODRAC
+  '021': BMI
+  '022': MCSN
+  '023': BUMA
+  '024': BURIDA
+  '025': SODAV (former BSDA)
+  '026': CASH
+  '027': CAPAC
+  028: LITA
+  029: SCD
+  '030': AMAR
+  '031': DILIA
+  '032': FILSCAP
+  '033': OMDA
+  '034': HFA
+  '035': GEMA
+  '036': IPRS
+  '037': BUBEDRA
+  038: JASRAC
+  039: MUSICAUTOR
+  '040': KODA
+  '041': LITERAR-MECHANA
+  '042': LVG
+  '043': MCSK
+  '044': MCPS
+  '045': BBDA
+  '046': MRS
+  '047': BCDA
+  048: NCB
+  049: ONDA
+  '050': OSA
+  '051': PROLITTERIS
+  '052': PRS
+  '053': PROCAN
+  '054': ALCS
+  '055': SABAM
+  '056': SACD
+  '057': SACERAU
+  058: SACEM
+  059: SACM
+  '060': SACVEN
+  '061': SADAIC
+  '062': SADEMBRA
+  '063': SAMRO
+  '064': SOKOJ
+  '065': SAYCE
+  '066': SBACEM
+  '067': SBAT
+  068: SDRM
+  069: SPA
+  '070': SOGEM
+  '071': SESAC Inc.
+  '072': SGAE
+  '073': SCAM
+  '074': SIAE
+  '075': SUISSIMAGE
+  '076': ACEMLA
+  '077': STEF
+  078: STEMRA
+  079: STIM
+  080: SUISA
+  081: SARRAL
+  082: OTPDA
+  083: SONECA
+  084: SAYCO
+  085: SOZA
+  086: SICAM
+  087: SPACEM
+  088: CMRRA
+  089: TEOSTO
+  090: TONO
+  091: SSA
+  092: SOCINADA
+  093: UBC
+  094: RAO
+  095: VG WORT
+  096: COTT
+  097: ZAIKS
+  098: ZIMURA
+  099: NS
+  '101': SOCAN
+  '102': NASCAM
+  '103': ACDAM
+  '104': MACP
+  '105': MASA (RMS)
+  '106': COMPASS
+  '107': ACAM
+  '108': CHA
+  '109': KCI
+  '110': LATGA-A
+  '111': HDS-ZAMP
+  '112': SAZAS
+  '113': LAA
+  '114': AGAYC
+  '115': UCMR-ADA
+  '116': EAU
+  '117': MESAM
+  '118': KOMCA
+  '119': MCSC
+  '120': LIRA
+  '121': VDFS
+  '122': AKKA-LAA
+  '123': COSGA
+  '124': COSOMA
+  '125': BNDA
+  '126': MCT
+  '127': ALBAUTOR
+  '128': IMRO
+  '129': SOBODAYCOM
+  '130': BUTODRA
+  '131': SADA
+  '132': BILD-KUNST
+  '133': ZAMCOPS
+  '134': SLPRS
+  '135': SADH
+  '136': ZAMP - Macédoine
+  '137': SOFAM
+  '138': KOPIOSTO
+  '139': VISDA
+  '140': UACRR
+  '141': ATN
+  '142': DALRO
+  '143': TEATERAUTOR
+  '144': HAA
+  '145': DIRECTORS UK
+  '146': SPAC
+  '147': FILMAUTOR
+  '148': ADAGP
+  '149': ARS
+  '150': BEELDRECHT
+  '151': BONO
+  '152': Bildupphovsrätt (Visual Copyright Society)
+  '153': DACS
+  '154': HUNGART
+  '155': SOMAAP
+  '156': VAGA
+  '157': BILDRECHT GmbH
+  '158': VEGAP
+  '159': VISCOPY
+  '160': NCIP
+  '161': MÜST
+  '162': AMPAL
+  '163': APG-Japan
+  '164': APSAV
+  '166': AUTORARTE
+  '167': BURAFO
+  '168': CA
+  '169': COSCAP
+  '170': CPSN
+  '171': CREAIMAGEN
+  '172': DGA
+  '173': DIRECTORES
+  '174': FILMJUS
+  '175': CopyRo
+  '176': JACAP
+  '177': KazAK
+  '178': KOSA
+  '179': KUVASTO
+  '180': MUSIKEDITION
+  '181': NMPA
+  '182': PAPPRI
+  '183': SACK
+  '184': SARTEC
+  '185': SESAM
+  '186': SGDL
+  '187': SNAC
+  '188': Société de l'Image
+  '189': SOCINPRO
+  '190': SOPE
+  '191': SPACQ
+  '192': SFF
+  '193': The Society of Authors (SOA)
+  '194': UFFICIO GIURIDICO
+  '195': VEVAM
+  '196': WGA
+  '197': WGJ
+  '198': ZAMP Association of Slovenia
+  '199': SFP-ZAPA
+  '200': MSG
+  '201': ABRAMUS
+  '202': AsDAC
+  '203': AWGACS
+  '204': GCA (former SSA)
+  '205': SODART
+  '206': UFW
+  '207': The Author's Registry Inc.
+  '208': SGA
+  '209': ARMAUTHOR NGO
+  '210': ACCESS COPYRIGHT
+  '212': CSCS
+  '213': DRCC
+  '214': ECCO
+  '215': Kyrgyzpatent
+  '216': SQN
+  '217': ABRAC
+  '218': ANACIM
+  '219': ASSIM
+  '220': ATIDA
+  '221': SABEM
+  '222': FONOPERU
+  '223': COSOTA
+  '224': SOMAS
+  '225': SAIF
+  '226': AACIMH
+  '227': SGACEDOM
+  '228': ROMS
+  '229': ICG
+  '230': ADAVIS
+  '231': AUTVIS
+  '232': GESTOR
+  '233': SACEMLUXEMBOURG
+  '234': UPRS
+  '235': SACENC
+  '236': ARTEGESTION
+  '237': TALI
+  '238': BSCAP
+  '239': CMC
+  '240': DAMA
+  '241': NICAUTOR
+  '242': SACIM
+  '243': SADIA
+  '244': SASUR
+  '245': SETEM
+  '246': VCPMC
+  '247': IVARO
+  '248': DAC
+  '249': PAM CG
+  '250': AEI-GUATEMALA
+  '251': ASDACS
+  '252': COLCCMA
+  '253': AAS
+  '254': SOCILADRA
+  '255': SODOMAPLA
+  '256': PICTORIGHT
+  '257': SAVA
+  '258': MRCSN
+  '259': SDCSI
+  '260': ACS
+  '261': GAI Uz
+  '262': SINEBIR
+  '263': SACS
+  '264': CARCC
+  '265': MACA
+  '266': BeAT
+  '267': UPRAVIS
+  '268': COSON
+  '269': WAMI
+  '270': JASPAR
+  '271': DHFR
+  '272': MOSCAP
+  '273': AMUS
+  '274': AuPO CINEMA
+  '275': AUTODIAHIRISI
+  '276': DASC
+  '277': RSAU
+  '278': RUR
+  '279': SDADV
+  '280': SANASTO
+  '281': ATHINA- SADA - S.A.D.
+  '282': UNAC-SA
+  '283': CAPASSO
+  '284': COSOZA
+  '285': GHAMRO
+  '286': ODDA
+  '287': KORRA
+  '288': ABYROY
+  '289': AIPA
+  '290': AZDG
+  '291': OFA
+  '292': ZPAP
+  '293': DBCA
+  '294': REDES
+  '295': SAGCRYT
+  '296': DACIN-SARA
+  '297': GEDAR
+  '298': OOA-S
+  '299': SCM-COOPERATIVA
+  '300': WID Centre
+  '301': GESAC
+  '302': LATINAUTOR
+  '303': NORD-DOC
+  '304': SONGCODE
+  '305': IMJV
+  '306': ACCS
+  '307': MIS@ASIA
+  '308': ECAD
+  '309': LatinNet
+  '310': DIVA
+  '311': MCPS-PRS Alliance
+  '312': CISAC
+  '313': FastTrack DCN
+  '314': IDA
+  '315': CSI
+  '316': CIS-Net AVI
+  '317': INTL-REP
+  '318': SGS
+  '319': ICE Services AB
+  '320': ARMONIA
+  '321': PUBLISHERS
+  '322': EVA
+  '555': GRD
+  '635': GEMA-US
+  '658': SACEM-US
+  '672': SGAE-NY
+  '707': MusicMark
+  '758': SACEM-LIBAN
+  '775': Solar EMI
+  '776': Solar Sony
+  '777': CELAS
+  '778': GMR
+  '779': Polaris Nordic
+  '888': PAECOL
+VALID_LANGUAGE:
+- OM
+- AB
+- AA
+- AF
+- SQ
+- AM
+- AR
+- HY
+- AS
+- AY
+- AZ
+- BA
+- EU
+- BN
+- DZ
+- BH
+- BI
+- BR
+- BG
+- MY
+- BE
+- KM
+- CA
+- ZH
+- CO
+- HR
+- CS
+- DA
+- NL
+- EN
+- EO
+- ET
+- FO
+- FA
+- FJ
+- FI
+- FR
+- FY
+- GL
+- KA
+- DE
+- EL
+- KL
+- GN
+- GU
+- HA
+- HW
+- IW
+- HI
+- HU
+- IS
+- IN
+- IA
+- IE
+- IK
+- GA
+- IT
+- JA
+- JW
+- KN
+- KS
+- KK
+- RW
+- KY
+- RN
+- KO
+- KU
+- LO
+- LA
+- LV
+- LN
+- LT
+- MK
+- MG
+- MS
+- ML
+- MT
+- MI
+- MR
+- MO
+- MN
+- NA
+- ND
+- NE
+- NS
+- 'NO'
+- OC
+- OR
+- OM
+- PM
+- PS
+- PL
+- PT
+- PA
+- QU
+- RM
+- RO
+- RU
+- SM
+- SG
+- SA
+- GD
+- SR
+- SH
+- ST
+- TN
+- SN
+- SD
+- SI
+- SS
+- SK
+- SL
+- SO
+- ES
+- SU
+- SW
+- SV
+- TL
+- TG
+- TA
+- TT
+- TE
+- TH
+- BO
+- TI
+- TO
+- TS
+- TR
+- TK
+- TW
+- UK
+- UR
+- UZ
+- VE
+- VI
+- VO
+- CY
+- WO
+- XH
+- JI
+- YO
+- ZU
+VALID_AGREEMENT_TYPE:
+- OS
+- PS
+- PG
+- OG
+VALID_YN:
+- Y
+- N
+VALID_YNU:
+- Y
+- N
+- U
+VALID_YN_BLANK:
+- Y
+- N
+- ''
+VALID_TIS:
+- 4
+- 8
+- 12
+- 20
+- 24
+- 28
+- 31
+- 32
+- 36
+- 40
+- 44
+- 48
+- 50
+- 51
+- 52
+- 56
+- 64
+- 68
+- 70
+- 72
+- 76
+- 84
+- 90
+- 96
+- 100
+- 104
+- 108
+- 112
+- 116
+- 120
+- 124
+- 132
+- 140
+- 144
+- 148
+- 152
+- 156
+- 158
+- 170
+- 174
+- 178
+- 180
+- 188
+- 191
+- 192
+- 196
+- 200
+- 203
+- 204
+- 208
+- 212
+- 214
+- 218
+- 222
+- 226
+- 230
+- 231
+- 232
+- 233
+- 242
+- 246
+- 250
+- 258
+- 262
+- 266
+- 268
+- 270
+- 276
+- 278
+- 280
+- 288
+- 296
+- 300
+- 308
+- 320
+- 324
+- 328
+- 332
+- 336
+- 340
+- 344
+- 348
+- 352
+- 356
+- 360
+- 364
+- 368
+- 372
+- 376
+- 380
+- 384
+- 388
+- 392
+- 398
+- 400
+- 404
+- 408
+- 410
+- 414
+- 417
+- 418
+- 422
+- 426
+- 428
+- 430
+- 434
+- 438
+- 440
+- 442
+- 446
+- 450
+- 454
+- 458
+- 462
+- 466
+- 470
+- 478
+- 480
+- 484
+- 492
+- 496
+- 498
+- 499
+- 500
+- 504
+- 508
+- 512
+- 516
+- 520
+- 524
+- 528
+- 540
+- 548
+- 554
+- 558
+- 562
+- 566
+- 578
+- 583
+- 584
+- 585
+- 586
+- 591
+- 598
+- 600
+- 604
+- 608
+- 616
+- 620
+- 624
+- 626
+- 630
+- 634
+- 642
+- 643
+- 646
+- 659
+- 660
+- 662
+- 670
+- 674
+- 678
+- 682
+- 686
+- 688
+- 690
+- 694
+- 702
+- 703
+- 704
+- 705
+- 706
+- 710
+- 716
+- 720
+- 724
+- 728
+- 729
+- 732
+- 736
+- 740
+- 748
+- 752
+- 756
+- 760
+- 762
+- 764
+- 768
+- 776
+- 777
+- 780
+- 784
+- 788
+- 792
+- 795
+- 798
+- 800
+- 804
+- 807
+- 810
+- 818
+- 826
+- 834
+- 840
+- 854
+- 858
+- 860
+- 862
+- 882
+- 886
+- 887
+- 888
+- 890
+- 891
+- 894
+- 2100
+- 2101
+- 2102
+- 2103
+- 2104
+- 2105
+- 2106
+- 2107
+- 2108
+- 2109
+- 2110
+- 2111
+- 2112
+- 2113
+- 2114
+- 2115
+- 2116
+- 2117
+- 2118
+- 2119
+- 2120
+- 2121
+- 2122
+- 2123
+- 2124
+- 2125
+- 2126
+- 2127
+- 2128
+- 2129
+- 2130
+- 2131
+- 2132
+- 2133
+- 2134
+- 2136
+BMI_SPECIAL_TIS:
+- 100
+UNKNOWN_TIS:
+- 0
+- 99
+VALID_AGREEMENT_ROLE_CODE:
+- AS
+- AC
+VALID_MEDIA_TYPE:
+- S
+- EP
+- DS
+- RDS
+- RMS
+- EPM
+- MLP
+- LP
+- LP2
+- LP3
+- LP4
+- SCD
+- CDS
+- CDM
+- RCD
+- CD
+- CD2
+- SA
+- SA2
+- CES
+- CXS
+- CXM
+- RCE
+- CEP
+- CE
+- CE2
+- SMC
+- SM2
+- MMC
+- EMC
+- RMC
+- MCP
+- MC
+- MC2
+- MC3
+- MC4
+- DMC
+- MDS
+- MDR
+- MDP
+- MD
+- MD2
+- DC
+- DC2
+- DV1
+- DV2
+- DV3
+- DV4
+- DW
+- DM
+- DL
+VALID_BLTVR:
+- B
+- L
+- R
+- T
+- V
+VALID_COMPOSITE_TYPE:
+- COS
+- MED
+- POT
+- UCO
+- ''
+VALID_CWR_WORK_TYPE:
+- TA
+- AC
+- AR
+- AL
+- AM
+- BD
+- BL
+- CD
+- CL
+- CC
+- CT
+- DN
+- FM
+- FK
+- BG
+- SG
+- JZ
+- JG
+- LN
+- LA
+- NA
+- OP
+- PK
+- PP
+- RP
+- RK
+- RB
+- SD
+- SY
+VALID_EXCERPT_TYPE:
+- MOV
+- UEX
+- ''
+VALID_IDENTIFIER_TYPE:
+- W
+- R
+- P
+- V
+VALID_INSTRUMENT:
+- ACC
+- ALP
+- ACL
+- AFL
+- AHN
+- ARC
+- ASX
+- ALT
+- AMP
+- BAG
+- BKA
+- BBF
+- BDN
+- BNJ
+- BAR
+- BSX
+- BTN
+- BQF
+- BBT
+- BCL
+- BDR
+- BFT
+- BGT
+- BOB
+- BRC
+- BSP
+- BRT
+- BSS
+- BHN
+- BSN
+- BEL
+- BNG
+- BOY
+- BGL
+- CAR
+- CST
+- CEL
+- CHM
+- CIM
+- CLR
+- CVD
+- COM
+- CNB
+- CNG
+- CBN
+- CBC
+- CCL
+- CAL
+- CNT
+- CTN
+- CYM
+- DIJ
+- DIZ
+- DJM
+- BAS
+- DRM
+- DRK
+- DUL
+- EFC
+- EBG
+- EGT
+- EOG
+- ELL
+- ELP
+- EHN
+- ERH
+- EUP
+- FLG
+- FLT
+- FRN
+- GHM
+- GHP
+- GLS
+- GNG
+- GTR
+- HBL
+- HAR
+- HRM
+- HRP
+- HPS
+- HCK
+- HRN
+- HUR
+- KAZ
+- KEY
+- KLV
+- KOT
+- LUT
+- LYR
+- MAN
+- MCS
+- MAR
+- MBR
+- MEL
+- MEZ
+- MID
+- MSB
+- NAR
+- NAF
+- NHN
+- OBO
+- OBD
+- OND
+- ORG
+- PWH
+- PER
+- PIA
+- PIC
+- PPA
+- PRP
+- PRO
+- REC
+- RUA
+- SAM
+- SAX
+- SEQ
+- SHK
+- SHM
+- SHW
+- SHO
+- SIT
+- SDM
+- SNR
+- SNS
+- SRC
+- SSX
+- SOP
+- SOU
+- SPO
+- STD
+- SYN
+- TAB
+- TAM
+- TMN
+- TTM
+- TAP
+- THN
+- TRC
+- TSX
+- TEN
+- THE
+- TIM
+- TYP
+- TRI
+- TMB
+- TRM
+- TBA
+- UKE
+- VIB
+- VID
+- VLA
+- VDG
+- VLN
+- VCL
+- VOC
+- WTB
+- WHS
+- WBK
+- XYL
+- YQN
+- ZHG
+- ZIT
+VALID_INTENDED_PURPOSE:
+- COM
+- FIL
+- GEN
+- LIB
+- MUL
+- RAD
+- TEL
+- THR
+- VID
+VALID_LYRIC_ADAPTATION:
+- NEW
+- MOD
+- NON
+- ORI
+- REP
+- ADL
+- UNS
+- TRA
+VALID_MESSAGE_LEVEL:
+- E
+- G
+- T
+- R
+- F
+VALID_MESSAGE_TYPE:
+- F
+- R
+- G
+- T
+- E
+VALID_MUSIC_ARRANGEMENT:
+- NEW
+- ARR
+- ADM
+- UNS
+- ORI
+VALID_NWR_CHILD_RECORD_TYPES:
+- NWR
+- REV
+- ISW
+- EXC
+- SPU
+- NPN
+- SPT
+- OPT
+- OPU
+- SWR
+- NWN
+- SWT
+- PWR
+- OWR
+- OWT
+- ALT
+- NAT
+- EWT
+- NET
+- VER
+- NVT
+- PER
+- NPR
+- REC
+- ORN
+- INS
+- IND
+- COM
+- NCT
+- NOW
+- ARI
+- XRF
+- ACK
+- MSG
+VALID_POST_TERM_COLLECTION_STATUS:
+- N
+- O
+- D
+VALID_PRIOR_ROYALTY_STATUS:
+- N
+- A
+- D
+VALID_RECORDING_FORMAT:
+- A
+- V
+VALID_RECORDING_TECHNIQUE:
+- A
+- D
+- U
+VALID_RECORD_TYPES:
+- HDR
+- GRH
+- GRT
+- TRL
+- AGR
+- NWR
+- REV
+- ISW
+- EXC
+- ACK
+- TER
+- IPA
+- NPA
+- SPU
+- OPU
+- NPN
+- SPT
+- OPT
+- SWR
+- OWR
+- NWN
+- SWT
+- OWT
+- PWR
+- ALT
+- NAT
+- EWT
+- VER
+- PER
+- NPR
+- REC
+- ORN
+- INS
+- IND
+- COM
+- MSG
+- NET
+- NCT
+- NVT
+- NOW
+- ARI
+- XRF
+VALID_SALES_MANUFACTURE_CLAUSE:
+- S
+- M
+- ''
+VALID_SENDER_FILE_CODE:
+- '0'
+- '104'
+- 22D
+- 4AD
+- AAL
+- AB
+- ABO
+- AC
+- ACC
+- ACM
+- ACT
+- AE
+- AEM
+- AFR
+- AIR
+- ALF
+- ALL
+- ALP
+- ALT
+- ALV
+- AM
+- AME
+- AMG
+- AML
+- AMP
+- AP
+- APL
+- APO
+- ARC
+- ARM
+- ART
+- ASM
+- ATP
+- AUM
+- AUN
+- AVE
+- AVI
+- AX
+- BAI
+- BB
+- BBM
+- BEC
+- BG
+- BGM
+- BHI
+- BHM
+- BIX
+- BK
+- BL
+- BLT
+- BLU
+- BM
+- BMC
+- BMM
+- BMP
+- BN
+- BNH
+- BNO
+- BON
+- BPM
+- BRE
+- BRM
+- BS
+- BU
+- BUD
+- BUX
+- CAF
+- CAN
+- CAR
+- CAS
+- CAV
+- CBE
+- CC
+- CCH
+- CCS
+- CDC
+- CEG
+- CEN
+- CEZ
+- CH
+- CHO
+- CHR
+- CHU
+- CIN
+- CIT
+- CL9
+- CMI
+- CMP
+- CMS
+- CN
+- COL
+- COM
+- CON
+- COR
+- CPI
+- CPM
+- CPS
+- CRI
+- CRO
+- CTH
+- CTM
+- CVA
+- CVP
+- CWW
+- D6M
+- DAV
+- DEF
+- DEM
+- DEN
+- DHM
+- DHP
+- DJP
+- DM
+- DML
+- DMP
+- DNA
+- DNM
+- DO
+- DOD
+- DOM
+- DOW
+- DP
+- DRS
+- DSC
+- DT
+- DTN
+- DUC
+- EAT
+- ECM
+- EDA
+- EDB
+- EIM
+- EMC
+- EMI
+- EMO
+- EMP
+- EMS
+- END
+- EP
+- EPM
+- ERA
+- ETE
+- ETM
+- ETT
+- EVS
+- EXH
+- EXH
+- EXT
+- FA
+- FAN
+- FAR
+- FBM
+- FC
+- FCM
+- FCU
+- FCW
+- FIN
+- FIV
+- FLE
+- FME
+- FMG
+- FMI
+- FMO
+- FOO
+- FRM
+- FWD
+- FWI
+- FWM
+- FX
+- FXF
+- G7M
+- GBH
+- GGM
+- GIS
+- GJM
+- GLM
+- GMC
+- GOT
+- GP
+- GRE
+- GRF
+- GSA
+- GTP
+- HAC
+- HB
+- HF
+- HFM
+- HKM
+- HM
+- HOH
+- HOT
+- HSP
+- HTE
+- HWG
+- IDM
+- IG
+- IM
+- IMA
+- IMG
+- IMP
+- INT
+- IVX
+- JAN
+- JIM
+- JPM
+- JRM
+- KAL
+- KAP
+- KCM
+- KEW
+- KM
+- KOB
+- KVN
+- KWM
+- KYR
+- LAL
+- LBM
+- LGD
+- LIO
+- LOR
+- LPH
+- LXE
+- MA
+- MAC
+- MAG
+- MAK
+- MAM
+- MAR
+- MAS
+- MBT
+- MCH
+- MCM
+- MCS
+- MD
+- MDM
+- MG
+- MGM
+- MGT
+- MI
+- MIS
+- ML
+- MLG
+- MLM
+- MMB
+- MMG
+- MMP
+- MND
+- MNF
+- MO
+- MOM
+- MON
+- MOT
+- MPL
+- MPW
+- MS
+- MSH
+- MSI
+- MSO
+- MSV
+- MT
+- MU
+- MUS
+- MWL
+- MYM
+- MZK
+- NAN
+- NCM
+- NET
+- NMC
+- NMG
+- NOM
+- NOR
+- NTM
+- NTP
+- NWC
+- OL
+- OUT
+- PAC
+- PAP
+- PBM
+- PC
+- PEN
+- PER
+- PFC
+- PFH
+- PFM
+- PG
+- PGM
+- PIG
+- PLK
+- PLM
+- PLS
+- PM
+- POS
+- PPA
+- PR
+- PRL
+- PRM
+- PRO
+- PSL
+- PT
+- PTR
+- PU
+- RAD
+- RAL
+- RAT
+- RBM
+- RBX
+- REB
+- RED
+- REF
+- REL
+- RES
+- RG
+- RHM
+- RHY
+- RIM
+- RIS
+- RM
+- RML
+- RMM
+- RMP
+- RMW
+- RNL
+- RO
+- ROS
+- RSM
+- RT
+- RTM
+- SA
+- SAS
+- SAV
+- SBI
+- SC1
+- SCI
+- SCS
+- SEN
+- SFB
+- SFM
+- SFO
+- SGM
+- SGR
+- SH
+- SHA
+- SID
+- SIK
+- SIL
+- SIM
+- SLM
+- SLP
+- SM
+- SMG
+- SMN
+- SMP
+- SMU
+- SMV
+- SNZ
+- SOB
+- SOH
+- SOM
+- SON
+- SOV
+- SP
+- SPI
+- SPM
+- SRP
+- SSM
+- ST
+- STG
+- STM
+- STO
+- STR
+- STV
+- SUG
+- SUH
+- SUM
+- TBO
+- TCP
+- TED
+- TEG
+- TEP
+- TFJ
+- THI
+- TIM
+- TJM
+- TLM
+- TM
+- TMS
+- TOF
+- TPL
+- TRN
+- TRP
+- TSM
+- TTD
+- TUB
+- TUN
+- ULT
+- UM
+- UMT
+- UN
+- UPR
+- USE
+- UT
+- VAM
+- VAN
+- VFC
+- VM
+- WAM
+- WAR
+- WB
+- WBX
+- WD
+- WIN
+- WIX
+- WML
+- WND
+- WOM
+- WP
+- WWM
+- YL
+- ZB
+- ZMP
+- ZNF
+- ZYX
+VALID_SPECIAL_AGREEMENT_INDICATOR:
+- R
+- L
+- B
+- Y
+- N
+- U
+- ''
+VALID_STANDARD_INSTRUMENTATION:
+- AUD
+- BND
+- BBA
+- BRC
+- BQU
+- BQN
+- BXT
+- BTR
+- CEN
+- CHO
+- CAO
+- BCH
+- CCH
+- DCH
+- MCH
+- MXC
+- TCH
+- UCH
+- WCH
+- YCH
+- CLC
+- CQN
+- CBA
+- FLC
+- GML
+- GQT
+- HNC
+- JZE
+- OQU
+- COR
+- ORC
+- SOR
+- PCE
+- PDU
+- PFH
+- PQU
+- PQN
+- PTR
+- SQT
+- SOC
+- SQU
+- SQN
+- SGT
+- SBA
+- TBC
+- TPC
+- TUC
+- WEN
+- WQR
+- WQN
+VALID_SUBJECT_CODE:
+- DL
+- SC
+- DW
+- IQ
+- RQ
+VALID_TEXT_MUSIC_RELATIONSHIP:
+- MUS
+- MTX
+- TXT
+- MTN
+VALID_TITLE_TYPE:
+- AT
+- TE
+- FT
+- IT
+- OT
+- TT
+- PT
+- RT
+- ET
+- OL
+- AL
+VALID_TRANSACTION_STATUS:
+- CO
+- DU
+- RA
+- AS
+- AC
+- RJ
+- NP
+- RC
+VALID_TYPE_OF_RIGHT:
+- MEC
+- PER
+- SYN
+- ALL
+VALID_USA_LICENSE_INDICATOR:
+- A
+- B
+- S
+VALID_WRITER_ARRANGER_DESIGNATION:
+- AR
+- AD
+- SR
+- SA
+- TR
+VALID_WRITER_CREATOR_DESIGNATION:
+- A
+- C
+- CA
+VALID_WRITER_INVALID_FOR_MUSIC_DESIGNATION:
+- CA
+- A
+- SA
+- TR
+VALID_WRITER_POSITION:
+- '1'
+- '2'
+# ISRC registrant-code prefixes (the first 2 chars of the 12-char ISRC,
+# CC-XXX-YY-NNNNN) -- not yet consumed by validator.py's isrc regex check
+# (REC.yaml / validator.py:1269-1271), which only checks ISRC *format*, not
+# that the prefix is a real registrant code. Kosovo/Yugoslavia aren't
+# 2-letter codes -- kept as given, presumably unassigned entries in the
+# source table; OECS is a real 3-letter registrant code (Organisation of
+# Eastern Caribbean States), not an error.
+VALID_ISRC_COUNTRY_CODE:
+- AC
+- AD
+- AE
+- AF
+- AG
+- AI
+- AL
+- AM
+- AN
+- AO
+- AR
+- AS
+- AT
+- AU
+- AW
+- AX
+- AZ
+- BA
+- BB
+- BD
+- BE
+- BF
+- BG
+- BH
+- BI
+- BJ
+- BL
+- BM
+- BN
+- BO
+- BR
+- BS
+- BT
+- BW
+- BY
+- BZ
+- CA
+- CB
+- CD
+- CF
+- CG
+- CH
+- CI
+- CK
+- CL
+- CM
+- CN
+- CO
+- CR
+- CU
+- CV
+- CY
+- CZ
+- DE
+- DJ
+- DK
+- DM
+- DO
+- DZ
+- EC
+- EE
+- EG
+- EH
+- EM
+- ER
+- ES
+- EU
+- ET
+- FI
+- FJ
+- FK
+- FM
+- FO
+- FR
+- GA
+- GB
+- GD
+- GE
+- GF
+- GG
+- GH
+- GI
+- GL
+- GM
+- GN
+- GP
+- GQ
+- GR
+- GT
+- GU
+- GW
+- GY
+- HK
+- HN
+- HR
+- HT
+- HU
+- ID
+- IE
+- IL
+- IM
+- IN
+- IQ
+- IR
+- IS
+- IT
+- JE
+- JM
+- JO
+- JP
+- KE
+- KG
+- KH
+- KI
+- KM
+- KN
+- Kosovo
+- KP
+- KR
+- KW
+- KY
+- KZ
+- LA
+- LB
+- LC
+- LI
+- LK
+- LR
+- LS
+- LT
+- LU
+- LV
+- LY
+- MA
+- MC
+- MD
+- ME
+- MF
+- MG
+- MH
+- MK
+- ML
+- MM
+- MN
+- MO
+- MP
+- MQ
+- MR
+- MS
+- MT
+- MU
+- MV
+- MW
+- MX
+- MY
+- MZ
+- NA
+- NC
+- NE
+- NF
+- NG
+- NI
+- NL
+- NO
+- NP
+- NR
+- NU
+- NZ
+- OECS
+- OM
+- PA
+- PE
+- PF
+- PG
+- PH
+- PK
+- PL
+- PM
+- PN
+- PR
+- PS
+- PT
+- PW
+- PY
+- QA
+- RE
+- RO
+- RS
+- RU
+- RW
+- SA
+- SB
+- SC
+- SD
+- SE
+- SG
+- SH
+- SI
+- SJ
+- SK
+- SL
+- SM
+- SN
+- SO
+- SR
+- ST
+- SV
+- SY
+- SZ
+- TC
+- TD
+- TG
+- TH
+- TJ
+- TK
+- TL
+- TM
+- TN
+- TO
+- TR
+- TT
+- TV
+- TW
+- TZ
+- UA
+- UG
+- UK
+- US
+- UY
+- UZ
+- VA
+- VC
+- VE
+- VG
+- VI
+- VN
+- VU
+- WF
+- WS
+- YE
+- YT
+- Yugoslavia
+- ZA
+- ZM
+- ZW
+- QR
+- QM
+- QZ
+- CP
+- DG
+- ZZ

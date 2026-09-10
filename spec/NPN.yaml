@@ -1,0 +1,112 @@
+# CWR 2.2 record layout: NPN - Non-Roman Alphabet Publisher Name
+# Fields transcribed from the official CISAC CWR 2.2 functional spec
+# (CWR11-1991R3, section 5.6). No rules defined for this type yet.
+record_type: NPN
+name: Non-Roman Alphabet Publisher Name
+# Like EWT/VER/REC/PER/COM, NPN won't appear in most real files, including
+# this project's own valid_baseline.V22 -- Generate PASS/FAIL for any rule
+# below requires loading (dragging/browsing) a real file that already
+# carries an NPN record.
+rules:
+- id: NPN-RLV-01
+  reject_level: RR
+  field: record_type
+  level: mandatory
+  version: '2.0'
+  description: This record must immediately follow an SPU record that refers to the publisher named here.
+  implemented: false
+  reason: >-
+    Structural ordering check ("must immediately follow X"); left
+    unimplemented for the same reason as this catalog's other such rules
+    (TER-RLV-01, OPT-FLV-05, NWN-RLV-01, ...).
+  bmi_exception: ''
+- id: NPN-FLV-01
+  reject_level: RR
+  field: publisher_sequence_n
+  level: mandatory
+  version: '2.0'
+  description: Publisher Sequence # must be entered and must match the Publisher Sequence # of the corresponding SPU record.
+  bmi_exception: ''
+  pass:
+    publisher_sequence_n: AUTO_SPU_SEQ
+  fail:
+    publisher_sequence_n: 99
+- id: NPN-FLV-02
+  reject_level: RR
+  field: interested_party_n
+  level: mandatory
+  version: '2.0'
+  description: Interested Party # must be entered and must match the Interested Party # of the corresponding SPU record.
+  bmi_exception: ''
+  pass:
+    interested_party_n: AUTO_SPU_IP
+  fail:
+    interested_party_n: '999999999'
+- id: NPN-FLV-03
+  reject_level: RR
+  field: publisher_name
+  level: mandatory
+  version: '2.0'
+  description: Publisher Name must be entered.
+  bmi_exception: ''
+  pass:
+    publisher_name: SONY MUSIC PUBLISHING
+  fail:
+    publisher_name: ''
+- id: NPN-FLV-04
+  reject_level: FR
+  field: language_code
+  level: optional
+  version: '2.0'
+  description: Language code, if entered, must be a valid code from the Language Code Table.
+  bmi_exception: ''
+  pass:
+    language_code: EN
+  fail:
+    language_code: ZZ
+fields:
+  - name: Record Type
+    start: 1
+    length: 3
+    type: A
+    req: mandatory
+    valid_values: ["NPN"]
+    description: NPN = Non-Roman Alphabet Publisher Name.
+  - name: Transaction Sequence #
+    start: 4
+    length: 8
+    type: N
+    req: mandatory
+    description: Must equal the Transaction Sequence # of the transaction header this record belongs to.
+  - name: Record Sequence #
+    start: 12
+    length: 8
+    type: N
+    req: mandatory
+    description: Previous record's Record Sequence # + 1.
+  - name: Publisher Sequence #
+    start: 20
+    length: 2
+    type: N
+    req: mandatory
+    description: A sequential number assigned to the original publishers on this work; must match the preceding SPU/OPU.
+  - name: Interested Party #
+    start: 22
+    length: 9
+    type: A
+    req: mandatory
+    description: Submitting publisher's unique identifier for this publisher; must match the preceding SPU/OPU.
+  - name: Publisher Name
+    start: 31
+    length: 480
+    type: A
+    req: mandatory
+    description: The name of this publishing company in non-Roman alphabet.
+  - name: Language Code
+    start: 511
+    length: 2
+    type: L
+    req: optional
+    valid_values_ref: VALID_LANGUAGE
+    description: The language code of the name.
+record_length: 512

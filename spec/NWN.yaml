@@ -1,0 +1,106 @@
+# CWR 2.2 record layout: NWN - Non-Roman Alphabet Writer Name
+# Fields transcribed from the official CISAC CWR 2.2 functional spec
+# (CWR11-1991R3, section 5.11). No rules defined for this type yet.
+#
+# Note: the spec's Record Format table lists "O" as the Fmt code for Writer
+# Last Name / Writer First Name, which isn't one of the defined type codes
+# (A/B/D/F/L/N/T, spec section 2.1) -- likely a transcription artifact in
+# the source PDF. Using "A" here as the sensible type for a name field.
+record_type: NWN
+name: Non-Roman Alphabet Writer Name
+# Like EWT/VER/REC/PER/COM, NWN won't appear in most real files, including
+# this project's own valid_baseline.V22 -- Generate PASS/FAIL for any rule
+# below requires loading (dragging/browsing) a real file that already
+# carries an NWN record.
+rules:
+- id: NWN-RLV-01
+  reject_level: RR
+  field: record_type
+  level: mandatory
+  version: '2.0'
+  description: This record must immediately follow an SWR record that refers to the writer named here.
+  implemented: false
+  reason: >-
+    Structural ordering check ("must immediately follow X"); left
+    unimplemented for the same reason as this catalog's other such rules
+    (TER-RLV-01, OPT-FLV-05, NPN-RLV-01, ...).
+  bmi_exception: ''
+- id: NWN-FLV-01
+  reject_level: RR
+  field: interested_party_n
+  level: conditional
+  version: '2.0'
+  description: Interested Party # must be entered and must match the Interested Party # of the corresponding SWR record.
+  bmi_exception: ''
+  pass:
+    interested_party_n: AUTO_SWR_IP
+  fail:
+    interested_party_n: '999999999'
+- id: NWN-FLV-02
+  reject_level: RR
+  field: writer_last_name
+  level: mandatory
+  version: '2.0'
+  description: Writer Name must be entered.
+  bmi_exception: ''
+  pass:
+    writer_last_name: SMITH
+  fail:
+    writer_last_name: ''
+- id: NWN-FLV-03
+  reject_level: FR
+  field: language_code
+  level: optional
+  version: '2.0'
+  description: Language code, if entered, must be a valid code from the Language Code Table.
+  bmi_exception: ''
+  pass:
+    language_code: EN
+  fail:
+    language_code: ZZ
+fields:
+  - name: Record Type
+    start: 1
+    length: 3
+    type: A
+    req: mandatory
+    valid_values: ["NWN"]
+    description: NWN = Non-Roman Alphabet Writer Name.
+  - name: Transaction Sequence #
+    start: 4
+    length: 8
+    type: N
+    req: mandatory
+    description: Must equal the Transaction Sequence # of the transaction header this record belongs to.
+  - name: Record Sequence #
+    start: 12
+    length: 8
+    type: N
+    req: mandatory
+    description: Previous record's Record Sequence # + 1.
+  - name: Interested Party #
+    start: 20
+    length: 9
+    type: A
+    req: conditional
+    description: Submitting publisher's unique identifier for this writer; must match the preceding SWR/OWR.
+  - name: Writer Last Name
+    start: 29
+    length: 160
+    type: A
+    req: mandatory
+    description: The last or single name of this writer, in non-Roman alphabet.
+  - name: Writer First Name
+    start: 189
+    length: 160
+    type: A
+    req: optional
+    description: The first name of this writer, in non-Roman alphabet.
+  - name: Language Code
+    start: 349
+    length: 2
+    type: L
+    req: optional
+    valid_values_ref: VALID_LANGUAGE
+    description: The language code of the name.
+record_length: 350

@@ -1,0 +1,147 @@
+# CWR 2.2 record layout: OPT - Publisher Non-Controlled Collection
+# OPT shares SPT's record format (CWR11-1991R3, section 5.7-5.8). Fields
+# duplicated here from SPT.yaml for a self-contained per-type file; keep in
+# sync with SPT.yaml if the layout changes.
+#
+# Corrected name -- the original stub guessed "Other Publisher Territory of
+# Control"; the real spec section title is "Publisher Non-Controlled
+# Collection".
+record_type: OPT
+name: Publisher Non-Controlled Collection
+# OPT is a whole new record type introduced in CWR 2.2 (not merely a field
+# addition to an existing record) -- per the CWR 2.2 revision changelog:
+# "OPT New 'non-controlled publisher collection' record (optional)". It
+# does not exist at all in real CWR 2.0/2.1 files.
+since_version: '2.2'
+rules:
+- id: OPT-FLV-01
+  reject_level: TR
+  field: interested_party_n
+  level: mandatory
+  version: '2.2'
+  description: 'Interested Party # must be entered and must match a preceding SPU/OPU record.'
+  bmi_exception: ''
+  pass:
+    interested_party_n: AUTO_SPU_IP
+  fail:
+    interested_party_n: '999999999'
+- id: OPT-FLV-02
+  reject_level: TR
+  field: pr_collection_share
+  level: conditional
+  version: '2.2'
+  description: PR Collection Share must be within 0 - 50.00% (0-5000).
+  bmi_exception: ''
+  pass:
+    pr_collection_share: 2500
+  fail:
+    pr_collection_share: 13000
+- id: OPT-FLV-03
+  reject_level: TR
+  field: tis_numeric_code
+  level: mandatory
+  version: '2.2'
+  description: TIS Numeric Code must be a valid CISAC territory.
+  bmi_exception: 'BMI: code 0 and 99 (unknown) are standardized to NULL downstream.'
+  pass:
+    tis_numeric_code: 2136
+  fail:
+    tis_numeric_code: 9998
+- id: OPT-FLV-04
+  reject_level: TR
+  field: inclusion_exclusion_indicator
+  level: mandatory
+  version: '2.2'
+  description: Inclusion/Exclusion Indicator must be I or E.
+  bmi_exception: ''
+  pass:
+    inclusion_exclusion_indicator: I
+  fail:
+    inclusion_exclusion_indicator: X
+- id: OPT-FLV-05
+  reject_level: TR
+  field: null
+  level: mandatory
+  version: '2.2'
+  description: An OPT record must follow an SPU, NPN, SPT, OPU, or another OPT record.
+  implemented: false
+  reason: Structural record-ordering check; not exercisable via a single-field patch.
+  bmi_exception: ''
+fields:
+  - name: Record Type
+    start: 1
+    length: 3
+    type: A
+    req: mandatory
+    valid_values: ["OPT"]
+    description: OPT = Publisher Non-Controlled Collection.
+  - name: Transaction Sequence #
+    start: 4
+    length: 8
+    type: N
+    req: mandatory
+    description: Must equal the Transaction Sequence # of the transaction header this record belongs to.
+  - name: Record Sequence #
+    start: 12
+    length: 8
+    type: N
+    req: mandatory
+    description: Previous record's Record Sequence # + 1.
+  - name: Interested Party #
+    start: 20
+    length: 9
+    type: A
+    req: mandatory
+    description: Submitting publisher's unique identifier for this publisher; matches the preceding SPU/OPU.
+  - name: Constant
+    start: 29
+    length: 6
+    type: A
+    req: mandatory
+    description: Set this field equal to spaces.
+  - name: PR Collection Share
+    start: 35
+    length: 5
+    type: N
+    req: conditional
+    description: '% of total royalty for performance collected by this publisher within the territory. Range 0-5000.'
+  - name: MR Collection Share
+    start: 40
+    length: 5
+    type: N
+    req: conditional
+    description: '% of total royalty for mechanical uses collected by this publisher. Range 0-10000.'
+  - name: SR Collection Share
+    start: 45
+    length: 5
+    type: N
+    req: conditional
+    description: '% of total royalty for synch rights collected by this publisher. Range 0-10000.'
+  - name: Inclusion/Exclusion Indicator
+    start: 50
+    length: 1
+    type: L
+    req: mandatory
+    valid_values_ref: VALID_INCL_EXCL
+    description: Whether the territory in this record is included (I) or excluded (E). Added CWR 2.0.
+  - name: TIS Numeric Code
+    start: 51
+    length: 4
+    type: L
+    req: mandatory
+    valid_values_ref: VALID_TIS
+    description: A territory within which this publisher claims collection rights. Added CWR 2.0.
+  - name: Shares change
+    start: 55
+    length: 1
+    type: B
+    req: optional
+    valid_values_ref: VALID_YN
+    description: Y if the shares change on sub-publication or similar reason. Added CWR 2.0.
+  - name: Sequence #
+    start: 56
+    length: 3
+    type: N
+    req: mandatory
+    description: Sequential number assigned to each territory following an SPU/OPU, starting at 1. Added CWR 2.1.
+record_length: 58

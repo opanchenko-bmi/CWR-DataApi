@@ -1,0 +1,301 @@
+# CWR 2.2 record layout: ORN - Work Origin
+# Fields transcribed from the official CISAC CWR 2.2 functional spec
+# (CWR11-1991R3, section 5.22). No rules defined for this type yet.
+#
+# The spec's V-ISAN and EIDR fields are documented as composite/nested
+# (V-ISAN = ISAN + Episode + Check Digit 1 + Version + Check Digit 2; EIDR
+# = root number + check digit). Flattened here into individual fields since
+# this project's fields: model is a flat list per record.
+record_type: ORN
+name: Work Origin
+rules:
+- id: ORN-FLV-01
+  reject_level: RR
+  field: intended_purpose
+  level: mandatory
+  version: '2.0'
+  description: Intended Purpose must match an entry in the Intended Purpose table (e.g. LIB/FIL/TEL).
+  bmi_exception: ''
+  pass:
+    intended_purpose: FIL
+  fail:
+    intended_purpose: ZZZ
+- id: ORN-FLV-02
+  reject_level: RR
+  field: production_title
+  level: conditional
+  version: '2.1'
+  description: Production Title or Library must be entered.
+  bmi_exception: ''
+  pass:
+    production_title: THE GREAT FILM
+    library: ''
+  fail:
+    production_title: ''
+    library: ''
+- id: ORN-FLV-03
+  reject_level: RR
+  field: cd_identifier
+  level: conditional
+  version: '2.0'
+  description: CD Identifier is required when Intended Purpose is LIB.
+  bmi_exception: ''
+  pass:
+    intended_purpose: LIB
+    cd_identifier: CD00123
+  fail:
+    intended_purpose: LIB
+    cd_identifier: ''
+- id: ORN-FLV-04
+  reject_level: FR
+  field: bltvr
+  level: optional
+  version: '2.1'
+  description: BLTVR, if entered, must be one of B/L/T/V/R.
+  bmi_exception: ''
+  pass:
+    bltvr: B
+  fail:
+    bltvr: Z
+- id: ORN-FLV-05
+  reject_level: RR
+  field: production_title
+  level: mandatory
+  version: '2.0'
+  description: Production Title, if entered, must contain only valid ASCII characters.
+  bmi_exception: ''
+  pass:
+    production_title: THE GREAT FILM
+  fail:
+    production_title: THE GRÉAT FILM
+- id: ORN-FLV-06
+  reject_level: FR
+  field: episode_title
+  level: optional
+  version: '2.1'
+  description: Episode Title, if entered, must contain only valid ASCII characters.
+  bmi_exception: ''
+  pass:
+    episode_title: PILOT EPISODE
+  fail:
+    episode_title: PÍLOT EPISODE
+- id: ORN-FLV-07
+  reject_level: FR
+  field: year_of_production
+  level: optional
+  version: '2.1'
+  description: Year of Production, if entered, must be a valid year.
+  bmi_exception: ''
+  pass:
+    year_of_production: 2020
+  fail:
+    year_of_production: 9999
+- id: ORN-FLV-08
+  reject_level: TR
+  field: production_title
+  level: conditional
+  version: '2.0'
+  description: Production Title must be entered when Intended Purpose is FIL or TEL.
+  bmi_exception: ''
+  pass:
+    intended_purpose: FIL
+    production_title: THE GREAT FILM
+  fail:
+    intended_purpose: FIL
+    production_title: ''
+- id: ORN-FLV-09
+  reject_level: FR
+  field: cut_number
+  level: optional
+  version: '2.0'
+  description: If entered, Cut Number must be numeric.
+  implemented: false
+  reason: This field is N-typed in this tool's parsing/patch-formatting, so non-numeric input can never survive to reach the validator.
+  bmi_exception: ''
+- id: ORN-FLV-10
+  reject_level: FR
+  field: null
+  level: optional
+  version: '2.2'
+  description: If entered, the V-ISAN (ISAN root + episode + version + check digits) must be a valid, checksum-correct identifier.
+  implemented: false
+  reason: No V-ISAN checksum algorithm is modeled in this project.
+  bmi_exception: ''
+- id: ORN-FLV-11
+  reject_level: FR
+  field: null
+  level: optional
+  version: '2.2'
+  description: If entered, the EIDR (root number + check digit) must be a valid, checksum-correct identifier.
+  implemented: false
+  reason: No EIDR checksum algorithm is modeled in this project.
+  bmi_exception: ''
+- id: ORN-FLV-12
+  reject_level: FR
+  field: null
+  level: optional
+  version: '2.1'
+  description: If entered, the AVI Key (AVI Society Code + Audio-Visual Number) must match an entry in the AV Index.
+  implemented: false
+  reason: No AV Index lookup is modeled in this project.
+  bmi_exception: ''
+fields:
+  - name: Record Type
+    start: 1
+    length: 3
+    type: A
+    req: mandatory
+    valid_values: ["ORN"]
+    description: ORN = Work Origin.
+  - name: Transaction Sequence #
+    start: 4
+    length: 8
+    type: N
+    req: mandatory
+    description: Must equal the Transaction Sequence # of the transaction header this record belongs to.
+  - name: Record Sequence #
+    start: 12
+    length: 8
+    type: N
+    req: mandatory
+    description: Previous record's Record Sequence # + 1.
+  - name: Intended Purpose
+    start: 20
+    length: 3
+    type: L
+    req: mandatory
+    description: Type of production this work originated from (Intended Purpose Table, e.g. LIB, FIL, TEL).
+  - name: Production Title
+    start: 23
+    length: 60
+    type: A
+    req: conditional
+    description: Name of the production this work originated from. Required when CWR Work Type on NWR is FM.
+  - name: CD Identifier
+    start: 83
+    length: 15
+    type: A
+    req: conditional
+    description: If Intended Purpose is LIB (Library Work), the identifier for the CD the work appears on.
+  - name: Cut Number
+    start: 98
+    length: 4
+    type: N
+    req: optional
+    description: If Intended Purpose is LIB, the track number on the CD Identifier where the work appears.
+  - name: Library
+    start: 102
+    length: 60
+    type: A
+    req: conditional
+    since: '2.1'
+    description: The library this work originated from. Production Title or Library must be entered. Added CWR 2.1.
+  - name: BLTVR
+    start: 162
+    length: 1
+    type: A
+    req: optional
+    since: '2.1'
+    valid_values: ["B", "L", "T", "V", "R"]
+    description: >-
+      Primary use of the work within the AV production: B=background,
+      L=logo, T=theme, V=visual, R=rolled up cues. Cue sheet is definitive. Added CWR 2.1.
+  - name: Filler
+    start: 163
+    length: 25
+    type: N
+    req: optional
+    since: '2.1'
+    description: Reserved for future use. Added CWR 2.1.
+  - name: Production #
+    start: 188
+    length: 12
+    type: A
+    req: optional
+    since: '2.1'
+    description: The number generated by the production company to identify the work. Added CWR 2.1.
+  - name: Episode Title
+    start: 200
+    length: 60
+    type: A
+    req: optional
+    since: '2.1'
+    description: Title of the episode this work originated from. Added CWR 2.1.
+  - name: Episode #
+    start: 260
+    length: 20
+    type: A
+    req: optional
+    since: '2.1'
+    description: Number assigned to the episode by the producer. Added CWR 2.1.
+  - name: Year of Production
+    start: 280
+    length: 4
+    type: N
+    req: optional
+    since: '2.1'
+    description: The year the production of the film or episode was completed. Added CWR 2.1.
+  - name: AVI Society Code
+    start: 284
+    length: 3
+    type: N
+    req: optional
+    since: '2.1'
+    description: Society code (Society Code Table) of the AV Index entry referenced, part of the AVI unique key. Added CWR 2.1.
+  - name: Audio-Visual Number
+    start: 287
+    length: 15
+    type: A
+    req: optional
+    since: '2.1'
+    description: Unique internal number used by the "owning" society for the AV work in the AV Index. Added CWR 2.1.
+  - name: 'V-ISAN: ISAN'
+    start: 302
+    length: 12
+    type: A
+    req: optional
+    since: '2.2'
+    description: Root segment of the V-ISAN unique audio-visual production identifier. Added CWR 2.2.
+  - name: 'V-ISAN: Episode'
+    start: 314
+    length: 4
+    type: A
+    req: optional
+    since: '2.2'
+    description: Episode or part number segment of the V-ISAN. Added CWR 2.2.
+  - name: 'V-ISAN: Check Digit 1'
+    start: 318
+    length: 1
+    type: A
+    req: optional
+    since: '2.2'
+    description: Check character for the root and episode segments. Added CWR 2.2.
+  - name: 'V-ISAN: Version'
+    start: 319
+    length: 8
+    type: A
+    req: optional
+    since: '2.2'
+    description: Version segment of the V-ISAN. Added CWR 2.2.
+  - name: 'V-ISAN: Check Digit 2'
+    start: 327
+    length: 1
+    type: A
+    req: optional
+    since: '2.2'
+    description: Check character for the version segment. Added CWR 2.2.
+  - name: 'EIDR: Root Number'
+    start: 328
+    length: 20
+    type: A
+    req: optional
+    since: '2.2'
+    description: EIDR root number. Added CWR 2.2.
+  - name: 'EIDR: Check Digit'
+    start: 348
+    length: 1
+    type: A
+    req: optional
+    since: '2.2'
+    description: EIDR check character. Added CWR 2.2.
+record_length: 348

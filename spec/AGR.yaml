@@ -1,0 +1,440 @@
+# CWR 2.2 record layout: AGR - Agreement Supporting Work Registration
+# Fields transcribed from the official CISAC CWR 2.2 functional spec
+# (CWR11-1991R3, section 4.1).
+record_type: AGR
+name: Agreement Supporting Work Registration
+rules:
+- id: AGR-FLV-01
+  reject_level: TR
+  field: submitter_agreement_number
+  level: mandatory
+  version: '2.0'
+  description: Submitter Agreement Number must be entered and must be unique within the submitter's database.
+  bmi_exception: This tool checks presence only; cross-file uniqueness is not verified.
+  pass:
+    submitter_agreement_number: AGR0000001
+  fail:
+    submitter_agreement_number: ''
+- id: AGR-FLV-02
+  reject_level: TR
+  field: agreement_type
+  level: mandatory
+  version: '2.0'
+  description: Agreement Type must match an entry in the Agreement Type table (e.g. OS/PS/OG/PG).
+  bmi_exception: ''
+  pass:
+    agreement_type: OG
+  fail:
+    agreement_type: ZZ
+- id: AGR-FLV-03
+  reject_level: TR
+  field: agreement_start_date
+  level: mandatory
+  version: '2.0'
+  description: Agreement Start Date must be a valid YYYYMMDD date.
+  bmi_exception: ''
+  pass:
+    agreement_start_date: TODAY
+  fail:
+    agreement_start_date: '20239999'
+- id: AGR-FLV-04
+  reject_level: TR
+  field: prior_royalty_status
+  level: mandatory
+  version: '2.0'
+  description: Prior Royalty Status must be N, A, or D.
+  bmi_exception: ''
+  pass:
+    prior_royalty_status: N
+  fail:
+    prior_royalty_status: Z
+- id: AGR-FLV-05
+  reject_level: TR
+  field: prior_royalty_start_date
+  level: conditional
+  version: '2.0'
+  description: Prior Royalty Start Date is required when Prior Royalty Status is D.
+  bmi_exception: ''
+  pass:
+    prior_royalty_status: D
+    prior_royalty_start_date: TODAY
+  fail:
+    prior_royalty_status: D
+    prior_royalty_start_date: ''
+- id: AGR-FLV-06
+  reject_level: TR
+  field: post_term_collection_status
+  level: mandatory
+  version: '2.0'
+  description: Post-term Collection Status must be N, O, or D.
+  bmi_exception: ''
+  pass:
+    post_term_collection_status: N
+  fail:
+    post_term_collection_status: Z
+- id: AGR-FLV-07
+  reject_level: TR
+  field: post_term_collection_end_date
+  level: conditional
+  version: '2.0'
+  description: Post-term Collection End Date is required when Post-term Collection Status is D.
+  bmi_exception: ''
+  pass:
+    post_term_collection_status: D
+    post_term_collection_end_date: TODAY
+  fail:
+    post_term_collection_status: D
+    post_term_collection_end_date: ''
+- id: AGR-FLV-08
+  reject_level: TR
+  field: number_of_works
+  level: mandatory
+  version: '2.0'
+  description: Number of Works must be entered and numeric.
+  bmi_exception: ''
+  pass:
+    number_of_works: 1
+  fail:
+    number_of_works: 0
+- id: AGR-FLV-09
+  reject_level: TR
+  field: sales_manufacture_clause
+  level: conditional
+  version: '2.0'
+  description: Sales/Manufacture Clause must be S or M when Agreement Type is OS or PS.
+  bmi_exception: ''
+  pass:
+    agreement_type: OS
+    sales_manufacture_clause: S
+  fail:
+    agreement_type: OS
+    sales_manufacture_clause: ''
+- id: AGR-FLV-10
+  reject_level: TR
+  field: agreement_end_date
+  level: optional
+  version: '2.0'
+  description: Agreement End Date, if entered, must be a valid date.
+  bmi_exception: ''
+  pass:
+    agreement_end_date: '20301231'
+  fail:
+    agreement_end_date: '20309999'
+- id: AGR-FLV-11
+  reject_level: TR
+  field: retention_end_date
+  level: optional
+  version: '2.0'
+  description: Retention End Date, if entered, must be a valid date equal to or later than Agreement End Date.
+  bmi_exception: ''
+  pass:
+    agreement_end_date: '20301231'
+    retention_end_date: '20301231'
+  fail:
+    agreement_end_date: '20301231'
+    retention_end_date: '20200101'
+- id: AGR-FLV-12
+  reject_level: TR
+  field: prior_royalty_start_date
+  level: conditional
+  version: '2.0'
+  description: Prior Royalty Start Date must be earlier than Agreement Start Date when Prior Royalty Status is D.
+  bmi_exception: ''
+  pass:
+    agreement_start_date: '20200101'
+    prior_royalty_status: D
+    prior_royalty_start_date: '20190101'
+  fail:
+    agreement_start_date: '20200101'
+    prior_royalty_status: D
+    prior_royalty_start_date: '20210101'
+- id: AGR-FLV-13
+  reject_level: TR
+  field: prior_royalty_start_date
+  level: conditional
+  version: '2.0'
+  description: Prior Royalty Start Date must not be entered when Prior Royalty Status is N or A.
+  bmi_exception: ''
+  pass:
+    prior_royalty_status: N
+    prior_royalty_start_date: ''
+  fail:
+    prior_royalty_status: N
+    prior_royalty_start_date: '20190101'
+- id: AGR-FLV-14
+  reject_level: TR
+  field: post_term_collection_end_date
+  level: conditional
+  version: '2.0'
+  description: Post-term Collection End Date must be after the Retention/Agreement End Date when Post-term
+    Collection Status is D.
+  bmi_exception: ''
+  pass:
+    agreement_end_date: '20301231'
+    post_term_collection_status: D
+    post_term_collection_end_date: '20310101'
+  fail:
+    agreement_end_date: '20301231'
+    post_term_collection_status: D
+    post_term_collection_end_date: '20200101'
+- id: AGR-FLV-15
+  reject_level: TR
+  field: post_term_collection_end_date
+  level: conditional
+  version: '2.0'
+  description: Post-term Collection End Date must not be entered when Post-term Collection Status is N or O.
+  bmi_exception: ''
+  pass:
+    post_term_collection_status: N
+    post_term_collection_end_date: ''
+  fail:
+    post_term_collection_status: N
+    post_term_collection_end_date: '20310101'
+- id: AGR-FLV-16
+  reject_level: FR
+  field: date_of_signature
+  level: optional
+  version: '2.0'
+  description: Date of Signature of Agreement, if entered, must be a valid date.
+  bmi_exception: ''
+  pass:
+    date_of_signature: TODAY
+  fail:
+    date_of_signature: '20309999'
+- id: AGR-FLV-17
+  reject_level: FR
+  field: sales_manufacture_clause
+  level: optional
+  version: '2.0'
+  description: Sales/Manufacture Clause, if entered, must be S or M.
+  bmi_exception: ''
+  pass:
+    sales_manufacture_clause: S
+  fail:
+    sales_manufacture_clause: Z
+- id: AGR-FLV-18
+  reject_level: FR
+  field: shares_change
+  level: optional
+  version: '2.0'
+  description: Shares change, if entered, must be Y or N.
+  bmi_exception: ''
+  pass:
+    shares_change: 'Y'
+  fail:
+    shares_change: Z
+- id: AGR-FLV-19
+  reject_level: FR
+  field: advance_given
+  level: optional
+  version: '2.0'
+  description: Advance Given, if entered, must be Y or N.
+  bmi_exception: ''
+  pass:
+    advance_given: 'Y'
+  fail:
+    advance_given: Z
+- id: AGR-FLV-20
+  reject_level: FR
+  field: international_standard_agreement_code
+  level: optional
+  version: '2.0'
+  description: The International Standard Agreement Code, if entered, must be a valid code.
+  implemented: false
+  reason: No ISAC database is modeled in this project's lookups; the field also isn't mapped in layout.py's REAL_LAYOUT.
+  bmi_exception: ''
+- id: AGR-TLV-01
+  reject_level: TR
+  field: null
+  level: mandatory
+  version: '2.0'
+  description: Only one AGR is allowed per transaction.
+  implemented: false
+  reason: Cross-record/transaction-level; not exercisable via a single AGR field patch.
+  bmi_exception: ''
+- id: AGR-TLV-02
+  reject_level: TR
+  field: null
+  level: mandatory
+  version: '2.0'
+  description: There must be at least one TER record per AGR transaction.
+  implemented: false
+  reason: Cross-record/transaction-level; not exercisable via a single AGR field patch.
+  bmi_exception: ''
+- id: AGR-TLV-03
+  reject_level: TR
+  field: null
+  level: mandatory
+  version: '2.0'
+  description: >-
+    There must be at least two IPA records per AGR transaction -- one with
+    an agreement role code of assignor, and one with acquirer.
+  implemented: false
+  reason: Cross-record/transaction-level; not exercisable via a single AGR field patch.
+  bmi_exception: ''
+- id: AGR-TLV-04
+  reject_level: TR
+  field: null
+  level: mandatory
+  version: '2.0'
+  description: >-
+    The number of NWR/REV transactions in the file referencing this
+    agreement must be less than or equal to Number of Works.
+  implemented: false
+  reason: Cross-transaction; requires linked NWR/REV transactions this tool's single-transaction model doesn't build.
+  bmi_exception: ''
+- id: AGR-TLV-05
+  reject_level: TR
+  field: null
+  level: mandatory
+  version: '2.0'
+  description: >-
+    The shares within the assignor and acquirer(s) IPA records must total
+    100% for each right type covered by the agreement, within a tolerance
+    of .06%.
+  implemented: false
+  reason: Cross-record aggregate across all IPA records; not exercisable via a single-record patch.
+  bmi_exception: ''
+- id: AGR-TLV-06
+  reject_level: GR
+  field: null
+  level: mandatory
+  version: '2.0'
+  description: >-
+    The Transaction Type of the immediately preceding GRH must be AGR for
+    submissions from a supplier (ignored if the AGR is part of an ACK).
+  implemented: false
+  reason: Structural, file-level ordering check; not exercisable via a single AGR field patch.
+  bmi_exception: ''
+fields:
+  - name: Record Type
+    start: 1
+    length: 3
+    type: A
+    req: mandatory
+    valid_values: ["AGR"]
+    description: AGR = Agreement Supporting Work Registration.
+  - name: Transaction Sequence #
+    start: 4
+    length: 8
+    type: N
+    req: mandatory
+    description: 00000000 for the first transaction in a group, else previous transaction header's value + 1.
+  - name: Record Sequence #
+    start: 12
+    length: 8
+    type: N
+    req: mandatory
+    description: 00000000 for a transaction header record.
+  - name: Submitter Agreement Number
+    start: 20
+    length: 14
+    type: A
+    req: mandatory
+    description: The submitter's unique identifier for this agreement.
+  - name: International Standard Agreement Code
+    start: 34
+    length: 14
+    type: A
+    req: optional
+    description: The ISAC assigned to this agreement (not yet available per spec text).
+  - name: Agreement Type
+    start: 48
+    length: 2
+    type: L
+    req: mandatory
+    valid_values_ref: VALID_AGREEMENT_TYPE
+    description: Code defining the category of agreement.
+  - name: Agreement Start Date
+    start: 50
+    length: 8
+    type: D
+    req: mandatory
+    description: The date the transfer of rights to the acquiring party becomes effective.
+  - name: Agreement End Date
+    start: 58
+    length: 8
+    type: D
+    req: optional
+    description: The date the transfer of rights ceases, except for agreed provisions such as a collection period.
+  - name: Retention End Date
+    start: 66
+    length: 8
+    type: D
+    req: optional
+    description: >-
+      End date of the retention period, superseding Agreement End Date when
+      a retention period applies. Must be >= Agreement End Date.
+  - name: Prior Royalty Status
+    start: 74
+    length: 1
+    type: A
+    req: mandatory
+    valid_values: ["N", "A", "D"]
+    description: N = none, A = all, D = date (Prior Royalty Start Date entered).
+  - name: Prior Royalty Start Date
+    start: 75
+    length: 8
+    type: D
+    req: conditional
+    description: Required if and only if Prior Royalty Status is D; must be before Agreement Start Date.
+  - name: Post-term Collection Status
+    start: 83
+    length: 1
+    type: A
+    req: mandatory
+    valid_values: ["N", "O", "D"]
+    description: N = no, O = open-ended, D = date (Post-term Collection End Date entered).
+  - name: Post-term Collection End Date
+    start: 84
+    length: 8
+    type: D
+    req: conditional
+    description: >-
+      Required if and only if Post-term Collection Status is D; must be
+      after Retention End Date (if present) or else Agreement End Date.
+  - name: Date of Signature of Agreement
+    start: 92
+    length: 8
+    type: D
+    req: optional
+    description: The date the written contract was signed.
+  - name: Number of Works
+    start: 100
+    length: 5
+    type: N
+    req: mandatory
+    description: Number of works registered subject to this agreement, specific to this file.
+  - name: Sales/Manufacture Clause
+    start: 105
+    length: 1
+    type: L
+    req: conditional
+    valid_values: ["S", "M"]
+    description: >-
+      S = Sales Clause, M = Manufacture Clause. Mandatory when Agreement
+      Type is OS or PS.
+  - name: Shares change
+    start: 106
+    length: 1
+    type: B
+    req: optional
+    valid_values_ref: VALID_YN
+    description: Y if writer-interest shares can change on sub-publication or similar. Default N.
+  - name: Advance Given
+    start: 107
+    length: 1
+    type: B
+    req: optional
+    valid_values_ref: VALID_YN
+    description: Y if there is an advance paid for this agreement. Default N.
+  - name: Society-assigned Agreement Number
+    start: 108
+    length: 14
+    type: A
+    req: optional
+    since: '2.1'
+    description: >-
+      The agreement number assigned by the society of the sub-publisher;
+      generally not known when the AGR is submitted. Added CWR 2.1.
+record_length: 121

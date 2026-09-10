@@ -1,0 +1,97 @@
+# CWR 2.2 record layout: NAT - Non-Roman Alphabet Title
+# Fields transcribed from the official CISAC CWR 2.2 functional spec
+# (CWR11-1991R3, section 5.16). No rules defined for this type yet.
+record_type: NAT
+name: Non-Roman Alphabet Title
+# Like EWT/VER/REC/PER/COM, NAT won't appear in most real files, including
+# this project's own valid_baseline.V22 -- Generate PASS/FAIL for any rule
+# below requires loading (dragging/browsing) a real file that already
+# carries a NAT record.
+rules:
+- id: NAT-RLV-01
+  reject_level: RR
+  field: title_type
+  level: mandatory
+  version: '2.0'
+  description: Only one NAT record per work can carry the original-title Title Type.
+  note: >-
+    Structural, not a single-field patch -- engine.py's _apply_nat_rlv_01
+    clones the loaded file's existing NAT record into a second one, forcing
+    both copies' Title Type to OT (same clone technique as
+    EWT-RLV-01/VER-RLV-01).
+  bmi_exception: ''
+- id: NAT-FLV-01
+  reject_level: RR
+  field: title
+  level: mandatory
+  version: '2.0'
+  description: Title must be entered.
+  bmi_exception: ''
+  pass:
+    title: SOME TITLE
+  fail:
+    title: ''
+- id: NAT-FLV-02
+  reject_level: FR
+  field: title_type
+  level: mandatory
+  version: '2.0'
+  description: Title Type must be entered and must match an entry in the Title Type table.
+  bmi_exception: ''
+  pass:
+    title_type: AT
+  fail:
+    title_type: ZZ
+- id: NAT-FLV-03
+  reject_level: RR
+  field: language_code
+  level: optional
+  version: '2.0'
+  description: If Language Code is entered, it must match an entry in the Language Code Table.
+  bmi_exception: ''
+  pass:
+    language_code: EN
+  fail:
+    language_code: ZZ
+fields:
+  - name: Record Type
+    start: 1
+    length: 3
+    type: A
+    req: mandatory
+    valid_values: ["NAT"]
+    description: NAT = Non-Roman Alphabet Title.
+  - name: Transaction Sequence #
+    start: 4
+    length: 8
+    type: N
+    req: mandatory
+    description: Must equal the Transaction Sequence # of the transaction header this record belongs to.
+  - name: Record Sequence #
+    start: 12
+    length: 8
+    type: N
+    req: mandatory
+    description: Previous record's Record Sequence # + 1.
+  - name: Title
+    start: 20
+    length: 640
+    type: A
+    req: mandatory
+    description: The work title in non-Roman alphabet.
+  - name: Title Type
+    start: 660
+    length: 2
+    type: L
+    req: mandatory
+    description: >-
+      Type of title presented (original, alternate, etc; Title Type Table).
+      Only one NAT per work can carry the original-title type.
+  - name: Language Code
+    start: 662
+    length: 2
+    type: L
+    req: optional
+    valid_values_ref: VALID_LANGUAGE
+    description: The language code of the title.
+record_length: 663

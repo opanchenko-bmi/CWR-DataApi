@@ -1,0 +1,215 @@
+# CWR 2.2 record layout: EWT - Entire Work Title for Excerpts
+# Fields transcribed from the official CISAC CWR 2.2 functional spec
+# (CWR11-1991R3, section 5.17).
+#
+# EWT only appears on a work that's an excerpt (Information_for_Excerpts in
+# the BNF), so it won't be present in most real files, including this
+# project's own valid_baseline.V22 -- Generate PASS/FAIL for any rule below
+# requires loading (dragging/browsing) a real file that already carries an
+# EWT record; see layout.py's REAL_LAYOUT["EWT"] and engine.py's
+# apply_rule_real docstring for how the tool never fabricates a record type
+# from nothing.
+record_type: EWT
+name: Entire Work Title for Excerpts
+rules:
+- id: EWT-RLV-01
+  reject_level: TR
+  field: record_type
+  level: mandatory
+  version: '2.0'
+  description: Only one EWT record is allowed per transaction.
+  note: >-
+    Structural, not a single-field patch -- engine.py's _apply_ewt_rlv_01
+    clones the loaded file's existing EWT record into a second one for FAIL
+    (same technique as NWR-TLV-01's transaction-header clone).
+  bmi_exception: ''
+- id: EWT-FLV-01
+  reject_level: RR
+  field: entire_work_title
+  level: mandatory
+  version: '2.0'
+  description: Entire Work Title must be entered, and must contain only valid ASCII characters.
+  bmi_exception: ''
+  pass:
+    entire_work_title: ORIGINAL LONGER WORK
+  fail:
+    entire_work_title: ''
+- id: EWT-FLV-02
+  reject_level: FR
+  field: iswc_of_entire_work
+  level: optional
+  version: '2.0'
+  description: If entered, the ISWC of Entire Work must be a valid ISWC.
+  bmi_exception: ''
+  pass:
+    iswc_of_entire_work: T0123456785
+  fail:
+    iswc_of_entire_work: BADISWC
+- id: EWT-FLV-03
+  reject_level: FR
+  field: language_code
+  level: optional
+  version: '2.0'
+  description: If entered, Language Code must match an entry in the Language Code table.
+  bmi_exception: ''
+  pass:
+    language_code: EN
+  fail:
+    language_code: ZZ
+- id: EWT-FLV-04
+  reject_level: FR
+  field: writer_1_ipi_name_n
+  level: optional
+  version: '2.0'
+  description: If entered, Writer 1 IPI Name # must match an entry for the writer in the IPI database.
+  implemented: false
+  reason: No IPI database is modeled in this project's lookups.
+  bmi_exception: ''
+- id: EWT-FLV-05
+  reject_level: FR
+  field: writer_2_ipi_name_n
+  level: optional
+  version: '2.0'
+  description: If entered, Writer 2 IPI Name # must match an entry for the writer in the IPI database.
+  implemented: false
+  reason: No IPI database is modeled in this project's lookups.
+  bmi_exception: ''
+- id: EWT-FLV-06
+  reject_level: FR
+  field: writer_1_ipi_base_number
+  level: optional
+  version: '2.0'
+  description: If entered, Writer 1 IPI Base Number must match an entry in the IPI database.
+  implemented: false
+  reason: No IPI database is modeled in this project's lookups, and this field isn't mapped in layout.py's REAL_LAYOUT.
+  bmi_exception: ''
+- id: EWT-FLV-07
+  reject_level: FR
+  field: writer_2_ipi_base_number
+  level: optional
+  version: '2.0'
+  description: If entered, Writer 2 IPI Base Number must match an entry in the IPI database.
+  implemented: false
+  reason: No IPI database is modeled in this project's lookups, and this field isn't mapped in layout.py's REAL_LAYOUT.
+  bmi_exception: ''
+- id: EWT-FLV-08
+  reject_level: FR
+  field: submitter_work_n
+  level: optional
+  version: '2.0'
+  description: If entered, the Submitter Work Number must uniquely identify the work.
+  implemented: false
+  reason: Cross-file uniqueness is not verified, and this field isn't mapped in layout.py's REAL_LAYOUT.
+  bmi_exception: ''
+- id: EWT-FLV-09
+  reject_level: FR
+  field: writer_1_last_name
+  level: optional
+  version: '2.0'
+  description: If entered, Writer 1 Last Name, First Name, Writer 2 Last Name, and First Name must each contain only valid ASCII characters from the allowed CIS character set.
+  note: One representative field (Writer 1 Last Name) is patched; validator.py checks all four.
+  bmi_exception: ''
+  pass:
+    writer_1_last_name: SMITH
+  fail:
+    writer_1_last_name: SMÍTH
+fields:
+  - name: Record Type
+    start: 1
+    length: 3
+    type: A
+    req: mandatory
+    valid_values: ["EWT"]
+    description: EWT = Entire Work Title for Excerpts.
+  - name: Transaction Sequence #
+    start: 4
+    length: 8
+    type: N
+    req: mandatory
+    description: Must equal the Transaction Sequence # of the transaction header this record belongs to.
+  - name: Record Sequence #
+    start: 12
+    length: 8
+    type: N
+    req: mandatory
+    description: Previous record's Record Sequence # + 1.
+  - name: Entire Work Title
+    start: 20
+    length: 60
+    type: A
+    req: mandatory
+    description: The title of the entire work from which this excerpt has been derived.
+  - name: ISWC of Entire Work
+    start: 80
+    length: 11
+    type: A
+    req: optional
+    description: The ISWC assigned to the work from which this excerpt has been derived.
+  - name: Language Code
+    start: 91
+    length: 2
+    type: L
+    req: optional
+    valid_values_ref: VALID_LANGUAGE
+    description: The language in which the entire work was originally written.
+  - name: Writer 1 Last Name
+    start: 93
+    length: 45
+    type: A
+    req: optional
+    description: Last name of the original writer/composer of the entire work.
+  - name: Writer 1 First Name
+    start: 138
+    length: 30
+    type: A
+    req: optional
+    description: First name of the original writer/composer of the entire work.
+  - name: Source
+    start: 168
+    length: 60
+    type: A
+    req: optional
+    description: A description of the source from which the work was obtained.
+  - name: Writer 1 IPI Name #
+    start: 228
+    length: 11
+    type: L
+    req: optional
+    description: The IPI Name # assigned to the first writer of the entire work. Added CWR 2.0.
+  - name: Writer 1 IPI Base Number
+    start: 239
+    length: 13
+    type: L
+    req: optional
+    description: The IPI base number assigned to this writer. Added CWR 2.0.
+  - name: Writer 2 Last Name
+    start: 252
+    length: 45
+    type: A
+    req: optional
+    description: Last name of the second writer of the entire work. Added CWR 2.0.
+  - name: Writer 2 First Name
+    start: 297
+    length: 30
+    type: A
+    req: optional
+    description: First name of the second writer of the entire work. Added CWR 2.0.
+  - name: Writer 2 IPI Name #
+    start: 327
+    length: 11
+    type: L
+    req: optional
+    description: The IPI Name # assigned to the second writer of the entire work. Added CWR 2.0.
+  - name: Writer 2 IPI Base Number
+    start: 338
+    length: 13
+    type: L
+    req: optional
+    description: The IPI base number assigned to this writer. Added CWR 2.0.
+  - name: Submitter Work #
+    start: 351
+    length: 14
+    type: A
+    req: optional
+    description: Number assigned to the entire work by the submitter; must be unique for the submitter. Added CWR 2.0.
+record_length: 364

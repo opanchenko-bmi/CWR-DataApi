@@ -1,0 +1,95 @@
+# CWR 2.2 record layout: XRF - Work ID Cross Reference
+# Fields transcribed from the official CISAC CWR 2.2 functional spec
+# (CWR11-1991R3, section 5.32).
+#
+# XRF is a whole new record type introduced in CWR 2.2 -- per the CWR 2.2
+# revision changelog: "XRF new Optional Record". It does not exist at all
+# in real CWR 2.0/2.1 files.
+record_type: XRF
+name: Work ID Cross Reference
+since_version: '2.2'
+rules:
+- id: XRF-FLV-01
+  reject_level: RR
+  field: organisation_code
+  level: mandatory
+  version: '2.2'
+  description: 'Organisation Code must be entered and must match an entry in the Sender ID Code Table or
+    Submitter ID Code Table.'
+  bmi_exception: ''
+  pass:
+    organisation_code: '021'
+  fail:
+    organisation_code: ''
+- id: XRF-FLV-02
+  reject_level: RR
+  field: identifier_type
+  level: mandatory
+  version: '2.2'
+  description: Identifier Type must be entered and must be equal to W, R, or P.
+  bmi_exception: ''
+  pass:
+    identifier_type: W
+  fail:
+    identifier_type: Z
+- id: XRF-FLV-03
+  reject_level: RR
+  field: validity
+  level: mandatory
+  version: '2.2'
+  description: Validity Indicator must be entered and must be equal to Y, N, or U.
+  bmi_exception: ''
+  pass:
+    validity: Y
+  fail:
+    validity: Z
+fields:
+  - name: Record Type
+    start: 1
+    length: 3
+    type: A
+    req: mandatory
+    valid_values: ["XRF"]
+    description: XRF = Work ID Cross Reference.
+  - name: Transaction Sequence #
+    start: 4
+    length: 8
+    type: N
+    req: mandatory
+    description: Must equal the Transaction Sequence # of the transaction header this record belongs to.
+  - name: Record Sequence #
+    start: 12
+    length: 8
+    type: N
+    req: mandatory
+    description: Previous record's Record Sequence # + 1.
+  - name: Organisation Code
+    start: 20
+    length: 3
+    type: L
+    req: mandatory
+    description: >-
+      The organisation (society, publisher, DSP, etc.) that generated the
+      Work ID (Sender ID / Submitter ID / Society Code tables, ISWC, ISRC).
+      Do not use 000 or 099.
+  - name: Identifier
+    start: 23
+    length: 14
+    type: A
+    req: mandatory
+    description: An identifier that relates to this work transaction.
+  - name: Identifier Type
+    start: 37
+    length: 1
+    type: L
+    req: mandatory
+    valid_values: ["W", "R", "P", "V"]
+    description: W = Work, R = Recording, P = Product, V = Video.
+  - name: Validity
+    start: 38
+    length: 1
+    type: F
+    req: mandatory
+    valid_values_ref: VALID_YNU
+    description: Y = valid, U = the link is invalid, N = the identifier is invalid.
+record_length: 38

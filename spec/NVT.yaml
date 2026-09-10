@@ -1,0 +1,82 @@
+# CWR 2.2 record layout: NVT - Non-Roman Alphabet Original Title for Version
+# Shares its record format with NET/NCT (CWR11-1991R3, section 5.27-5.29
+# combined table). No rules defined for this type yet.
+#
+# Renamed from the original stub's "...for Versions" to match the spec's
+# own section 5.29 heading wording ("...for Version", singular).
+record_type: NVT
+name: Non-Roman Alphabet Original Title for Version
+# Like EWT/VER/REC/PER/COM, NVT won't appear in most real files, including
+# this project's own valid_baseline.V22 -- Generate PASS/FAIL for any rule
+# below requires loading (dragging/browsing) a real file that already
+# carries a NVT record.
+rules:
+- id: NVT-RLV-01
+  reject_level: RR
+  field: title
+  level: mandatory
+  version: '2.0'
+  description: This record must contain the title for the work described in the immediately preceding VER record.
+  implemented: false
+  reason: >-
+    Structural cross-record ordering (must immediately follow its parent
+    VER); left unimplemented for the same reason as this catalog's other
+    "must immediately follow X" rules (TER-RLV-01, OPT-FLV-05, NWN-RLV-01,
+    ...).
+  bmi_exception: ''
+- id: NVT-FLV-01
+  reject_level: RR
+  field: title
+  level: mandatory
+  version: '2.0'
+  description: Title must be entered.
+  bmi_exception: ''
+  pass:
+    title: ORIGINAL WORK
+  fail:
+    title: ''
+- id: NVT-FLV-02
+  reject_level: RR
+  field: language_code
+  level: optional
+  version: '2.0'
+  description: If Language Code is entered, it must match an entry in the Language Code Table.
+  bmi_exception: ''
+  pass:
+    language_code: EN
+  fail:
+    language_code: ZZ
+fields:
+  - name: Record Type
+    start: 1
+    length: 3
+    type: A
+    req: mandatory
+    valid_values: ["NVT"]
+    description: NVT = Non-Roman Alphabet Original Title for Version.
+  - name: Transaction Sequence #
+    start: 4
+    length: 8
+    type: N
+    req: mandatory
+    description: Must equal the Transaction Sequence # of the transaction header this record belongs to.
+  - name: Record Sequence #
+    start: 12
+    length: 8
+    type: N
+    req: mandatory
+    description: Previous record's Record Sequence # + 1.
+  - name: Title
+    start: 20
+    length: 640
+    type: A
+    req: mandatory
+    description: The title in non-Roman alphabet -- must be the title for the work in the immediately preceding VER record.
+  - name: Language Code
+    start: 660
+    length: 2
+    type: L
+    req: optional
+    valid_values_ref: VALID_LANGUAGE
+    description: The language code of the title.
+record_length: 661

@@ -1,0 +1,382 @@
+# CWR 2.2 record layout: IPA - Interested Party of Agreement
+# Fields transcribed from the official CISAC CWR 2.2 functional spec
+# (CWR11-1991R3, section 5.2).
+#
+# Like TER (which sits in the same AGR transaction), IPA won't appear in
+# most real files, including this project's own valid_baseline.V22 --
+# Generate PASS/FAIL for any implemented rule below requires loading
+# (dragging/browsing) a real file that already carries an IPA record.
+record_type: IPA
+name: Interested Party of Agreement
+rules:
+- id: IPA-RLV-01
+  reject_level: TR
+  field: record_type
+  level: mandatory
+  version: '2.0'
+  description: An IPA record must follow a TER record or another IPA record.
+  implemented: false
+  reason: >-
+    Structural ordering check ("must immediately follow X"); left
+    unimplemented for the same reason as this catalog's other such rules
+    (TER-RLV-01, OPT-FLV-05, NWN-RLV-01, ...).
+  bmi_exception: ''
+- id: IPA-RLV-02
+  reject_level: TR
+  field: record_type
+  level: mandatory
+  version: '2.0'
+  description: Each AGR record must be followed by one assignor IPA record and at least one acquirer IPA record.
+  implemented: false
+  reason: Cross-record transaction composition across the whole AGR transaction; not exercisable via a single-record patch.
+  bmi_exception: ''
+- id: IPA-RLV-03
+  reject_level: TR
+  field: record_type
+  level: mandatory
+  version: '2.0'
+  description: At least one of PR share, MR share, or SR share must be greater than zero in an acquirer IPA record.
+  implemented: false
+  reason: >-
+    Deferred: distinguishing "an acquirer IPA record" (role AC) from the
+    generic share-range checks (IPA-FLV-06/08/10) already covering these
+    same fields adds cross-rule interaction risk not yet worked through.
+  bmi_exception: ''
+- id: IPA-FLV-01
+  reject_level: TR
+  field: agreement_role_code
+  level: mandatory
+  version: '2.0'
+  description: Agreement Role Code must be entered and must be either AS (assignor) or AC (acquirer).
+  bmi_exception: ''
+  pass:
+    agreement_role_code: AS
+  fail:
+    agreement_role_code: ZZ
+- id: IPA-FLV-02
+  reject_level: FR
+  field: interested_party_ipi_name_n
+  level: optional
+  version: '2.0'
+  description: If entered, Interested Party IPI Name # must match an entry in the IPI system.
+  implemented: false
+  reason: No IPI database is modeled in this project's lookups.
+  bmi_exception: ''
+- id: IPA-FLV-03
+  reject_level: TR
+  field: interested_party_n
+  level: mandatory
+  version: '2.0'
+  description: >-
+    Interested Party # cannot duplicate the number of a different interested
+    party currently or previously controlled by the submitting publisher.
+  implemented: false
+  reason: Cross-file uniqueness is not verified in this single-file tool.
+  bmi_exception: ''
+- id: IPA-FLV-04
+  reject_level: FR
+  field: interested_party_writer_first_name
+  level: optional
+  version: '2.0'
+  description: >-
+    Interested Party Writer First Name is only allowed if Agreement Type is
+    OS or OG and Agreement Role Code is Assignor.
+  implemented: false
+  reason: >-
+    Cross-record: the condition lives on the parent AGR's Agreement Type,
+    not on IPA itself. Deferred to limit scope on this pass -- a `targets`-
+    based implementation (patching both AGR.agreement_type and this field,
+    as done for COM-RLV-01) is a viable follow-up.
+  bmi_exception: ''
+- id: IPA-FLV-05
+  reject_level: FR
+  field: pr_affiliation_society
+  level: conditional
+  version: '2.0'
+  description: If the PR Affiliation Society is entered, it must be held in the Society Code Table.
+  bmi_exception: ''
+  pass:
+    pr_affiliation_society: '021'
+  fail:
+    pr_affiliation_society: '999'
+- id: IPA-FLV-06
+  reject_level: TR
+  field: pr_share
+  level: conditional
+  version: '2.0'
+  description: PR Share must be numeric and in the range 0 to 100.00%.
+  note: >-
+    Only the range half is checked -- like other N-typed share fields in
+    this catalog, non-numeric input can't survive parsing/patch-formatting
+    to reach the validator.
+  bmi_exception: ''
+  pass:
+    pr_share: 5000
+  fail:
+    pr_share: 15000
+- id: IPA-FLV-07
+  reject_level: FR
+  field: mr_affiliation_society
+  level: conditional
+  version: '2.0'
+  description: If the MR Affiliation Society is entered, it must reside in the Society Code Table.
+  bmi_exception: ''
+  pass:
+    mr_affiliation_society: '021'
+  fail:
+    mr_affiliation_society: '999'
+- id: IPA-FLV-08
+  reject_level: TR
+  field: mr_share
+  level: conditional
+  version: '2.0'
+  description: MR Share must be numeric and in the range 0 to 100.00%.
+  note: Only the range half is checked (see IPA-FLV-06's note).
+  bmi_exception: ''
+  pass:
+    mr_share: 5000
+  fail:
+    mr_share: 15000
+- id: IPA-FLV-09
+  reject_level: FR
+  field: sr_affiliation_society
+  level: conditional
+  version: '2.0'
+  description: If the SR Affiliation Society is present, it must reside in the Society Code Table.
+  bmi_exception: ''
+  pass:
+    sr_affiliation_society: '021'
+  fail:
+    sr_affiliation_society: '999'
+- id: IPA-FLV-10
+  reject_level: TR
+  field: sr_share
+  level: conditional
+  version: '2.0'
+  description: SR Share must be numeric and in the range 0 to 100.00%.
+  note: Only the range half is checked (see IPA-FLV-06's note).
+  bmi_exception: ''
+  pass:
+    sr_share: 5000
+    sr_affiliation_society: '021'
+  fail:
+    sr_share: 15000
+    sr_affiliation_society: '021'
+- id: IPA-FLV-11
+  reject_level: TR
+  field: pr_affiliation_society
+  level: mandatory
+  version: '2.0'
+  description: One of PR Affiliation Society or MR Affiliation Society must be entered.
+  bmi_exception: ''
+  pass:
+    pr_affiliation_society: '021'
+    mr_affiliation_society: ''
+    pr_share: 5000
+    mr_share: 0
+  fail:
+    pr_affiliation_society: ''
+    mr_affiliation_society: ''
+    pr_share: 0
+    mr_share: 0
+- id: IPA-FLV-12
+  reject_level: TR
+  field: pr_affiliation_society
+  level: conditional
+  version: '2.0'
+  description: If PR Share is entered, then PR Affiliation must be entered.
+  bmi_exception: ''
+  pass:
+    pr_share: 5000
+    pr_affiliation_society: '021'
+    mr_affiliation_society: '021'
+  fail:
+    pr_share: 5000
+    pr_affiliation_society: ''
+    mr_affiliation_society: '021'
+- id: IPA-FLV-13
+  reject_level: TR
+  field: mr_affiliation_society
+  level: conditional
+  version: '2.0'
+  description: If MR Share is entered, then MR Affiliation must be entered.
+  bmi_exception: ''
+  pass:
+    mr_share: 5000
+    mr_affiliation_society: '021'
+    pr_affiliation_society: '021'
+  fail:
+    mr_share: 5000
+    mr_affiliation_society: ''
+    pr_affiliation_society: '021'
+- id: IPA-FLV-14
+  reject_level: TR
+  field: sr_affiliation_society
+  level: conditional
+  version: '2.0'
+  description: If SR Share is entered, then SR Affiliation must be entered.
+  bmi_exception: ''
+  pass:
+    sr_share: 5000
+    sr_affiliation_society: '021'
+    pr_affiliation_society: '021'
+  fail:
+    sr_share: 5000
+    sr_affiliation_society: ''
+    pr_affiliation_society: '021'
+- id: IPA-FLV-15
+  reject_level: TR
+  field: interested_party_last_name
+  level: mandatory
+  version: '2.0'
+  description: Interested Party Last Name must be entered.
+  bmi_exception: ''
+  pass:
+    interested_party_last_name: SMITH
+  fail:
+    interested_party_last_name: ''
+- id: IPA-FLV-16
+  reject_level: TR
+  field: interested_party_n
+  level: mandatory
+  version: '2.0'
+  description: Interested Party # must be entered.
+  bmi_exception: ''
+  pass:
+    interested_party_n: W001
+  fail:
+    interested_party_n: ''
+- id: IPA-FLV-17
+  reject_level: FR
+  field: ipi_base_number
+  level: optional
+  version: '2.0'
+  description: If IPI Base Number is entered, it must match an entry in the IPI database.
+  implemented: false
+  reason: No IPI database is modeled in this project's lookups.
+  bmi_exception: ''
+- id: IPA-FLV-18
+  reject_level: TR
+  field: interested_party_last_name
+  level: mandatory
+  version: '2.0'
+  description: Interested Party Last Name must contain only valid ASCII characters from the allowed CIS character set.
+  bmi_exception: ''
+  pass:
+    interested_party_last_name: SMITH
+  fail:
+    interested_party_last_name: SMÍTH
+- id: IPA-FLV-19
+  reject_level: TR
+  field: interested_party_writer_first_name
+  level: optional
+  version: '2.0'
+  description: >-
+    If entered, Interested Party Writer First Name must contain only valid
+    ASCII characters from the allowed CIS character set.
+  bmi_exception: ''
+  pass:
+    interested_party_writer_first_name: JOHN
+  fail:
+    interested_party_writer_first_name: JÓHN
+fields:
+  - name: Record Type
+    start: 1
+    length: 3
+    type: A
+    req: mandatory
+    valid_values: ["IPA"]
+    description: IPA = Interested Party of Agreement.
+  - name: Transaction Sequence #
+    start: 4
+    length: 8
+    type: N
+    req: mandatory
+    description: Must equal the Transaction Sequence # of the AGR transaction header this record belongs to.
+  - name: Record Sequence #
+    start: 12
+    length: 8
+    type: N
+    req: mandatory
+    description: Previous record's Record Sequence # + 1.
+  - name: Agreement Role Code
+    start: 20
+    length: 2
+    type: L
+    req: mandatory
+    valid_values: ["AS", "AC"]
+    description: The role of this interested party in the agreement -- AS = assignor, AC = acquirer.
+  - name: Interested Party IPI Name #
+    start: 22
+    length: 11
+    type: L
+    req: optional
+    description: The IPI name # assigned to this interested party.
+  - name: IPI Base Number
+    start: 33
+    length: 13
+    type: L
+    req: optional
+    description: The IPI base number assigned to this interested party.
+  - name: Interested Party #
+    start: 46
+    length: 9
+    type: A
+    req: mandatory
+    description: Submitter's unique identifier for this interested party.
+  - name: Interested Party Last Name
+    start: 55
+    length: 45
+    type: A
+    req: mandatory
+    description: >-
+      The last name of this writer or the name of the publisher. If first
+      and last names can't be split, use "Last Name, First Name" format.
+  - name: Interested Party Writer First Name
+    start: 100
+    length: 30
+    type: A
+    req: optional
+    description: >-
+      First name and qualifying/middle names of this writer. Only allowed
+      if Agreement Type is OS or OG and Agreement Role Code is Assignor.
+  - name: PR Affiliation Society
+    start: 130
+    length: 3
+    type: L
+    req: conditional
+    description: Performing Rights Society this interested party is affiliated with. Required if PR Share > 0.
+  - name: PR Share
+    start: 133
+    length: 5
+    type: N
+    req: conditional
+    description: >-
+      % of performing rights claimed, range 0-10000 (0-100.00%), implied
+      decimal. Must sum to 100.00 across all IPA records if the agreement
+      covers performing rights, else 0.
+  - name: MR Affiliation Society
+    start: 138
+    length: 3
+    type: L
+    req: conditional
+    description: Mechanical Rights Society this interested party is affiliated with. Required if MR Share > 0.
+  - name: MR Share
+    start: 141
+    length: 5
+    type: N
+    req: conditional
+    description: '% of mechanical rights claimed, range 0-10000 (0-100.00%), implied decimal.'
+  - name: SR Affiliation Society
+    start: 146
+    length: 3
+    type: L
+    req: conditional
+    description: Synchronization rights society this interested party is affiliated with. Required if SR Share > 0.
+  - name: SR Share
+    start: 149
+    length: 5
+    type: N
+    req: conditional
+    description: '% of synchronization rights claimed, range 0-10000 (0-100.00%), implied decimal.'
+record_length: 153

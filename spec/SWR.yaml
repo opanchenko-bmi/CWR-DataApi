@@ -1,0 +1,441 @@
+record_type: SWR
+name: Writer Controlled By Submitter
+rules:
+- id: SWR-FLV-01
+  reject_level: TR
+  field: interested_party_n
+  level: mandatory
+  version: '2.0'
+  description: 'Interested Party # must be entered for record type SWR.'
+  bmi_exception: ''
+  pass:
+    interested_party_n: '902460532'
+  fail:
+    interested_party_n: ''
+- id: SWR-FLV-03
+  reject_level: TR
+  field: writer_last_name
+  level: mandatory
+  version: '2.0'
+  description: Writer Last Name must be present.
+  bmi_exception: ''
+  pass:
+    writer_last_name: SMITH
+  fail:
+    writer_last_name: ''
+- id: SWR-FLV-08
+  reject_level: TR
+  field: writer_designation_code
+  level: mandatory
+  version: '2.0'
+  description: Writer Designation Code must be valid (CA/A/C/AR/SR/SA/AD/TR).
+  bmi_exception: ''
+  pass:
+    writer_designation_code: CA
+  fail:
+    writer_designation_code: ZZ
+- id: SWR-FLV-09
+  reject_level: FR
+  field: writer_ipi_name_n
+  level: conditional
+  version: '2.0'
+  description: Writer IPI Name Number expected for controlled writers.
+  bmi_exception: ''
+  pass:
+    writer_ipi_name_n: 66600001
+  fail:
+    writer_ipi_name_n: 0
+- id: SWR-FLV-11
+  reject_level: TR
+  field: pr_ownership_share
+  level: optional
+  version: '2.0'
+  description: PR Ownership Share must be numeric, within 0 - 100.00% (0-10000).
+  bmi_exception: ''
+  pass:
+    pr_ownership_share: 5000
+  fail:
+    pr_ownership_share: 15000
+- id: SWR-FLV-13
+  reject_level: TR
+  field: mr_ownership_share
+  level: optional
+  version: '2.0'
+  description: MR Ownership Share must be numeric, within 0 - 100.00% (0-10000).
+  bmi_exception: ''
+  pass:
+    mr_ownership_share: 5000
+  fail:
+    mr_ownership_share: 15000
+- id: SWR-FLV-15
+  reject_level: TR
+  field: sr_ownership_share
+  level: optional
+  version: '2.0'
+  description: SR Ownership Share must be numeric, within 0 - 100.00% (0-10000).
+  bmi_exception: ''
+  pass:
+    sr_ownership_share: 5000
+  fail:
+    sr_ownership_share: 15000
+- id: SWR-FLV-16
+  reject_level: FR
+  field: reversionary_indicator
+  level: optional
+  version: '2.0'
+  description: Reversionary Indicator, if entered, must be equal to Y, N, or U.
+  bmi_exception: ''
+  pass:
+    reversionary_indicator: Y
+  fail:
+    reversionary_indicator: Z
+- id: SWR-FLV-17
+  reject_level: FR
+  field: first_recording_refusal_ind
+  level: optional
+  version: '2.0'
+  description: First Recording Refusal Ind, if entered, must be equal to Y or N.
+  bmi_exception: ''
+  pass:
+    first_recording_refusal_ind: Y
+  fail:
+    first_recording_refusal_ind: Z
+- id: SWR-FLV-18
+  reject_level: FR
+  field: work_for_hire_indicator
+  level: optional
+  version: '2.0'
+  description: Work For Hire Indicator, if entered, must be equal to Y or N.
+  bmi_exception: ''
+  pass:
+    work_for_hire_indicator: Y
+  fail:
+    work_for_hire_indicator: Z
+- id: SWR-FLV-21
+  reject_level: FR
+  field: tax_id
+  level: optional
+  version: '2.0'
+  description: 'Tax ID #, if entered, must be numeric.'
+  bmi_exception: ''
+  pass:
+    tax_id: '123456789'
+  fail:
+    tax_id: 12A45B789
+- id: SWR-FLV-29
+  reject_level: TR
+  field: writer_last_name
+  level: mandatory
+  version: '2.0'
+  description: Writer Last Name must contain only valid ASCII characters.
+  bmi_exception: ''
+  pass:
+    writer_last_name: SMITH
+  fail:
+    writer_last_name: SMÍTH
+- id: SWR-FLV-30
+  reject_level: TR
+  field: writer_first_name
+  level: optional
+  version: '2.0'
+  description: Writer First Name, if entered, must contain only valid ASCII characters.
+  bmi_exception: ''
+  pass:
+    writer_first_name: JANE
+  fail:
+    writer_first_name: JÁNE
+- id: SWR-FLV-04
+  reject_level: TR
+  field: writer_unknown_indicator
+  level: mandatory
+  version: '2.0'
+  description: Writer Unknown Indicator must be blank for SWR records.
+  bmi_exception: ''
+  pass:
+    writer_unknown_indicator: ''
+  fail:
+    writer_unknown_indicator: 'Y'
+- id: SWR-FLV-10
+  reject_level: FR
+  field: pr_affiliation_society
+  level: optional
+  version: '2.0'
+  description: PR Affiliation Society #, if entered, must match an entry in the Society Code table.
+  bmi_exception: ''
+  pass:
+    pr_affiliation_society: '021'
+  fail:
+    pr_affiliation_society: '999'
+- id: SWR-FLV-12
+  reject_level: FR
+  field: mr_affiliation_society
+  level: optional
+  version: '2.0'
+  description: MR Affiliation Society #, if entered, must match an entry in the Society Code table.
+  bmi_exception: ''
+  pass:
+    mr_affiliation_society: '021'
+  fail:
+    mr_affiliation_society: '999'
+- id: SWR-FLV-14
+  reject_level: FR
+  field: sr_affiliation_society
+  level: optional
+  version: '2.0'
+  description: SR Affiliation Society #, if entered, must match an entry in the Society Code table.
+  bmi_exception: ''
+  pass:
+    sr_affiliation_society: '021'
+  fail:
+    sr_affiliation_society: '999'
+- id: SWR-FLV-24
+  reject_level: TR
+  field: usa_license_ind
+  level: optional
+  version: '2.1'
+  description: USA License Ind, if entered, must match an entry in the USA License Indicator table.
+  bmi_exception: ''
+  pass:
+    usa_license_ind: A
+  fail:
+    usa_license_ind: Z
+- id: SWR-RLV-02
+  reject_level: TR
+  field: writer_publisher_link
+  level: conditional
+  version: '2.0'
+  description: Unless the total writers' ownership shares equal 100% for each right (unpublished work), each SWR record must be followed by at least one PWR record.
+  note: >-
+    The baseline has two PWR records, both linking back to the file's one
+    SWR -- generated by redirecting *both* (engine.py's `all: true` target
+    option) to a nonexistent writer IP, orphaning the SWR. Also
+    collaterally trips the pre-existing "PWR Writer IP has no matching SWR"
+    check on each of the two PWRs.
+  bmi_exception: ''
+  targets:
+    - record_type: PWR
+      all: true
+      pass:
+        writer_ip_n: AUTO_SWR_IP
+      fail:
+        writer_ip_n: '999999999'
+- id: SWR-FLV-02
+  reject_level: TR
+  field: interested_party_n
+  level: mandatory
+  version: '2.0'
+  description: Interested Party # cannot duplicate the number of a different party currently or previously controlled by the submitting publisher.
+  implemented: false
+  reason: Cross-file uniqueness is not verified by this tool.
+  bmi_exception: ''
+- id: SWR-FLV-20-MOD
+  reject_level: TR
+  field: writer_mod_arranger_requirement
+  level: conditional
+  version: '1.1'
+  description: >-
+    When Version Type is MOD, if a writer with Designation Code C/CA/A has
+    zero shares, there must exist another SWR with non-zero shares and a
+    Designation Code of AR/TR/SA/SR/AD.
+  note: >-
+    FAIL sets Version Type to MOD and zeroes the baseline's one SWR's
+    shares (Designation Code stays CA) -- no second writer exists to
+    satisfy the requirement, so it fires. PASS leaves Version Type at the
+    baseline's default ORI instead of also patching in a second writer:
+    the rule's own precondition ("when MOD") then never applies, so this
+    doesn't collaterally trip NWR-TLV-10's separate "MOD needs an arranger"
+    requirement -- the same known gap already documented on NWR-TLV-10,
+    since a true dual-condition PASS needs a second SWR/OWR record this
+    tool can't synthesize with its own SWT/PWR without further work.
+  bmi_exception: ''
+  targets:
+    - record_type: NWR
+      fail:
+        version_type: MOD
+        music_arrangement: ARR
+        lyric_adaptation: NEW
+    - record_type: SWR
+      fail:
+        pr_ownership_share: 0
+        mr_ownership_share: 0
+        sr_ownership_share: 0
+- id: SWR-FLV-22
+  reject_level: FR
+  field: writer_ipi_base_number
+  level: optional
+  version: '2.0'
+  description: If Writer IPI Base Number is entered, it must match an entry in the IPI database.
+  implemented: false
+  reason: >-
+    No IPI database is modeled in this project's lookups, and this field
+    isn't mapped in layout.py's REAL_LAYOUT.
+  bmi_exception: ''
+# - id: SWR-FLV-SGAE-01
+#   reject_level: TR
+#   field: writer_unknown_indicator
+#   level: mandatory
+#   version: '2.0'
+#   description: 'For registrations to SGAE only: the Writer Unknown Indicator must not be set to Y.'
+#   implemented: false
+#   reason: Society-specific (SGAE only); this tool doesn't model per-record society interest.
+#   bmi_exception: ''
+# - id: SWR-FLV-SGAE-02
+#   reject_level: TR
+#   field: writer_last_name
+#   level: mandatory
+#   version: '2.0'
+#   description: 'For registrations to SGAE only: the Writer Last Name must not be set to "Unknown" or any other name indicating the writer is not known.'
+#   implemented: false
+#   reason: Society-specific (SGAE only); this tool doesn't model per-record society interest.
+#   bmi_exception: ''
+# Field layout below is transcribed from the official CISAC CWR 2.2 spec
+# (CWR11-1991R3, section 5.9-5.10 -- SWR/OWR share one record format).
+# start/length are 1-based, spec-defined. Record Prefix (1-19) as in NWR.
+fields:
+  - name: Record Type
+    start: 1
+    length: 3
+    type: A
+    req: mandatory
+    valid_values: ["SWR", "OWR"]
+    description: SWR (Writer Controlled By Submitter) or OWR (Other Writer).
+  - name: Transaction Sequence #
+    start: 4
+    length: 8
+    type: N
+    req: mandatory
+    description: Must equal the Transaction Sequence # of the transaction header this record belongs to.
+  - name: Record Sequence #
+    start: 12
+    length: 8
+    type: N
+    req: mandatory
+    description: Previous record's Record Sequence # + 1.
+  - name: Interested Party #
+    start: 20
+    length: 9
+    type: A
+    req: conditional
+    description: Submitting publisher's unique identifier for this writer. Required for SWR, optional for OWR.
+  - name: Writer Last Name
+    start: 29
+    length: 45
+    type: A
+    req: conditional
+    description: The last name of this writer. Required for SWR, optional for OWR.
+  - name: Writer First Name
+    start: 74
+    length: 30
+    type: A
+    req: optional
+    description: First name and qualifying/middle names of this writer.
+  - name: Writer Unknown Indicator
+    start: 104
+    length: 1
+    type: F
+    req: conditional
+    description: Must be blank for SWR. For OWR, must be Y if Writer Last Name is blank, else Y/N.
+  - name: Writer Designation Code
+    start: 105
+    length: 2
+    type: L
+    req: conditional
+    valid_values_ref: VALID_WRITER_DESIGNATION
+    description: Code defining the writer's role in composing the work. Required for SWR, optional for OWR.
+  - name: Tax ID #
+    start: 107
+    length: 9
+    type: A
+    req: optional
+    description: The number used to identify this writer for domestic tax reporting.
+  - name: Writer IPI Name #
+    start: 116
+    length: 11
+    type: L
+    req: optional
+    description: The IPI Name # assigned to this writer.
+  - name: PR Affiliation Society #
+    start: 127
+    length: 3
+    type: L
+    req: optional
+    description: Performing Rights Society this writer is affiliated with.
+  - name: PR Ownership Share
+    start: 130
+    length: 5
+    type: N
+    req: optional
+    description: Writer's ownership % of performance rights. Range 0-10000 (0-100.00%), implied decimal.
+  - name: MR Society
+    start: 135
+    length: 3
+    type: L
+    req: optional
+    description: Mechanical Rights Society this writer is affiliated with.
+  - name: MR Ownership Share
+    start: 138
+    length: 5
+    type: N
+    req: optional
+    description: Writer's ownership % of mechanical rights. Range 0-10000 (0-100.00%), implied decimal.
+  - name: SR Society
+    start: 143
+    length: 3
+    type: L
+    req: optional
+    description: Society this writer is affiliated with for synchronization rights.
+  - name: SR Ownership Share
+    start: 146
+    length: 5
+    type: N
+    req: optional
+    description: Writer's ownership % of synch rights. Range 0-10000 (0-100.00%), implied decimal.
+  - name: Reversionary Indicator
+    start: 151
+    length: 1
+    type: F
+    req: optional
+    valid_values_ref: VALID_YNU
+    description: Indicates writer involved in a reversionary claim (societies that recognize them, e.g. SOCAN).
+  - name: First Recording Refusal Ind
+    start: 152
+    length: 1
+    type: B
+    req: optional
+    valid_values_ref: VALID_YN
+    description: >-
+      Whether the submitter has refused authority for the first recording.
+      Mandatory for UK society registrations.
+  - name: Work For Hire Indicator
+    start: 153
+    length: 1
+    type: B
+    req: optional
+    valid_values_ref: VALID_YN
+    description: Whether this work was written for hire.
+  - name: Filler
+    start: 154
+    length: 1
+    type: A
+    req: optional
+    description: Reserved.
+  - name: Writer IPI Base Number
+    start: 155
+    length: 13
+    type: L
+    req: optional
+    description: The IPI base number assigned to this writer. Added CWR 2.0.
+  - name: Personal Number
+    start: 168
+    length: 12
+    type: N
+    req: optional
+    description: The personal number assigned to this writer in their country of residence. Added CWR 2.0.
+  - name: USA License Ind.
+    start: 180
+    length: 1
+    type: L
+    req: optional
+    since: '2.1'
+    description: Indicates rights flow through SESAC/BMI/ASCAP/AMRA in the US. Added CWR 2.1.
+record_length: 180

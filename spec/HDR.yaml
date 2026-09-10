@@ -1,0 +1,306 @@
+record_type: HDR
+name: Transmission Header
+rules:
+- id: HDR-FLV-01
+  reject_level: ER
+  field: record_type
+  level: mandatory
+  version: '2.0'
+  description: Record Type must be equal to HDR.
+  bmi_exception: ''
+  pass:
+    record_type: HDR
+  fail:
+    record_type: XXX
+- id: HDR-FLV-02
+  reject_level: ER
+  field: sender_type
+  level: mandatory
+  version: '2.0'
+  description: Sender Type must be equal to PB (Publisher), SO (Society), WR (Writer), or AA (Administrative
+    Agency).
+  bmi_exception: ''
+  pass:
+    sender_type: PB
+  fail:
+    sender_type: ZZ
+- id: HDR-FLV-03
+  reject_level: ER
+  field: sender_id
+  level: mandatory
+  version: '2.0'
+  description: If Sender Type is PB, WR, or AA, Sender ID must be entered and match the CWR Sender ID
+    and Codes Table.
+  bmi_exception: ''
+  pass:
+    sender_type: PB
+    sender_id: 111111111
+  fail:
+    sender_type: PB
+    sender_id: 0
+- id: HDR-FLV-04
+  reject_level: ER
+  field: sender_id
+  level: mandatory
+  version: '2.0'
+  description: If Sender Type is SO, Sender ID must be entered and must match an entry in the Society
+    Code Table.
+  bmi_exception: This tool checks against a small verified subset of the Society Code Table (035 GEMA,
+    058 SACEM), not the full CISAC table.
+  pass:
+    sender_type: SO
+    sender_id: 35
+  fail:
+    sender_type: SO
+    sender_id: 999999999
+- id: HDR-FLV-05
+  reject_level: ER
+  field: sender_name
+  level: mandatory
+  version: '2.0'
+  description: If Sender Type is PB, Sender Name must match the name on the corresponding CWR Sender ID
+    and Codes Table entry.
+  bmi_exception: This tool checks presence only; the real table match is not verified.
+  pass:
+    sender_type: PB
+    sender_name: SONY/ATV MUSIC PUBLISHING LLC
+  fail:
+    sender_type: PB
+    sender_name: ''
+- id: HDR-FLV-06
+  reject_level: ER
+  field: sender_name
+  level: mandatory
+  version: '2.0'
+  description: If Sender Type is SO, Sender Name must match the name on the corresponding Society Code
+    Table entry.
+  bmi_exception: This tool checks presence only; the real table match is not verified.
+  pass:
+    sender_type: SO
+    sender_name: GEMA
+  fail:
+    sender_type: SO
+    sender_name: ''
+- id: HDR-FLV-07
+  reject_level: ER
+  field: sender_id
+  level: mandatory
+  version: '2.0'
+  description: 'If Sender Type is AA, Sender ID must contain the IPI # of the Publisher the Administrative
+    Agency acts on behalf of.'
+  bmi_exception: This tool checks presence only; the real IPI-to-Publisher match is not verified.
+  pass:
+    sender_type: AA
+    sender_id: 269021863
+  fail:
+    sender_type: AA
+    sender_id: 0
+- id: HDR-FLV-08
+  reject_level: ER
+  field: sender_name
+  level: mandatory
+  version: '2.0'
+  description: If Sender Type is AA, Sender Name must match the name on the corresponding Publisher Code
+    Table entry.
+  bmi_exception: This tool checks presence only; the real table match is not verified.
+  pass:
+    sender_type: AA
+    sender_name: SONY/ATV MUSIC PUBLISHING LLC
+  fail:
+    sender_type: AA
+    sender_name: ''
+- id: HDR-FLV-09
+  reject_level: ER
+  field: edi_standard_version
+  level: mandatory
+  version: '2.0'
+  description: EDI Standard Version Number must be equal to the constant value "01.10".
+  bmi_exception: ''
+  pass:
+    edi_standard_version: '01.10'
+  fail:
+    edi_standard_version: '99.99'
+- id: HDR-FLV-10
+  reject_level: ER
+  field: creation_date
+  level: mandatory
+  version: '2.0'
+  description: Creation Date must be a valid date.
+  bmi_exception: ''
+  pass:
+    creation_date: TODAY
+  fail:
+    creation_date: '20261301'
+- id: HDR-FLV-11
+  reject_level: ER
+  field: transmission_date
+  level: mandatory
+  version: '2.0'
+  description: Transmission Date must be a valid date.
+  bmi_exception: ''
+  pass:
+    transmission_date: TODAY
+  fail:
+    transmission_date: '20261301'
+- id: HDR-FLV-12
+  reject_level: ER
+  field: sender_id
+  level: mandatory
+  version: '2.0'
+  description: If Sender Type is PB, Sender ID must be for an approved CWR participant.
+  bmi_exception: This tool checks presence only; the approved-participant list is not verified.
+  pass:
+    sender_type: PB
+    sender_id: 269021863
+  fail:
+    sender_type: PB
+    sender_id: 0
+- id: HDR-FLV-13
+  reject_level: ER
+  field: sender_id
+  level: mandatory
+  version: '2.0'
+  description: 'If Sender Type is WR, Sender ID must be a valid IPI # for a writer.'
+  bmi_exception: This tool checks presence only; the real IPI database lookup is not verified.
+  pass:
+    sender_type: WR
+    sender_id: 66600001
+  fail:
+    sender_type: WR
+    sender_id: 0
+- id: HDR-FLV-14
+  reject_level: ER
+  field: character_set
+  level: optional
+  version: '2.1'
+  description: If entered, Character Set must be Traditional [Big5], Simplified [GB], or a Unicode value
+    (e.g. UTF-8).
+  bmi_exception: ''
+  pass:
+    character_set: UTF-8
+  fail:
+    character_set: KLINGON
+- id: HDR-FLV-15
+  reject_level: ER
+  field: version
+  level: optional
+  version: '2.2'
+  description: Version, if entered, must be 2.2.
+  bmi_exception: ''
+  pass:
+    version: '2.2'
+  fail:
+    version: '9.9'
+- id: HDR-FLV-16
+  reject_level: ER
+  field: revision
+  level: optional
+  version: '2.2'
+  description: Revision number, if entered, must be a valid CWR 2.2 revision number (currently 1).
+  bmi_exception: ''
+  pass:
+    revision: '1'
+  fail:
+    revision: '9'
+# Field layout below is transcribed from the official CISAC CWR 2.2 spec
+# (CWR11-1991R3, section 3.5). start/length are 1-based, spec-defined.
+# Every real CWR11-1991R3 Field Level Validation item for HDR (16 total) has
+# a dedicated rule above -- nothing left to add as a placeholder here.
+fields:
+  - name: Record Type
+    start: 1
+    length: 3
+    type: A
+    req: mandatory
+    valid_values: ["HDR"]
+    description: HDR = Transmission Header
+  - name: Sender Type
+    start: 4
+    length: 2
+    type: A
+    req: mandatory
+    valid_values_ref: VALID_SENDER_TYPE
+    description: >-
+      Indicates if the sender of the file is a society or a publisher.
+      PB = Publisher, SO = Society, AA = Administrative Agency, WR = Writer.
+  - name: Sender ID
+    start: 6
+    length: 9
+    type: N
+    req: mandatory
+    description: >-
+      If Sender Type is PB, AA, or WR, the sender's assigned CWR IPI# (CWR
+      Sender ID and Codes Table). If Sender Type is SO, the Society Code.
+  - name: Sender Name
+    start: 15
+    length: 45
+    type: A
+    req: mandatory
+    description: The name of the sender (publisher, society, agency).
+  - name: EDI Standard Version Number
+    start: 60
+    length: 5
+    type: A
+    req: mandatory
+    valid_values: ["01.10"]
+    description: Must be set to 01.10 for this version of the standard.
+  - name: Creation Date
+    start: 65
+    length: 8
+    type: D
+    req: mandatory
+    description: The date that this file was created.
+  - name: Creation Time
+    start: 73
+    length: 6
+    type: T
+    req: mandatory
+    description: The time of day that this file was created.
+  - name: Transmission Date
+    start: 79
+    length: 8
+    type: D
+    req: mandatory
+    description: The date that this file was transmitted to all receiving entities.
+  - name: Character Set
+    start: 87
+    length: 15
+    type: L
+    req: optional
+    since: '2.1'
+    description: >-
+      To be used if this file contains data in a character set other than
+      ASCII (Big5, GB, or a Unicode value e.g. UTF-8). Added in CWR 2.1.
+  - name: Version
+    start: 102
+    length: 3
+    type: A
+    req: optional
+    since: '2.2'
+    valid_values: ["2.2"]
+    description: CWR version (2.2). Added in CWR 2.2.
+  - name: Revision
+    start: 105
+    length: 3
+    type: N
+    req: optional
+    since: '2.2'
+    description: >-
+      CWR revision number. Added in CWR 2.2. Note: cwr_layout.py's
+      REAL_LAYOUT type is "A" here -- real files left-justify this as text
+      rather than zero-padded numeric, despite the spec's N type.
+  - name: Software Package
+    start: 108
+    length: 30
+    type: A
+    req: optional
+    since: '2.2'
+    description: Name of the software package from which the file originated. Added in CWR 2.2.
+  - name: Software Package Version
+    start: 138
+    length: 30
+    type: A
+    req: optional
+    since: '2.2'
+    description: Version of the software package from which the file originated. Added in CWR 2.2.
+record_length: 167

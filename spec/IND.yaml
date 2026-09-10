@@ -1,0 +1,76 @@
+# CWR 2.2 record layout: IND - Instrumentation Detail
+# Fields transcribed from the official CISAC CWR 2.2 functional spec
+# (CWR11-1991R3, section 5.24).
+record_type: IND
+name: Instrumentation Detail
+rules:
+- id: IND-FLV-01
+  reject_level: RR
+  field: instrument_code
+  level: mandatory
+  version: '2.0'
+  description: Instrument Code must be entered and match the Instrument table.
+  bmi_exception: ''
+  pass:
+    instrument_code: PIA
+  fail:
+    instrument_code: ZZZ
+- id: IND-FLV-02
+  reject_level: RR
+  field: number_of_players
+  level: optional
+  version: '2.0'
+  description: Number of Players must be numeric.
+  implemented: false
+  reason: This field is N-typed in this tool's parsing/patch-formatting, so non-numeric input can never survive to reach the validator.
+  bmi_exception: ''
+- id: IND-RLV-01
+  reject_level: RR
+  field: null
+  level: mandatory
+  version: '2.0'
+  description: If provided, IND records must follow an INS record or another IND record.
+  implemented: false
+  reason: >-
+    Enforced in validator.py (checks each IND's preceding record type), but
+    not generatable: INS and IND are the only two record types at phase 8
+    in validator.py's _TLV43_PHASE (the NWR-TLV-43 canonical-order check).
+    Any record inserted or swapped between an existing INS and IND to break
+    this rule's adjacency would itself trip NWR-TLV-43 as collateral --
+    there's no other phase-8 type to substitute, and no phase-7-or-lower
+    type can be placed after INS without decreasing the running phase
+    counter and firing that check instead.
+  bmi_exception: ''
+fields:
+  - name: Record Type
+    start: 1
+    length: 3
+    type: A
+    req: mandatory
+    valid_values: ["IND"]
+    description: IND = Instrumentation Detail.
+  - name: Transaction Sequence #
+    start: 4
+    length: 8
+    type: N
+    req: mandatory
+    description: Must equal the Transaction Sequence # of the transaction header this record belongs to.
+  - name: Record Sequence #
+    start: 12
+    length: 8
+    type: N
+    req: mandatory
+    description: Previous record's Record Sequence # + 1.
+  - name: Instrument Code
+    start: 20
+    length: 3
+    type: L
+    req: mandatory
+    description: The specific instrument used in this instrumentation (Instrument Table).
+  - name: Number of Players
+    start: 23
+    length: 3
+    type: N
+    req: optional
+    description: The number of players for the above instrument.
+record_length: 25

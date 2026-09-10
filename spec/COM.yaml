@@ -1,0 +1,283 @@
+# CWR 2.2 record layout: COM - Component
+# Fields transcribed from the official CISAC CWR 2.2 functional spec
+# (CWR11-1991R3, section 5.25).
+record_type: COM
+name: Component
+rules:
+- id: COM-FLV-01
+  reject_level: RR
+  field: title
+  level: mandatory
+  version: '2.0'
+  description: Title must be entered.
+  bmi_exception: ''
+  pass:
+    title: ORIGINAL WORK TITLE
+  fail:
+    title: ''
+- id: COM-FLV-02
+  reject_level: RR
+  field: writer_1_last_name
+  level: mandatory
+  version: '2.0'
+  description: Writer 1 Last Name must be entered.
+  bmi_exception: ''
+  pass:
+    writer_1_last_name: SMITH
+  fail:
+    writer_1_last_name: ''
+- id: COM-FLV-03
+  reject_level: FR
+  field: writer_2_last_name
+  level: conditional
+  version: '2.0'
+  description: Writer 2 Last Name is required if Writer 2 First Name is entered.
+  bmi_exception: ''
+  pass:
+    writer_2_first_name: JANE
+    writer_2_last_name: DOE
+  fail:
+    writer_2_first_name: JANE
+    writer_2_last_name: ''
+- id: COM-FLV-04
+  reject_level: FR
+  field: iswc_of_component
+  level: optional
+  version: '2.0'
+  description: ISWC of Component, if entered, must match T-DDDDDDDDD-C format.
+  bmi_exception: ''
+  pass:
+    iswc_of_component: T0123456785
+  fail:
+    iswc_of_component: BADISWC
+- id: COM-FLV-05
+  reject_level: FR
+  field: duration
+  level: optional
+  version: '2.0'
+  description: Duration, if entered, must be a valid combination of hours, minutes, and seconds.
+  bmi_exception: ''
+  pass:
+    duration: '015000'
+  fail:
+    duration: '019900'
+- id: COM-FLV-06
+  reject_level: RR
+  field: title
+  level: mandatory
+  version: '2.0'
+  description: Title must contain only valid ASCII characters.
+  bmi_exception: ''
+  pass:
+    title: ORIGINAL WORK TITLE
+  fail:
+    title: ORIGÍNAL WORK TITLE
+- id: COM-FLV-07
+  reject_level: FR
+  field: writer_1_last_name
+  level: mandatory
+  version: '2.0'
+  description: Writer 1 Last Name must contain only valid ASCII characters.
+  bmi_exception: ''
+  pass:
+    writer_1_last_name: SMITH
+  fail:
+    writer_1_last_name: SMÍTH
+- id: COM-FLV-08
+  reject_level: FR
+  field: writer_1_first_name
+  level: optional
+  version: '2.0'
+  description: Writer 1 First Name, if entered, must contain only valid ASCII characters.
+  bmi_exception: ''
+  pass:
+    writer_1_first_name: JOHN
+  fail:
+    writer_1_first_name: JÓHN
+- id: COM-FLV-09
+  reject_level: FR
+  field: writer_2_last_name
+  level: optional
+  version: '2.0'
+  description: Writer 2 Last Name, if entered, must contain only valid ASCII characters.
+  bmi_exception: ''
+  pass:
+    writer_2_first_name: JANE
+    writer_2_last_name: DOE
+  fail:
+    writer_2_first_name: JANE
+    writer_2_last_name: DÓE
+- id: COM-FLV-10
+  reject_level: FR
+  field: writer_2_first_name
+  level: optional
+  version: '2.0'
+  description: Writer 2 First Name, if entered, must contain only valid ASCII characters.
+  bmi_exception: ''
+  pass:
+    writer_2_first_name: JANE
+  fail:
+    writer_2_first_name: JÁNE
+- id: COM-RLV-01
+  reject_level: RR
+  field: record_type
+  level: mandatory
+  version: '2.0'
+  description: COM records can only be entered for works where the Composite Type (on the parent NWR) is entered.
+  note: >-
+    Cross-record: the violation lives on the parent NWR, not on the COM
+    record itself. Uses two `targets` entries -- an empty-patch COM target
+    purely to guard "no COM record found" (this rule can't fire on a file
+    with no COM to begin with, since a real file's COM records are
+    preserved as-is, never fabricated), and the actual patch on the parent
+    NWR's composite_type/composite_component_count.
+  bmi_exception: ''
+  targets:
+    - record_type: COM
+      pass: {}
+      fail: {}
+    - record_type: NWR
+      pass:
+        composite_type: COS
+        composite_component_count: 2
+      fail:
+        composite_type: ''
+        composite_component_count: 0
+- id: COM-FLV-11
+  reject_level: FR
+  field: writer_1_ipi_name_n
+  level: optional
+  version: '2.0'
+  description: If entered, Writer 1 IPI Name # must match an entry for the writer in the IPI database.
+  implemented: false
+  reason: No IPI database is modeled in this project's lookups.
+  bmi_exception: ''
+- id: COM-FLV-12
+  reject_level: FR
+  field: writer_2_ipi_name_n
+  level: optional
+  version: '2.0'
+  description: If entered, Writer 2 IPI Name # must match an entry for the writer in the IPI database.
+  implemented: false
+  reason: No IPI database is modeled in this project's lookups.
+  bmi_exception: ''
+- id: COM-FLV-13
+  reject_level: FR
+  field: writer_1_ipi_base_number
+  level: optional
+  version: '2.0'
+  description: If entered, Writer 1 IPI Base Number must match an entry in the IPI database.
+  implemented: false
+  reason: No IPI database is modeled in this project's lookups, and this field isn't mapped in layout.py's REAL_LAYOUT.
+  bmi_exception: ''
+- id: COM-FLV-14
+  reject_level: FR
+  field: writer_2_ipi_base_number
+  level: optional
+  version: '2.0'
+  description: If entered, Writer 2 IPI Base Number must match an entry in the IPI database.
+  implemented: false
+  reason: No IPI database is modeled in this project's lookups, and this field isn't mapped in layout.py's REAL_LAYOUT.
+  bmi_exception: ''
+- id: COM-FLV-15
+  reject_level: FR
+  field: submitter_work_n
+  level: optional
+  version: '2.0'
+  description: If entered, the Submitter Work Number must uniquely identify this composite component.
+  implemented: false
+  reason: Cross-file uniqueness is not verified, and this field isn't mapped in layout.py's REAL_LAYOUT.
+  bmi_exception: ''
+fields:
+  - name: Record Type
+    start: 1
+    length: 3
+    type: A
+    req: mandatory
+    valid_values: ["COM"]
+    description: COM = Component.
+  - name: Transaction Sequence #
+    start: 4
+    length: 8
+    type: N
+    req: mandatory
+    description: Must equal the Transaction Sequence # of the transaction header this record belongs to.
+  - name: Record Sequence #
+    start: 12
+    length: 8
+    type: N
+    req: mandatory
+    description: Previous record's Record Sequence # + 1.
+  - name: Title
+    start: 20
+    length: 60
+    type: A
+    req: mandatory
+    description: The title of the original work a portion of which was taken and included in this composite work.
+  - name: ISWC of Component
+    start: 80
+    length: 11
+    type: A
+    req: optional
+    description: The ISWC assigned to the original work this component was taken from.
+  - name: Submitter Work #
+    start: 91
+    length: 14
+    type: A
+    req: optional
+    description: The number the submitting party uses to refer to this composite component.
+  - name: Duration
+    start: 105
+    length: 6
+    type: T
+    req: optional
+    description: The duration of this composite component.
+  - name: Writer 1 Last Name
+    start: 111
+    length: 45
+    type: A
+    req: mandatory
+    description: Last name of the first writer of this component.
+  - name: Writer 1 First Name
+    start: 156
+    length: 30
+    type: A
+    req: optional
+    description: First name of the first writer of this component.
+  - name: Writer 1 IPI Name #
+    start: 186
+    length: 11
+    type: L
+    req: optional
+    description: The IPI Name # assigned to the first writer of this component.
+  - name: Writer 2 Last Name
+    start: 197
+    length: 45
+    type: A
+    req: optional
+    description: Last name of the second writer of this component; required if Writer 2 First Name is entered.
+  - name: Writer 2 First Name
+    start: 242
+    length: 30
+    type: A
+    req: optional
+    description: First name of the second writer of this component.
+  - name: Writer 2 IPI Name #
+    start: 272
+    length: 11
+    type: L
+    req: optional
+    description: The IPI Name # assigned to the second writer of this component.
+  - name: Writer 1 IPI Base Number
+    start: 283
+    length: 13
+    type: L
+    req: optional
+    description: The IPI base number assigned to Writer 1. Added CWR 2.0.
+  - name: Writer 2 IPI Base Number
+    start: 296
+    length: 13
+    type: L
+    req: optional
+    description: The IPI base number assigned to Writer 2. Added CWR 2.0.
+record_length: 308

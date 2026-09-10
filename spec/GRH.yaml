@@ -1,0 +1,128 @@
+record_type: GRH
+name: Group Header
+rules:
+- id: GRH-FLV-01
+  reject_level: GR
+  field: transaction_type
+  level: mandatory
+  version: '2.0'
+  description: Transaction Type must be entered and must match an entry in the Transaction Type table.
+  bmi_exception: ''
+  pass:
+    transaction_type: NWR
+  fail:
+    transaction_type: ZZZ
+- id: GRH-FLV-02
+  reject_level: GR
+  field: group_id
+  level: mandatory
+  version: '2.0'
+  description: Group ID must be entered and must start at 1.
+  bmi_exception: ''
+  pass:
+    group_id: 1
+  fail:
+    group_id: 0
+# - id: GRH-FLV-02-SEQ
+#   reject_level: GR
+#   field: null
+#   level: mandatory
+#   version: '2.0'
+#   description: Group ID must increment by 1 sequentially for each new group in the file.
+#   implemented: false
+#   reason: >-
+#     Cross-record: requires more than one GRH/GRT group in the file to
+#     exercise; this tool's synthetic/real-file pipeline only ever builds a
+#     single group.
+#   bmi_exception: ''
+- id: GRH-FLV-03
+  reject_level: ER
+  field: record_type
+  level: mandatory
+  version: '2.0'
+  description: A GRH record must follow either a GRT record or an HDR record.
+  note: >-
+    Structural record-ordering check, not a single-field patch -- engine.py's
+    _apply_grh_flv_03 swaps the GRH/NWR pair's file position for FAIL instead
+    of touching either record's bytes.
+  bmi_exception: ''
+- id: GRH-FLV-04
+  reject_level: GR
+  field: version_number
+  level: mandatory
+  version: '2.0'
+  description: >-
+    Version Number for this transaction type must match the constant value
+    '02.10' for all CWR 2.x files (this is the EDI/GRH record-format
+    sub-version, not the CWR data version -- it does not change between
+    CWR 2.0/2.1/2.2).
+  bmi_exception: ''
+  pass:
+    version_number: '02.10'
+  fail:
+    version_number: '99.99'
+- id: GRH-FLV-05
+  reject_level: GR
+  field: transaction_type
+  level: mandatory
+  version: '2.0'
+  description: Each Group Transaction type can only be used once per file.
+  note: >-
+    Cross-record check needing a second GRH group with the same transaction
+    type -- engine.py's _apply_grh_flv_05 synthesizes an empty second
+    GRH/GRT group (group_id 2, zero transactions) for FAIL, tracked outside
+    the normal single-GRH/GRT work-dict slots.
+  bmi_exception: ''
+# Field layout below is transcribed from the official CISAC CWR 2.2 spec
+# (CWR11-1991R3, section 3.6). start/length are 1-based, spec-defined.
+# None of GRH's fields are version-gated additions -- the whole record
+# format is unchanged across CWR 2.0/2.1/2.2 -- so no `since` tags are
+# needed on the fields below, and every rule above applies from CWR 2.0.
+fields:
+  - name: Record Type
+    start: 1
+    length: 3
+    type: A
+    req: mandatory
+    valid_values: ["GRH"]
+    description: GRH = Group Header
+  - name: Transaction Type
+    start: 4
+    length: 3
+    type: L
+    req: mandatory
+    valid_values_ref: VALID_TXN_TYPE
+    description: Indicates the type of transactions included in this group.
+  - name: Group ID
+    start: 7
+    length: 5
+    type: N
+    req: mandatory
+    description: >-
+      A unique sequential number for this group within this file. Group ID
+      should start at 00001.
+  - name: Version Number for this transaction type
+    start: 12
+    length: 5
+    type: A
+    req: mandatory
+    description: >-
+      Indicates the version of the transaction type that will follow within
+      this group. Constant '02.10' for all CWR 2.x files.
+  - name: Batch request
+    start: 17
+    length: 10
+    type: N
+    req: optional
+    description: >-
+      A unique sequential number to identify the group, managed by the
+      submitter to identify the group among multiple submission files.
+  - name: Submission/Distribution type
+    start: 27
+    length: 2
+    type: L
+    req: conditional
+    description: >-
+      Set to blank - not used for CWR (used only for audio-visual
+      transactions; ignored for CWR transactions).
+record_length: 28

@@ -1,0 +1,98 @@
+# CWR 2.2 record layout: NOW - Non-Roman Alphabet Other Writer Name
+# Fields transcribed from the official CISAC CWR 2.2 functional spec
+# (CWR11-1991R3, section 5.30). No rules defined for this type yet.
+#
+# Note: the spec's Record Format table lists "O" as the Fmt code for Writer
+# Name / Writer First Name, same transcription artifact noted in NWN.yaml --
+# using "A" here.
+record_type: NOW
+name: Non-Roman Alphabet Other Writer Name
+# NOW is not wired into layout.py's REAL_LAYOUT, so none of these can be
+# exercised by this tool's Generate PASS/FAIL flow yet -- placeholders only.
+rules:
+- id: NOW-RLV-01
+  reject_level: RR
+  field: null
+  level: mandatory
+  version: '2.0'
+  description: This record must follow an EWT, VER, COM, NET, NCT, or NVT record that refers to a work written by the writer named here.
+  implemented: false
+  reason: Cross-record ordering check; NOW is also not wired into layout.py's REAL_LAYOUT.
+  bmi_exception: ''
+- id: NOW-FLV-01
+  reject_level: RR
+  field: writer_name
+  level: mandatory
+  version: '2.0'
+  description: Writer Name must be entered.
+  implemented: false
+  reason: NOW is not wired into layout.py's REAL_LAYOUT.
+  bmi_exception: ''
+- id: NOW-FLV-02
+  reject_level: FR
+  field: language_code
+  level: optional
+  version: '2.0'
+  description: Language code, if entered, must be a valid code from the Language Code Table.
+  implemented: false
+  reason: NOW is not wired into layout.py's REAL_LAYOUT.
+  bmi_exception: ''
+- id: NOW-FLV-03
+  reject_level: FR
+  field: writer_position
+  level: optional
+  version: '2.0'
+  description: Writer Position, if entered, must be either "1" or "2".
+  implemented: false
+  reason: NOW is not wired into layout.py's REAL_LAYOUT.
+  bmi_exception: ''
+fields:
+  - name: Record Type
+    start: 1
+    length: 3
+    type: A
+    req: mandatory
+    valid_values: ["NOW"]
+    description: NOW = Non-Roman Alphabet Other Writer Name.
+  - name: Transaction Sequence #
+    start: 4
+    length: 8
+    type: N
+    req: mandatory
+    description: Must equal the Transaction Sequence # of the transaction header this record belongs to.
+  - name: Record Sequence #
+    start: 12
+    length: 8
+    type: N
+    req: mandatory
+    description: Previous record's Record Sequence # + 1.
+  - name: Writer Name
+    start: 20
+    length: 160
+    type: A
+    req: mandatory
+    description: >-
+      The last or single name of this writer, in non-Roman alphabet. Must
+      follow an EWT, VER, COM, NET, NCT, or NVT that refers to a work
+      written by this writer.
+  - name: Writer First Name
+    start: 180
+    length: 160
+    type: A
+    req: mandatory
+    description: The first name of this writer, in non-Roman alphabet.
+  - name: Language Code
+    start: 340
+    length: 2
+    type: L
+    req: optional
+    valid_values_ref: VALID_LANGUAGE
+    description: The language code of the name.
+  - name: Writer Position
+    start: 342
+    length: 1
+    type: L
+    req: optional
+    valid_values: ["1", "2"]
+    description: The position of the writer in the corresponding EWT/VER/COM record; defaults to 1.
+record_length: 342

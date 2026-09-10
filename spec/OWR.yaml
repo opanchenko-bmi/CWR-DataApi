@@ -1,0 +1,244 @@
+# CWR 2.2 record layout: OWR - Other Writer
+# OWR shares SWR's record format (CWR11-1991R3, section 5.9-5.10). Fields
+# duplicated here from SWR.yaml for a self-contained per-type file; keep in
+# sync with SWR.yaml if the layout changes.
+record_type: OWR
+name: Other Writer
+rules:
+- id: OWR-FLV-01
+  reject_level: TR
+  field: writer_unknown_indicator
+  level: conditional
+  version: '2.0'
+  description: Writer Unknown Indicator must be Y when Writer Last Name is blank.
+  bmi_exception: ''
+  pass:
+    writer_last_name: ''
+    writer_unknown_indicator: Y
+  fail:
+    writer_last_name: ''
+    writer_unknown_indicator: N
+- id: OWR-FLV-02
+  reject_level: FR
+  field: writer_designation_code
+  level: optional
+  version: '2.0'
+  description: Writer Designation Code, if entered, must be a valid code.
+  bmi_exception: ''
+  pass:
+    writer_designation_code: CA
+  fail:
+    writer_designation_code: ZZ
+- id: OWR-FLV-03
+  reject_level: TR
+  field: pr_ownership_share
+  level: optional
+  version: '2.0'
+  description: PR Ownership Share, if entered, must be within 0 - 100.00% (0-10000).
+  bmi_exception: ''
+  pass:
+    pr_ownership_share: 0
+  fail:
+    pr_ownership_share: 15000
+- id: OWR-FLV-04
+  reject_level: FR
+  field: reversionary_indicator
+  level: optional
+  version: '2.0'
+  description: Reversionary Indicator, if entered, must be Y, N, or U.
+  bmi_exception: ''
+  pass:
+    reversionary_indicator: Y
+  fail:
+    reversionary_indicator: Z
+- id: OWR-FLV-05
+  reject_level: FR
+  field: writer_last_name
+  level: conditional
+  version: '2.0'
+  description: Writer Last Name must be blank when Writer Unknown Indicator is Y.
+  bmi_exception: ''
+  pass:
+    writer_unknown_indicator: 'Y'
+    writer_last_name: ''
+  fail:
+    writer_unknown_indicator: 'Y'
+    writer_last_name: SMITH
+- id: OWR-FLV-06
+  reject_level: FR
+  field: pr_affiliation_society
+  level: optional
+  version: '2.0'
+  description: PR Affiliation Society #, if entered, must match an entry in the Society Code table.
+  bmi_exception: ''
+  pass:
+    pr_affiliation_society: '021'
+  fail:
+    pr_affiliation_society: '999'
+- id: OWR-FLV-07
+  reject_level: FR
+  field: usa_license_ind
+  level: optional
+  version: '2.1'
+  description: USA License Ind, if entered, must match an entry in the USA License Indicator table.
+  bmi_exception: ''
+  pass:
+    usa_license_ind: A
+  fail:
+    usa_license_ind: Z
+- id: OWR-FLV-SACEM-01
+  reject_level: RR
+  field: writer_last_name
+  level: conditional
+  version: '2.0'
+  description: 'For registrations to SACEM only: if Record Type is OWR, the Writer Last Name must be entered, or else the writer will be ignored.'
+  implemented: false
+  reason: Society-specific (SACEM only); this tool doesn't model per-record society interest.
+  bmi_exception: ''
+fields:
+  - name: Record Type
+    start: 1
+    length: 3
+    type: A
+    req: mandatory
+    valid_values: ["OWR"]
+    description: OWR = Other Writer (not controlled by the submitter).
+  - name: Transaction Sequence #
+    start: 4
+    length: 8
+    type: N
+    req: mandatory
+    description: Must equal the Transaction Sequence # of the transaction header this record belongs to.
+  - name: Record Sequence #
+    start: 12
+    length: 8
+    type: N
+    req: mandatory
+    description: Previous record's Record Sequence # + 1.
+  - name: Interested Party #
+    start: 20
+    length: 9
+    type: A
+    req: optional
+    description: Submitting publisher's unique identifier for this writer (optional for OWR).
+  - name: Writer Last Name
+    start: 29
+    length: 45
+    type: A
+    req: optional
+    description: The last name of this writer (optional for OWR; blank requires Writer Unknown Indicator = Y).
+  - name: Writer First Name
+    start: 74
+    length: 30
+    type: A
+    req: optional
+    description: First name and qualifying/middle names of this writer.
+  - name: Writer Unknown Indicator
+    start: 104
+    length: 1
+    type: F
+    req: conditional
+    valid_values_ref: VALID_YN
+    description: Must be Y if Writer Last Name is blank, else Y/N. Default N.
+  - name: Writer Designation Code
+    start: 105
+    length: 2
+    type: L
+    req: optional
+    valid_values_ref: VALID_WRITER_DESIGNATION
+    description: Code defining the writer's role in composing the work (optional for OWR).
+  - name: Tax ID #
+    start: 107
+    length: 9
+    type: A
+    req: optional
+    description: The number used to identify this writer for domestic tax reporting.
+  - name: Writer IPI Name #
+    start: 116
+    length: 11
+    type: L
+    req: optional
+    description: The IPI Name # assigned to this writer.
+  - name: PR Affiliation Society #
+    start: 127
+    length: 3
+    type: L
+    req: optional
+    description: Performing Rights Society this writer is affiliated with.
+  - name: PR Ownership Share
+    start: 130
+    length: 5
+    type: N
+    req: optional
+    description: Writer's ownership % of performance rights. Range 0-10000 (0-100.00%), implied decimal.
+  - name: MR Society
+    start: 135
+    length: 3
+    type: L
+    req: optional
+    description: Mechanical Rights Society this writer is affiliated with.
+  - name: MR Ownership Share
+    start: 138
+    length: 5
+    type: N
+    req: optional
+    description: Writer's ownership % of mechanical rights. Range 0-10000 (0-100.00%), implied decimal.
+  - name: SR Society
+    start: 143
+    length: 3
+    type: L
+    req: optional
+    description: Society this writer is affiliated with for synchronization rights.
+  - name: SR Ownership Share
+    start: 146
+    length: 5
+    type: N
+    req: optional
+    description: Writer's ownership % of synch rights. Range 0-10000 (0-100.00%), implied decimal.
+  - name: Reversionary Indicator
+    start: 151
+    length: 1
+    type: F
+    req: optional
+    valid_values_ref: VALID_YNU
+    description: Indicates writer involved in a reversionary claim (societies that recognize them, e.g. SOCAN).
+  - name: First Recording Refusal Ind
+    start: 152
+    length: 1
+    type: B
+    req: optional
+    valid_values_ref: VALID_YN
+    description: Whether the submitter has refused authority for the first recording.
+  - name: Work For Hire Indicator
+    start: 153
+    length: 1
+    type: B
+    req: optional
+    valid_values_ref: VALID_YN
+    description: Whether this work was written for hire.
+  - name: Filler
+    start: 154
+    length: 1
+    type: A
+    req: optional
+    description: Reserved.
+  - name: Writer IPI Base Number
+    start: 155
+    length: 13
+    type: L
+    req: optional
+    description: The IPI base number assigned to this writer. Added CWR 2.0.
+  - name: Personal Number
+    start: 168
+    length: 12
+    type: N
+    req: optional
+    description: The personal number assigned to this writer in their country of residence. Added CWR 2.0.
+  - name: USA License Ind.
+    start: 180
+    length: 1
+    type: L
+    req: optional
+    since: '2.1'
+    description: Indicates rights flow through SESAC/BMI/ASCAP/AMRA in the US. Added CWR 2.1.
+record_length: 180
